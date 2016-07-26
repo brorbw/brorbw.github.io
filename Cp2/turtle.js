@@ -31,12 +31,13 @@ window.onload = function init()
     gl.useProgram( program );
     
     // Load the data into the GPU
-    
+    /*
     bufferId = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW );    
 
     render();
+    */
 };
 
 function buffer(){
@@ -76,12 +77,19 @@ function convert(number){
 function forward(distance){
     if(turtlePen){
         vertices.push(vec2(convert(turtlePos[0]), convert(turtlePos[1])));
-        turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(turtleAngle),Math.sin(turtleAngle))));
+        turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(rad(turtleAngle)),Math.sin(rad(turtleAngle)))));
+        // (x,y) + (cos(angle),sin(angle)) * distance
         vertices.push(vec2(convert(turtlePos[0]), convert(turtlePos[1])));
+        //vertices.push(vec2(convert(turtlePos[0]), convert(turtlePos[1])));
     } else {
         turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(turtleAngle),Math.sin(turtleAngle))));
     }
 }
+
+function rad(degree){
+    return degree * Math.PI/180;
+}
+
 function pen(up_down){
     turtlePen = up_down;
 }
@@ -110,5 +118,3 @@ function testLeftTurn(){
     left(10);
     console.log(turtleAngle);
 }
-
-
