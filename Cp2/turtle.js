@@ -9,12 +9,7 @@ var turtleAngle;
 var turtlePos;
 var turtlePen;
 
-var vertices = [
-    vec2(0,0),
-    vec2(1,0),
-    vec2(1,-1)
-    
-];
+var vertices = [];
 
 window.onload = function init()
 {
@@ -22,11 +17,6 @@ window.onload = function init()
     
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
-    var vertices = [
-    vec2(0,0),
-    vec2(1,0),
-    vec2(1,-1)
-    ];
     
 
     //
@@ -61,7 +51,7 @@ function render() {
     vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-    gl.drawArrays( gl.TRIANGLES, 0, 3);
+    gl.drawArrays( gl.LINES, 0, vertices.length)
     
 }
 
@@ -69,13 +59,27 @@ function init(x,y,theta){
     turtlePos = vec2(x,y);
     turtleAngle = theta;
     turtlePen = true;
-    vertices.push(vec2(turtlePos[0],turtlePos[1]));
+}
+
+function convert(number){
+    var value = 0;
+    var old = (512 - 0);
+    if(number === 0){
+        value = -1;
+    } else {
+        var newR = (1 - -1);
+        value = (((number - 0)*newR)/old)+-1;
+    }
+    return value;
 }
 
 function forward(distance){
-    turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(turtleAngle), Math.sin(turtleAngle))));
     if(turtlePen){
-        vertices.push(vec2(turtlePos[0], turtlePos[1]));
+        vertices.push(vec2(convert(turtlePos[0]), convert(turtlePos[1])));
+        turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(turtleAngle),Math.sin(turtleAngle))));
+        vertices.push(vec2(convert(turtlePos[0]), convert(turtlePos[1])));
+    } else {
+        turtlePos = add(turtlePos, scale(distance,vec2(Math.cos(turtleAngle),Math.sin(turtleAngle))));
     }
 }
 function pen(up_down){
@@ -83,10 +87,10 @@ function pen(up_down){
 }
 
 function right(angle){
-    turtleAngle = turtleAngle - angle % 360;
+    turtleAngle = (turtleAngle - angle) % 360;
 }
 function left(angle){
-    turtleAngle = turtleAngle + angle % 360;
+    turtleAngle = (turtleAngle + angle) % 360;
 }
 
 function testMove(){
