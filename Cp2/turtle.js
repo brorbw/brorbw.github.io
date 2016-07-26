@@ -118,3 +118,35 @@ function testLeftTurn(){
     left(10);
     console.log(turtleAngle);
 }
+
+function fractialMountains(){
+    
+}
+
+function devideTriangle(length, count){
+    if(count < 0){
+        buffer();
+        render();
+    } else{
+        forward(length);
+        left(120);
+        devideTriangle(length/2, count-1);
+        forward(length);
+        left(120);
+        devideTriangle(length/2, count-1);
+        forward(length);
+        left(120);
+        devideTriangle(length/2, count-1);
+    }
+}
+
+function triangle(length){
+    forward(length);
+    left(120);
+    forward(length);
+    left(120);
+    forward(length);
+    left(120);
+    buffer();
+    render();
+}
