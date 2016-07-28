@@ -2,7 +2,7 @@
 var canvas;
 var gl;
 
-var red, green, blue;
+var red = 100, green = 100, blue = 100;
 
 var maxNumTriangles = 200;
 var maxNumVertices  = 3 * maxNumTriangles;
@@ -58,18 +58,23 @@ window.onload = function init() {
     var vColor = gl.getAttribLocation( program, "vColor");
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
+    var box = document.getElementById("box");
     document.getElementById("red").onchange = function(event){
       red = event.target.value;
+      box.style.backgroundColor = rgbToHex((red/100*255),(green/100*255),(blue/100*255));
       console.log(red);
     };
     document.getElementById("green").onchange = function(event){
       green = event.target.value;
-      console.log(green);
+      box.style.backgroundColor = rgbToHex((red/100*255),(green/100*255),(blue/100*255));
     };
     document.getElementById("blue").onchange = function(event){
       blue = event.target.value;
+      box.style.backgroundColor = rgbToHex((red/100*255),(green/100*255),(blue/100*255));
       console.log(blue);
     };
+
+
     var m = document.getElementById("mymenu");
 
     m.addEventListener("click", function() {
@@ -99,7 +104,7 @@ window.onload = function init() {
           gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer);
           index += 4;
 
-          t = vec4(colors[cIndex]);
+          t = vec4(red/100,green/100,blue/100, 1.0);
 
           gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index-4), flatten(t));
           gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index-3), flatten(t));
@@ -110,8 +115,14 @@ window.onload = function init() {
 
     render();
 }
-
-
+function rgbToHex(a,b,c){
+  a = Math.round(a);
+  b = Math.round(b);
+  c = Math.round(c);
+  var string = "#"+(a).toString(16)+(b).toString(16)+(c).toString(16);
+  console.log(string);
+  return string;
+}
 function render() {
 
     gl.clear( gl.COLOR_BUFFER_BIT );

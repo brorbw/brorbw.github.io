@@ -6,7 +6,9 @@ attribute vec4 vColor;
 
 varying vec4 fColor;
 
-void main()
+
+void
+main()
 {
     gl_Position = vPosition;
     fColor = vColor;
@@ -18,7 +20,8 @@ void main()
 precision mediump float;
 
 varying vec4 fColor;
-void main()
+void
+main()
 {
     gl_FragColor = fColor;
 }
@@ -27,7 +30,7 @@ void main()
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/webgl-utils.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/initShaders.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/MV.js"></script>
-<script type="text/javascript" src="cad1.js"></script>
+<script type="text/javascript" src="tic-tac-toe.js"></script>
 
 <body>
 <div>
@@ -45,14 +48,8 @@ Oops ... your browser doesn't support the HTML5 canvas element
     <option value = "5">Magenta</option>
     <option value = "6">Cyan</option>
 </select>
-</br>
-<input id="red" type="range" value="100" step="1" max="100" min="0"></br>
-<input id="green" type="range" value="100" step="1" max="100" min="0"></br>
-<input id="blue" type="range" value="100" step="1" max="100" min="0"></br>
-<span id="box" style="display:block;width:10px;height:10px;"></span>
+<button id = "Button1">End Polygon</button>
 </div>
-
-
 
 </body>
 </html>
