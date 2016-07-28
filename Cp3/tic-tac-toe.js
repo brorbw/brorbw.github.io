@@ -49,7 +49,7 @@ function buildGrid(){
   for(var x = 0; x < 3; x++){
    for(var y = 0; y < 3; y++){
      var box = square(x*(width/3),y*(height/3));
-     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*index, flatten(box));
+     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*index, flatten(box));
      console.log(index+':'+x+':'+y+' square:'+box.toString());
      index++;
    }
@@ -65,12 +65,13 @@ function square(x,y){
   ];
 }
 function convert(x,y){
-  return vec2(-1+2*x/width,-1+2*(height-y)/height);
+  return vec2(-1+((2*x)/width),-1+(2*(height-y))/height);
 }
 
 function render(){
   gl.clear(gl.COLOR_BUFFER_BIT);
-  for(var i = 0; i < sizeof['vec2']*4*9; i+=4){
+  for(var i = 0; i < 9*4; i+=4){
+     console.log("printing point at: "+i);
      gl.drawArrays(gl.LINE_LOOP, i, 4);
   }
   window.requestAnimFrame(render);
