@@ -150,3 +150,41 @@ function triangle(length){
     buffer();
     render();
 }
+
+// rotTri is ok, but twistTri ... 
+function rotTri(theta){
+	len = vertices.length;
+	for(i=0;i<len; ++i){
+		vertices[i] = rot(vertices[i],theta);
+	}
+	buffer();
+	render();
+}
+
+function rot(coord,theta){
+	cost = Math.cos(rad(theta));
+	sint = Math.sin(rad(theta));
+	x_ = coord[0]*cost - coord[1]*sint;
+	y_ = coord[0]*sint - coord[1]*cost;
+	
+	return vec2(x_,y_)
+}
+
+function twistTri(theta){
+	len = vertices.length;
+	for(i=0;i<len; ++i){
+		vertices[i] = twist(vertices[i],theta);
+	}
+	buffer();
+	render();
+}
+
+function twist(coord, theta){
+	d = Math.sqrt(Math.pow(coord[0],2)+Math.pow(coord[1],2));
+	costd = Math.cos(rad(theta*d));
+	sintd = Math.sin(rad(theta*d));
+	x_ = coord[0]*costd - coord[1]*sintd;
+	y_ = coord[0]*sintd - coord[1]*costd;
+	
+	return vec2(x_,y_)
+}
