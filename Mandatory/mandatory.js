@@ -3,10 +3,11 @@
 var canvas;
 var gl;
 
-var gridSize = 15;
+var gridSize = 10;
 var numberOfBoxes = 0;
-var vBuffer;
+var vBuffer,cBuffer;
 var vPos;
+var vColor;
 var toggle = true;
 var width, height;
 var type = 0;
@@ -15,6 +16,15 @@ var cellStartCoordinates = [];
 var map = [];
 
 var world;
+
+var colors = [
+    vec4( 0.0, 0.0, 0.0, 0.0), //nothing
+    vec4( 0.0, 1.0, 0.0, 1.0 ),  // green-gras
+    vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue-water
+    vec4( 1.0, 0.0, 0.0, 1.0 ),  // red-water
+    vec4( 0.5, 0.25, 0.0, 1.0 ),  // brown-dirt
+    vec4( 0.0, 0.0, 0.0, 1) // curser maybe
+];
 
 window.onload = function init(){
 
@@ -36,6 +46,10 @@ window.onload = function init(){
   gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, sizeOfTheArray(), gl.STATIC_DRAW);
   vPos = gl.getAttribLocation(program, "vPosition");
+  cBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,cBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, gridSize*gridSize*sizeof['vec4']*4, gl.STATIC_DRAW)
+  vColor = gl.getAttribLocation(program, "vColor");
   //onclicks
   canvas.addEventListener("click",clickFunction);
   var menu = document.getElementById("mymenu");
@@ -44,9 +58,21 @@ window.onload = function init(){
     switch(menu.selectedIndex){
       case 0 : type = 0 ; break;//nothing
       case 1 : type = 1 ; break;//dirt
+      case 2 : type = 2 ; break;//dirt
+      case 3 : type = 3 ; break;//dirt
+      case 4 : type = 4 ; break;//dirt
+      case 5 : type = 5 ; break;//dirt
     }
   });
   //maybe there needs to be made links to the attributes in the vertex-shader
+  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0,0);
+  gl.enableVertexAttribArray(vPos);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+  gl.vertexAttribPointer(vColor,4,gl.FLOAT,false,0,0);
+  gl.enableVertexAttribArray(vColor);
+
   drawGrid();
   render();
 
@@ -58,7 +84,6 @@ function sizeOfTheArray(){
 }
 
 function drawGrid(){
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
   var tmpArray = [];
   for(var x = 0; x < gridSize; x++){
     for(var y = 0; y < gridSize; y++){
@@ -68,7 +93,7 @@ function drawGrid(){
   }
 }
 
-function drawSquare(y,x, type){
+function drawSquare(y,x){
   //put the starting coordinate of the square to find it
   numberOfBoxes++;
   return [
@@ -85,19 +110,18 @@ function convert(x,y){
 
 function render(){
   gl.clear(gl.COLOR_BUFFER_BIT);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0,0);
-  gl.enableVertexAttribArray(vPos);
   //gl.drawArrays(gl.LINE_LOOP, 0, gridSize*gridSize*4);
+
   if(world != null){
     for(var i = 0; i < gridSize*gridSize; i++){
-      var pos = indexToXYIn2DArray(i);
-      console.log(i);
-      if(world[pos[0]][pos[1]] != 0){
-        gl.drawArrays(gl.LINE_LOOP, i*4, 4);
-      }
+      //var pos = indexToXYIn2DArray(i);
+      //if(world[pos[0]][pos[1]] != 0){
+        gl.drawArrays(gl.TRIANGLE_FAN, i*4, 4);
+      //}
     }
   }
+
+
 
 }
 
@@ -117,7 +141,16 @@ function clickFunction(event){
   var newBoxToDraw = drawSquare(newX,newY);
   gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
   gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*startCoordinates, flatten(newBoxToDraw));
+
+  var color = vec4(colors[type]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+1), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+2), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+3), flatten(color));
   console.log(startCoordinates+' : '+x+':'+y+' square:'+newBoxToDraw.toString());
+
+
   render();
 }
 
