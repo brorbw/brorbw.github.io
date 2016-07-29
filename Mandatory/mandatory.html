@@ -9,11 +9,11 @@ varying vec4 fColor;
 void main()
 {
     gl_Position = vPosition;
-    gl_PointSize = 10.0;
-    float red = 0.0 + length(vPosition);
-    float green = 0.0 + length(vPosition);
-    float blue = 0.0 + length(vPosition);
-    fColor = vec4(vColor.x+red,vColor.y+green,vColor.z+blue,1);
+    float red = 1.0 - length(vPosition);
+    float green = 1.0 - length(vPosition);
+    float blue = 1.0 - length(vPosition);
+    fColor = vec4(vColor.x-red,vColor.y-green,vColor.z-blue,1);
+
 
 }
 </script>
