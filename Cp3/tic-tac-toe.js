@@ -31,6 +31,7 @@ window.onload = function init(){
   gl.bufferSubData(gl.ARRAY_BUFFER,
     sizeof["vec2"]*4*indexForCross,
     flatten(pencil));
+  indexForCross++;
   render();
       //Ugly as hell but it works
 
