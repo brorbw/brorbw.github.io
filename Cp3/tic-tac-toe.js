@@ -2,8 +2,6 @@
 var canvas;
 var gl;
 
-var grid = [9][9];
-
 var coordinates;
 
 var width, height;
