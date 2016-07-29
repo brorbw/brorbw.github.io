@@ -4,13 +4,12 @@ var canvas;
 var gl;
 
 var gridSize = 25;
-var numberOfBoxes = 0;
 var vBuffer,cBuffer, mBuffer;
 var vPos;
 var vColor;
 var toggle = true;
 var width, height;
-var type = 0;
+var typePicked = 0;
 var cellStartCoordinates = [];
 
 var map = [];
@@ -66,17 +65,18 @@ window.onload = function init(){
   initWorld();
   menu.addEventListener("click", function(){
     switch(menu.selectedIndex){
-      case 0 : type = 0 ; break;//nothing
-      case 1 : type = 1 ; break;//dirt
-      case 2 : type = 2 ; break;//dirt
-      case 3 : type = 3 ; break;//dirt
-      case 4 : type = 4 ; break;//dirt
-      case 5 : type = 5 ; break;//dirt
+      case 0 : typePicked = 0 ; break;//nothing
+      case 1 : typePicked = 1 ; break;//dirt
+      case 2 : typePicked = 2 ; break;//dirt
+      case 3 : typePicked = 3 ; break;//dirt
+      case 4 : typePicked = 4 ; break;//dirt
+      case 5 : typePicked = 5 ; break;//dirt
     }
   });
   //maybe there needs to be made links to the attributes in the vertex-shader
 
   drawGrid();
+  populateBoxes();
   render();
 
 }
@@ -94,21 +94,6 @@ function drawGrid(){
       cellStartCoordinates.push(vec2(x*(width/gridSize),y*(height/gridSize)));
     }
   }
-}
-
-function drawSquare(y,x){
-  //put the starting coordinate of the square to find it
-  numberOfBoxes++;
-  return [
-    convert(x,y),
-    convert(x+width/gridSize,y),
-    convert(x+width/gridSize,y+height/gridSize),
-    convert(x,y+height/gridSize)
-  ];
-}
-
-function convert(x,y){
-  return vec2(-1+((2*x)/width),-1+(2*(height-y))/height);
 }
 
 function render(){
@@ -139,31 +124,13 @@ function render(){
 
 }
 
+
+//event listneres
 function clickFunction(event){
   var x = event.clientX;
   var y = event.clientY;
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
-  var newX = (cellStartCoordinates[startCoordinates])[0];
-  var newY = (cellStartCoordinates[startCoordinates])[1];
-  var arrayIndex = indexToXYIn2DArray(startCoordinates);
-  console.log(arrayIndex[0]);
-  console.log("world: "+ world+", type: "+ type);
-  var indexX = arrayIndex[0];
-  var indexY = arrayIndex[1];
-  world[indexX][indexY] = type;
-  var newBoxToDraw = drawSquare(newX,newY);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*startCoordinates, flatten(newBoxToDraw));
-
-  var color = vec4(colors[type]);
-  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4), flatten(color));
-  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+1), flatten(color));
-  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+2), flatten(color));
-  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+3), flatten(color));
-  console.log(startCoordinates+' : '+x+':'+y+' square:'+newBoxToDraw.toString());
-
-
+  addBox(startCoordinates,typePicked);
   render();
 }
 
@@ -180,6 +147,26 @@ function mousemove(event){
   render();
 }
 
+
+
+//Helper methods
+
+function addBox(startCoordinates,type){
+  var worldCoordinates = indexToXYIn2DArray(startCoordinates);
+  var x = (cellStartCoordinates[startCoordinates])[0];
+  var y = (cellStartCoordinates[startCoordinates])[1];
+  world[worldCoordinates[0]][worldCoordinates[1]] = type;
+  var newBoxToDraw = drawSquare(x,y);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*startCoordinates, flatten(newBoxToDraw));
+
+  var color = vec4(colors[type]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+1), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+2), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+3), flatten(color));
+}
 
 function getCellNumberFromXYMouseInput(y,x){ //turn'd the algo the wrong way
   //gridIndex running from 0-8
@@ -215,4 +202,26 @@ function initWorld(){
         world[i][j] = 0;
       }
     }
+}
+
+function populateBoxes(){
+  for(var i = 0; i < gridSize*gridSize; i++){
+    if(i > 349){
+      addBox(i,1);
+    }
+  }
+}
+
+function drawSquare(y,x){
+  //put the starting coordinate of the square to find it
+  return [
+    convert(x,y),
+    convert(x+width/gridSize,y),
+    convert(x+width/gridSize,y+height/gridSize),
+    convert(x,y+height/gridSize)
+  ];
+}
+
+function convert(x,y){
+  return vec2(-1+((2*x)/width),-1+(2*(height-y))/height);
 }
