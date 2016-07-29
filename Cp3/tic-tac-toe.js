@@ -54,6 +54,7 @@ window.onload = function init(){
   vPos = gl.getAttribLocation(program, "vPosition");
   gl.vertexAttribPointer(vPos,2,gl.FLOAT,false,0,0);
   gl.enableVertexAttribArray(vPos);
+<<<<<<< HEAD
 
   vPlayerBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vPlayerBuffer);
