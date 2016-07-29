@@ -207,7 +207,7 @@ function initWorld(){
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
     if(i > 349){
-      addBox(i,1);
+      addBox(i,4);
     }
   }
 }
