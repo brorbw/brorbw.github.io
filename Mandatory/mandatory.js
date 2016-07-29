@@ -3,9 +3,9 @@
 var canvas;
 var gl;
 
-var gridSize = 10;
+var gridSize = 25;
 var numberOfBoxes = 0;
-var vBuffer,cBuffer;
+var vBuffer,cBuffer, mBuffer;
 var vPos;
 var vColor;
 var toggle = true;
@@ -18,7 +18,7 @@ var map = [];
 var world;
 
 var colors = [
-    vec4( 0.0, 0.0, 0.0, 0.0), //nothing
+    vec4( 0.0, 0.0, 0.0, 1.0), //nothing
     vec4( 0.0, 1.0, 0.0, 1.0 ),  // green-gras
     vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue-water
     vec4( 1.0, 0.0, 0.0, 1.0 ),  // red-water
@@ -42,16 +42,26 @@ window.onload = function init(){
 
 
   //making the buffers
+  //vertix buffer
   vBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, sizeOfTheArray(), gl.STATIC_DRAW);
   vPos = gl.getAttribLocation(program, "vPosition");
+
+  //color buffer
   cBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER,cBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, gridSize*gridSize*sizeof['vec4']*4, gl.STATIC_DRAW)
   vColor = gl.getAttribLocation(program, "vColor");
+  //mouse buffer
+  mBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, 4*sizeof['vec4'], gl.STATIC_DRAW);
+
+
   //onclicks
   canvas.addEventListener("click",clickFunction);
+  canvas.addEventListener("mousemove", mousemove);
   var menu = document.getElementById("mymenu");
   initWorld();
   menu.addEventListener("click", function(){
@@ -65,13 +75,6 @@ window.onload = function init(){
     }
   });
   //maybe there needs to be made links to the attributes in the vertex-shader
-  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0,0);
-  gl.enableVertexAttribArray(vPos);
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-  gl.vertexAttribPointer(vColor,4,gl.FLOAT,false,0,0);
-  gl.enableVertexAttribArray(vColor);
 
   drawGrid();
   render();
@@ -110,23 +113,33 @@ function convert(x,y){
 
 function render(){
   gl.clear(gl.COLOR_BUFFER_BIT);
-  //gl.drawArrays(gl.LINE_LOOP, 0, gridSize*gridSize*4);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0,0);
+  gl.enableVertexAttribArray(vPos);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+  gl.vertexAttribPointer(vColor,4,gl.FLOAT,false,0,0);
+  gl.enableVertexAttribArray(vColor);
+
 
   if(world != null){
     for(var i = 0; i < gridSize*gridSize; i++){
-      //var pos = indexToXYIn2DArray(i);
-      //if(world[pos[0]][pos[1]] != 0){
+      var pos = indexToXYIn2DArray(i);
+      if(world[pos[0]][pos[1]] != 0){
         gl.drawArrays(gl.TRIANGLE_FAN, i*4, 4);
-      //}
+      }
     }
   }
 
+  gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
+  gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0,0);
+  gl.enableVertexAttribArray(vPos);
 
+  gl.drawArrays(gl.LINE_LOOP, 0,4);
 
 }
 
 function clickFunction(event){
-  toggle = !toggle;
   var x = event.clientX;
   var y = event.clientY;
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
@@ -153,6 +166,20 @@ function clickFunction(event){
 
   render();
 }
+
+function mousemove(event){
+  var x = event.clientX;
+  var y = event.clientY;
+  var startCoordinates = getCellNumberFromXYMouseInput(x,y);
+  var newX = (cellStartCoordinates[startCoordinates])[0];
+  var newY = (cellStartCoordinates[startCoordinates])[1];
+  var arrayIndex = indexToXYIn2DArray(startCoordinates);
+  var newBoxToDraw = drawSquare(newX,newY);
+  gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, flatten(newBoxToDraw), gl.STATIC_DRAW);
+  render();
+}
+
 
 function getCellNumberFromXYMouseInput(y,x){ //turn'd the algo the wrong way
   //gridIndex running from 0-8
