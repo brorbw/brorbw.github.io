@@ -126,7 +126,7 @@ function render(){
   gl.vertexAttribPointer( vPos, 2, gl.FLOAT, false, 0, 0 );
   gl.enableVertexAttribArray(vPos);
   for(var i = 0; i < 9*4; i+=4){
-      //onsole.log("printing point at: "+i);
+      //console.log("printing point at: "+i);
     gl.drawArrays(gl.LINE_LOOP, i, 4);
   }
   gl.bindBuffer(gl.ARRAY_BUFFER, vPlayerBuffer);
