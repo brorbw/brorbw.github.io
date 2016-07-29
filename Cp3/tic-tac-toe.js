@@ -54,48 +54,12 @@ window.onload = function init(){
   vPos = gl.getAttribLocation(program, "vPosition");
   gl.vertexAttribPointer(vPos,2,gl.FLOAT,false,0,0);
   gl.enableVertexAttribArray(vPos);
-<<<<<<< HEAD
 
   vPlayerBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vPlayerBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, sizeof["vec2"]*4*9,gl.STATIC_DRAW);
 
   drawGrid();
-=======
-  buildGrid();
-  ///////////BEGINNING////////////////////////////////////////////////////////////////////////////
-  canvas.addEventListener("mousedown", function(event){
-	// indices of the chosen box
-	var gridx = Math.floor(event.clientX/(canvas.width/3));
-	var gridy = Math.floor(event.clientY/(canvas.height/3));
-	console.log(gridx+','+gridy);
-	
-	// index of the first vertice of the chosen box in an array
-	var index = gridy*12 + gridx*4;
-	console.log(index);
-	
-	// location of all the 4 vertices of the chosen box
-	var box = square(gridx*(width/3),gridy*(height/3));
-	console.log(box);
-	
-	// switch color (red/green) each click
-	red= !red;
-    var color = (red ? vec4(1.0, 0.0, 0.0, 1.0): vec4(0.0, 1.0, 0.0, 1.0));
-	console.log(color);
-
-	// no clue how to buffer or render that..
-	gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
-	gl.bufferSubData(gl.ARRAY_BUFFER, 8*index, flatten(box));
-	
-	gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index+1), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index+2), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, 16*(index+3), flatten(color));
-	
-  });
-  //////////END/////////////////////////////////////////////////////////////////////////////
->>>>>>> 5bd2c69eefb4935b7dcdd4e83076992601640962
   render();
 }
 
