@@ -13,7 +13,7 @@ var typePicked = 0;
 var cellStartCoordinates = [];
 
 var radiusLoc;
-var radius = 0.1;
+var radius = 0.7;
 
 var clickCenterLoc;
 var clickCenter = vec2(0,-0.5);
@@ -103,12 +103,6 @@ window.onload = function init(){
   populateBoxes();
   initiating = false;
   render();
-  var s = 0;
-  while(s< 100000){
-    radius += 0.01;
-    render();
-    s++;
-  }
 }
 
 function sizeOfTheArray(){
@@ -128,6 +122,7 @@ function drawGrid(){
 
 function render(){
   gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform1f(radiusLoc, radius);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
   gl.vertexAttribPointer(vColor,4,gl.FLOAT,false,0,0);
@@ -217,7 +212,6 @@ function addBox(startCoordinates,type){
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+2),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+3),flatten(center));
-    gl.uniform1f(radiusLoc, radius);
     gl.uniform2fv(clickCenterLoc, flatten(clickCenter));
   }
 }
