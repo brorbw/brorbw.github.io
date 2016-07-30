@@ -21,7 +21,7 @@ void main()
     float rad = 0.1 + 0.3 * radius;
     float rad2 = 0.01 + 0.39 * radius;
     if(r >= rad2 && r <= rad){
-      gl_Position = vec4(vPosition.x+x*0.1,vPosition.y+y*0.1,vPosition.z, 1);
+      gl_Position = vec4(vPosition.x+x*0.03*1.0/radius,vPosition.y+y*0.03*1.0/radius,vPosition.z, 1);
 	  } else {
       gl_Position = vec4(vPosition.x,vPosition.y,vPosition.z, 1);
     }

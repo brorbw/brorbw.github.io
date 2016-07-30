@@ -13,7 +13,7 @@ var typePicked = 0;
 var cellStartCoordinates = [];
 
 var radiusLoc;
-var radius = 0.7;
+var radius = 0.1;
 
 var clickCenterLoc;
 var clickCenter = vec2(0,-0.5);
