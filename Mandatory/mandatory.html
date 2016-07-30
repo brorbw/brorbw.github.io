@@ -6,14 +6,36 @@ attribute vec4 vPosition;
 attribute vec4 vColor;
 attribute vec2 cPosition;
 
+uniform float radius;
+uniform vec2 clickCenter;
+
 varying vec4 fColor;
 varying vec2 fPosition;
 varying vec2 vertPosition;
 void main()
 {
-    gl_Position = vPosition;
+    vec2 uv = vec2(vPosition.x,vPosition.y);
+    float x = (clickCenter.x-uv.x);
+    float y = (clickCenter.y-uv.y);
+    float r = sqrt(x*x+y*y);
+    float rad = 0.1 + 0.3 * radius;
+    float rad2 = 0.01 + 0.39 * radius;
+    if(r > rad){
+        fColor = vec4(0.33,0.33,0.33,1.0);
+    }
+    if(r >= rad2 && r <= rad){
+        fColor = vec4(1,1,1,1.0);
+	  }else if(r < rad2){
+		    fColor = vec4(0.33,0.33,0.33,1.0);
+    } else {
+        fColor = vColor;
+    }
+    // vec2 destortionLength = clickCenter-vec2(vPosition.x,vPosition.y);
+    // float xDestortionFactor = length(radius*destortionLength);
+    // float yDestortionsFactor =
+    gl_Position = vec4(vPosition.x,vPosition.y,vPosition.z, 1);
     vertPosition = vec2(vPosition.x,vPosition.y);
-    fColor = vColor;
+
     fPosition = cPosition;
 
 }
@@ -47,7 +69,9 @@ Oops ... your browser doesn't support the HTML5 canvas element
     <option value = "1">grass</option>
     <option value = "2">water</option>
     <option value = "3">fire</option>
-    <option value = "4">dirt</option>
-    <option value = "5">death</option>
+    <option value = "4">leafs</option>
+    <option value = "5">wood</option>
+    <option value = "6">dirt</option>
+    <option value = "7">death</option>
 </select>
 </html>

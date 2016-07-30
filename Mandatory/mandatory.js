@@ -12,6 +12,12 @@ var width, height;
 var typePicked = 0;
 var cellStartCoordinates = [];
 
+var radiusLoc;
+var radius = 0.1;
+
+var clickCenterLoc;
+var clickCenter = vec2(0,-0.5);
+
 var initiating = true;
 
 var map = [];
@@ -21,8 +27,10 @@ var world;
 var colors = [
     vec4( 0.0, 0.0, 0.0, 1.0), //nothing
     vec4( 0.0, 1.0, 0.0, 1.0 ),  // green-gras
-    vec4( 0.0, 0.0, 1.0, 1.0 ),  // blue-water
-    vec4( 1.0, 0.0, 0.0, 1.0 ),  // red-water
+    vec4( 0.0, 0.5, 1.0, 1.0 ),  // blue-water
+    vec4( 1.0, 0.0, 0.0, 1.0 ),  // fire
+    vec4( 0.0, 1.0, 0.5, 1.0 ), // leafs
+    vec4( 0.8, 0.5, 0.2, 1.0 ), // wood
     vec4( 0.5, 0.25, 0.0, 1.0 ),  // brown-dirt
     vec4( 0.0, 0.0, 0.0, 1) // curser maybe
 ];
@@ -65,6 +73,13 @@ window.onload = function init(){
   gl.bufferData(gl.ARRAY_BUFFER, gridSize*gridSize*sizeof['vec2']*4, gl.STATIC_DRAW);
   cPos = gl.getAttribLocation(program, "cPosition");
 
+
+  //settin up the uniform variables
+  //radius
+  radiusLoc = gl.getUniformLocation(program, "radius");
+  //centerpoint
+  clickCenterLoc = gl.getUniformLocation(program, "clickCenter");
+
   //onclicks
   canvas.addEventListener("click",clickFunction);
   canvas.addEventListener("mousemove", mousemove);
@@ -78,6 +93,8 @@ window.onload = function init(){
       case 3 : typePicked = 3 ; break;//dirt
       case 4 : typePicked = 4 ; break;//dirt
       case 5 : typePicked = 5 ; break;//dirt
+      case 6 : typePicked = 6 ; break;//dirt
+      case 7 : typePicked = 7; break;//dirt
     }
   });
   //maybe there needs to be made links to the attributes in the vertex-shader
@@ -86,7 +103,12 @@ window.onload = function init(){
   populateBoxes();
   initiating = false;
   render();
-
+  var s = 0;
+  while(s< 100000){
+    radius += 0.01;
+    render();
+    s++;
+  }
 }
 
 function sizeOfTheArray(){
@@ -134,7 +156,7 @@ function render(){
 
   gl.drawArrays(gl.LINE_LOOP, 0,4);
 
-
+  //TODO: make the render function, render forever.
 }
 
 
@@ -195,7 +217,8 @@ function addBox(startCoordinates,type){
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+2),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+3),flatten(center));
-
+    gl.uniform1f(radiusLoc, radius);
+    gl.uniform2fv(clickCenterLoc, flatten(clickCenter));
   }
 }
 
@@ -237,7 +260,7 @@ function initWorld(){
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
     if(i > 349){
-      addBox(i,2);
+      addBox(i,4);
     }
   }
 }
