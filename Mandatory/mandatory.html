@@ -4,16 +4,17 @@
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute vec4 vPosition;
 attribute vec4 vColor;
+attribute vec2 cPosition;
 
 varying vec4 fColor;
+varying vec2 fPosition;
+varying vec2 vertPosition;
 void main()
 {
     gl_Position = vPosition;
-    float red = 1.0 - length(vPosition);
-    float green = 1.0 - length(vPosition);
-    float blue = 1.0 - length(vPosition);
-    fColor = vec4(vColor.x-red,vColor.y-green,vColor.z-blue,1);
-
+    vertPosition = vec2(vPosition.x,vPosition.y);
+    fColor = vColor;
+    fPosition = cPosition;
 
 }
 </script>
@@ -22,10 +23,14 @@ void main()
 
 precision mediump float;
 
-varying vec4 fColor;
+varying vec4 fColor; //current color of the boc
+varying vec2 fPosition; //center of the box
+varying vec2 vertPosition;
 void main()
 {
-    gl_FragColor = fColor;
+    vec2 dinstance_from_center = vertPosition-fPosition;
+    float red = 1.0 - length(dinstance_from_center);
+    gl_FragColor = vec4(red-fColor.x,fColor.y,fColor.z,1);
 }
 </script>
 
