@@ -3,7 +3,7 @@
 var canvas;
 var gl;
 
-var gridSize = 10;
+var gridSize = 25;
 var vBuffer,cBuffer, mBuffer,centerBuffer;;
 var vPos;
 var vColor;
@@ -187,10 +187,9 @@ function addBox(startCoordinates,type){
     //sending the center position to the shader
     console.log(newBoxToDraw[0]+":"+newBoxToDraw[1]);
     var centerX = mix(newBoxToDraw[0],newBoxToDraw[1],0.5);
-    console.log(centerX[0]+":"+centerX[1]);
+
     var centerY = mix(newBoxToDraw[0],newBoxToDraw[2],0.5);
     var center = vec2(centerX[0],centerY[1]);
-    console.log(center);
     gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
@@ -237,9 +236,8 @@ function initWorld(){
 
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
-    addBox(i,4);
     if(i > 349){
-
+      addBox(i,2);
     }
   }
 }
