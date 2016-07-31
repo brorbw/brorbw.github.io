@@ -16,13 +16,14 @@ var radiusLoc;
 var radius = 0.1;
 
 var clickCenterLoc;
-var clickCenter = vec2(0,-0.5);
+var clickCenter = [2,2];
 
 var initiating = true;
 
 var map = [];
 
 var world;
+var click = false;
 
 var colors = [
     vec4( 0.0, 0.0, 0.0, 1.0), //nothing
@@ -123,6 +124,7 @@ function drawGrid(){
 function render(){
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.uniform1f(radiusLoc, radius);
+  gl.uniform2fv(clickCenterLoc, flatten(clickCenter));
 
   gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
   gl.vertexAttribPointer(vColor,4,gl.FLOAT,false,0,0);
@@ -150,8 +152,17 @@ function render(){
   gl.enableVertexAttribArray(vPos);
 
   gl.drawArrays(gl.LINE_LOOP, 0,4);
+  if(click){
+    if(radius >= 2){
+      radius = 0.1;
 
-  //TODO: make the render function, render forever.
+      click = false;
+      clickCenter = [2,2];
+    } else {
+      radius += 0.1;
+    }
+  }
+  window.requestAnimFrame(render,canvas);
 }
 
 
@@ -161,7 +172,8 @@ function clickFunction(event){
   var y = event.clientY;
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
   addBox(startCoordinates,typePicked);
-  render();
+
+  //render();
 }
 
 function mousemove(event){
@@ -170,11 +182,10 @@ function mousemove(event){
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
   var newX = (cellStartCoordinates[startCoordinates])[0];
   var newY = (cellStartCoordinates[startCoordinates])[1];
-  var arrayIndex = indexToXYIn2DArray(startCoordinates);
   var newBoxToDraw = drawSquare(newX,newY);
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, flatten(newBoxToDraw), gl.STATIC_DRAW);
-  render();
+  //render();
 }
 
 
@@ -202,9 +213,7 @@ function addBox(startCoordinates,type){
 
 
     //sending the center position to the shader
-    console.log(newBoxToDraw[0]+":"+newBoxToDraw[1]);
     var centerX = mix(newBoxToDraw[0],newBoxToDraw[1],0.5);
-
     var centerY = mix(newBoxToDraw[0],newBoxToDraw[2],0.5);
     var center = vec2(centerX[0],centerY[1]);
     gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
@@ -212,7 +221,12 @@ function addBox(startCoordinates,type){
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+2),flatten(center));
     gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+3),flatten(center));
-    gl.uniform2fv(clickCenterLoc, flatten(clickCenter));
+    if(!initiating){
+      click = true;
+      var newX = (cellStartCoordinates[startCoordinates])[0];
+      var newY = (cellStartCoordinates[startCoordinates])[1];
+      clickCenter = convert(newY+width/25/2,newX+width/25/2);
+    }
   }
 }
 
@@ -254,7 +268,7 @@ function initWorld(){
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
     if(i > 349){
-      addBox(i,4);
+      addBox(i,6);
     }
   }
 }
@@ -289,6 +303,5 @@ function canBuild(worldCoordinates){
   } else {
     returnBool = false;
   }
-  console.log(returnBool);
   return returnBool;
 }
