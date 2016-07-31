@@ -192,7 +192,16 @@ function mousemove(event){
 	return;
   var newX = (cellStartCoordinates[startCoordinates])[0];
   var newY = (cellStartCoordinates[startCoordinates])[1];
-  var newBoxToDraw = drawSquare(newX,newY);
+  var newBoxToDraw;
+  var worldCoordinates = indexToXYIn2DArray(startCoordinates);
+  typeCurrent = world[worldCoordinates[0]][worldCoordinates[1]];
+  var gridpos = pixPosToBoxPos(newX,newY);
+  if(allowedToBuild(gridpos)){
+      newBoxToDraw = drawSquare(newX,newY);
+      console.log()
+  } else {
+     newBoxToDraw = drawSquare(-width/gridSize,-width/gridSize);
+  }
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, flatten(newBoxToDraw), gl.STATIC_DRAW);
   //render();
@@ -296,24 +305,6 @@ function convert(x,y){
   return vec2(-1+((2*x)/width),-1+(2*(height-y))/height);
 }
 
-// function canBuild(worldCoordinates){
-//   if(initiating){
-//     return true;
-//   }
-//   //  console.log(worldCoordinates);
-//   var yCoordinate = worldCoordinates[0]+1;
-//   if(yCoordinate > 24){
-//     return true;
-//   }
-//   var boxUnder = world[yCoordinate][worldCoordinates[1]];
-//   var returnBool;
-//   if(!boxUnder==0){
-//     returnBool = true;
-//   } else {
-//     returnBool = false;
-//   }
-//   return returnBool;
-// }
 
 // ----- For mergeing
 
@@ -360,7 +351,7 @@ function allowedToBuild(gridpos){
 			case 2 : return allowedToBuildWater(gridpos); break;
 			case 3 : return allowedToBuildFire(gridpos); break;
 			case 4 : return allowedToBuildDirt(gridpos); break;
-			case 5 : return allowedToBuildDirt(gridpos); break;
+			case 5 : return allowedToBuildleafs(gridpos); break;
       case 6 : return allowedToBuildDirt(gridpos); break;
       case 7 : return allowedToBuildDeath(gridpos); break;
 		}
@@ -392,10 +383,10 @@ function allowedToBuildWater(gridpos){
 }
 
 function allowedToBuildFire(gridpos){
-	// only allowed if currentBox is clear AND on top of border, fire, dirt, death AND there is something like this left or rigth of it
+	// only allowed if currentBox is clear AND not top of air, water, man AND there is no water next to it
 	if(typeCurrent===0)
-		if(collisionDown(gridpos)===border || collisionDown(gridpos)===2 || collisionDown(gridpos)===3 || collisionDown(gridpos)===5)
-			if((collisionLeft(gridpos)!=0 || collisionLeft(gridpos)!=4)&& (collisionRight(gridpos)!=0 || collisionRight(gridpos)===3))
+		if(collisionDown(gridpos)!=0 && collisionDown(gridpos)!=2 && collisionDown(gridpos)!=8)
+			if(collisionLeft(gridpos)!=2&& collisionRight(gridpos)!=2)
 				return true;
 }
 
@@ -403,6 +394,20 @@ function allowedToBuildDirt(gridpos){
 	// only allowed if currentBox is clear AND on top of border, dirt, death
 	if((typeCurrent===0) && (collisionDown(gridpos)===border || collisionDown(gridpos)===4 || collisionDown(gridpos)===5 ))
 		return true;
+}
+
+function allowedToBuildLeafs(gridpos){
+	// only allowed if currentBox is clear AND not top of fire, water, man
+	if(typeCurrent===0)
+		if(collisionDown(gridpos)!=2 && collisionDown(gridpos)!=3 && collisionDown(gridpos)!=8)
+			return true;
+}
+
+function allowedToBuildWood(gridpos){
+	// only allowed if currentBox is clear AND not top of fire, leafs, man
+	if(typeCurrent===0)
+		if(collisionDown(gridpos)!=3 && collisionDown(gridpos)!=5 && collisionDown(gridpos)!=8)
+			return true;
 }
 
 function allowedToBuildDeath(gridpos){
