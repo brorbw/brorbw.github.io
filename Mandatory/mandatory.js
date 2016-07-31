@@ -3,7 +3,7 @@
 var canvas;
 var gl;
 
-var gridSize = 25;
+var gridSize = 30;
 var vBuffer,cBuffer, mBuffer,centerBuffer;;
 var vPos;
 var vColor;
@@ -13,6 +13,8 @@ var typePicked = 0;
 var cellStartCoordinates = [];
 var typeCurrent;
 var border = 9;
+
+// var mouseHold = false;
 
 var radiusLoc;
 var radius = 0.1;
@@ -86,6 +88,15 @@ window.onload = function init(){
   //onclicks
   canvas.addEventListener("click",clickFunction);
   canvas.addEventListener("mousemove", mousemove);
+
+  // _______ FOR DRAWING
+  // canvas.addEventListener("mousedown", function(event){
+  //   mouseHold = true;
+  // });
+  // canvas.addEventListener("mouseup", function(event){
+  //   mouseHold = false;
+  // });
+
   var menu = document.getElementById("mymenu");
   initWorld();
   menu.addEventListener("click", function(){
@@ -103,7 +114,7 @@ window.onload = function init(){
   //maybe there needs to be made links to the attributes in the vertex-shader
 
   drawGrid();
-  populateBoxes();
+  buildStaticWorld();
   initiating = false;
   render();
 }
@@ -180,7 +191,7 @@ function clickFunction(event){
   var worldCoordinates = indexToXYIn2DArray(startCoordinates);
   typeCurrent = world[worldCoordinates[0]][worldCoordinates[1]];
   if(allowedToBuild(worldCoordinates)){
-    addBox(startCoordinates,typePicked);
+      addBox(startCoordinates,typePicked);
   }
 }
 
@@ -205,6 +216,13 @@ function mousemove(event){
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, flatten(newBoxToDraw), gl.STATIC_DRAW);
   //render();
+
+  // _______ FOR DRAWING
+  // if(mouseHold){
+  //   addBox(startCoordinates,typePicked);
+  //   if(allowedToBuild(worldCoordinates)){
+  //   }
+  // }
 }
 
 
@@ -243,7 +261,7 @@ function addBox(startCoordinates,type){
     click = true;
     var newX = (cellStartCoordinates[startCoordinates])[0];
     var newY = (cellStartCoordinates[startCoordinates])[1];
-    clickCenter = convert(newY+width/25/2,newX+width/25/2);
+    clickCenter = convert(newY+width/gridSize/2,newX+width/gridSize/2);
   }
 
 }
@@ -285,7 +303,7 @@ function initWorld(){
 
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
-    if(i > gridSize*gridSize-gridSize*Math.floor(gridSize/2)-1){
+    if(i > gridSize*gridSize-gridSize*Math.floor(gridSize/3)-1){
 		addBox(i,4);
     }
   }
@@ -351,7 +369,7 @@ function allowedToBuild(gridpos){
 			case 2 : return allowedToBuildWater(gridpos); break;
 			case 3 : return allowedToBuildFire(gridpos); break;
 			case 4 : return allowedToBuildDirt(gridpos); break;
-			case 5 : return allowedToBuildleafs(gridpos); break;
+			case 5 : return allowedToBuildLeafs(gridpos); break;
       case 6 : return allowedToBuildDirt(gridpos); break;
       case 7 : return allowedToBuildDeath(gridpos); break;
 		}
@@ -390,25 +408,38 @@ function allowedToBuildFire(gridpos){
 				return true;
 }
 
+
 function allowedToBuildDirt(gridpos){
-	// only allowed if currentBox is clear AND on top of border, dirt, death
-	if((typeCurrent===0) && (collisionDown(gridpos)===border || collisionDown(gridpos)===4 || collisionDown(gridpos)===5 ))
-		return true;
+	// only allowed if currentBox is clear AND not on top of fire and water, man and in air if there is wood or dirt
+	if((typeCurrent===0) && (collisionDown(gridpos)!=2 || collisionDown(gridpos)!=3 || collisionDown(gridpos)!=8)){
+		if(collisionDown(gridpos)===0){
+			if(collisionLeft(gridpos)===4 || collisionLeft(gridpos)===6 || collisionRight(gridpos)===4 || collisionRight(gridpos)===6) {
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
 }
 
 function allowedToBuildLeafs(gridpos){
 	// only allowed if currentBox is clear AND not top of fire, water, man
-	if(typeCurrent===0)
-		if(collisionDown(gridpos)!=2 && collisionDown(gridpos)!=3 && collisionDown(gridpos)!=8)
-			return true;
+	if(typeCurrent===0 && collisionDown(gridpos)!=2 && collisionDown(gridpos)!=3 && collisionDown(gridpos)!=8){
+			// if building on top of air check if there is wood or leaf next to
+			if(collisionDown(gridpos)===0){
+				if(collisionLeft(gridpos)===5 || collisionLeft(gridpos)===6 || collisionRight(gridpos)===5 || collisionRight(gridpos)===6) {
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return true;
+			}
+	}
 }
 
-function allowedToBuildWood(gridpos){
-	// only allowed if currentBox is clear AND not top of fire, leafs, man
-	if(typeCurrent===0)
-		if(collisionDown(gridpos)!=3 && collisionDown(gridpos)!=5 && collisionDown(gridpos)!=8)
-			return true;
-}
 
 function allowedToBuildDeath(gridpos){
 	// only allowed if currentBox is clear AND on top of border, dirt, death AND inbetween border, dirt, death
@@ -417,3 +448,64 @@ function allowedToBuildDeath(gridpos){
 			if(collisionRight(gridpos)===border || collisionRight(gridpos)===4 || collisionRight(gridpos)===4)
 				return true;
 }
+
+function prittyPrintWorld(){
+  var string = "";
+  string +="[";
+  for(var i = 0; i < gridSize; i++){
+    string +="[";
+    for(var j = 0; j < gridSize; j++){
+      if (j == gridSize-1) {
+        string += world[i][j];
+      } else {
+        string += world[i][j] + ",";
+      }
+    }
+    string +="],";
+  }
+  string +="]";
+  console.log(string);
+}
+
+function buildStaticWorld(){
+  var index = 0;
+  for (var i = 0; i < gridSize; i++){
+    for (var j = 0; j < gridSize; j++){
+      addBox(index,staticWorld[i][j]);
+      index++;
+    }
+  }
+}
+
+var staticWorld = [
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,6,5,5,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,6,5,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
+  [1,1,1,3,3,3,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,3,3,1,1,2,2,2,2,2],
+  [4,4,4,3,3,3,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
+  [4,4,4,3,3,3,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
+  [4,4,4,4,3,4,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,3,4,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,4,4,4,4,4,4,4,2,2,2,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,4,4,4,4,4,4,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,4,4,4,4,4,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,4,4,4,4,4,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2]
+];
