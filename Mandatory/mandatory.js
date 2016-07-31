@@ -11,6 +11,8 @@ var cPos;
 var width, height;
 var typePicked = 0;
 var cellStartCoordinates = [];
+var typeCurrent;
+var border = 9;
 
 var radiusLoc;
 var radius = 0.1;
@@ -30,9 +32,9 @@ var colors = [
     vec4( 0.0, 1.0, 0.0, 1.0 ),  // green-gras
     vec4( 0.0, 0.5, 1.0, 1.0 ),  // blue-water
     vec4( 1.0, 0.0, 0.0, 1.0 ),  // fire
+    vec4( 0.5, 0.25, 0.0, 1.0 ),  // brown-dirt
     vec4( 0.0, 1.0, 0.5, 1.0 ), // leafs
     vec4( 0.8, 0.5, 0.2, 1.0 ), // wood
-    vec4( 0.5, 0.25, 0.0, 1.0 ),  // brown-dirt
     vec4( 0.0, 0.0, 0.0, 1) // curser maybe
 ];
 
@@ -171,15 +173,23 @@ function clickFunction(event){
   var x = event.clientX;
   var y = event.clientY;
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
-  addBox(startCoordinates,typePicked);
-
-  //render();
+  if(startCoordinates===undefined)
+	return;
+  var newX = (cellStartCoordinates[startCoordinates])[0];
+  var newY = (cellStartCoordinates[startCoordinates])[1];
+  var worldCoordinates = indexToXYIn2DArray(startCoordinates);
+  typeCurrent = world[worldCoordinates[0]][worldCoordinates[1]];
+  if(allowedToBuild(worldCoordinates)){
+    addBox(startCoordinates,typePicked);
+  }
 }
 
 function mousemove(event){
   var x = event.clientX;
   var y = event.clientY;
   var startCoordinates = getCellNumberFromXYMouseInput(x,y);
+  if(startCoordinates===undefined)
+	return;
   var newX = (cellStartCoordinates[startCoordinates])[0];
   var newY = (cellStartCoordinates[startCoordinates])[1];
   var newBoxToDraw = drawSquare(newX,newY);
@@ -194,40 +204,39 @@ function mousemove(event){
 
 function addBox(startCoordinates,type){
   var worldCoordinates = indexToXYIn2DArray(startCoordinates);
-  if(canBuild(worldCoordinates)){
-    //this is for sending the square coordinates to the shader
-    var x = (cellStartCoordinates[startCoordinates])[0];
-    var y = (cellStartCoordinates[startCoordinates])[1];
-    world[worldCoordinates[0]][worldCoordinates[1]] = type;
-    var newBoxToDraw = drawSquare(x,y);
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*startCoordinates, flatten(newBoxToDraw));
+  //this is for sending the square coordinates to the shader
+  var x = (cellStartCoordinates[startCoordinates])[0];
+  var y = (cellStartCoordinates[startCoordinates])[1];
+  world[worldCoordinates[0]][worldCoordinates[1]] = type;
+  var newBoxToDraw = drawSquare(x,y);
+  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*4*startCoordinates, flatten(newBoxToDraw));
 
-    //this is for coloring of the 4 vertecies
-    var color = vec4(colors[type]);
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+1), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+2), flatten(color));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+3), flatten(color));
+  //this is for coloring of the 4 vertecies
+  var color = vec4(colors[type]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+1), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+2), flatten(color));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec4']*(startCoordinates*4+3), flatten(color));
 
 
-    //sending the center position to the shader
-    var centerX = mix(newBoxToDraw[0],newBoxToDraw[1],0.5);
-    var centerY = mix(newBoxToDraw[0],newBoxToDraw[2],0.5);
-    var center = vec2(centerX[0],centerY[1]);
-    gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4),flatten(center));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+2),flatten(center));
-    gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+3),flatten(center));
-    if(!initiating){
-      click = true;
-      var newX = (cellStartCoordinates[startCoordinates])[0];
-      var newY = (cellStartCoordinates[startCoordinates])[1];
-      clickCenter = convert(newY+width/25/2,newX+width/25/2);
-    }
+  //sending the center position to the shader
+  var centerX = mix(newBoxToDraw[0],newBoxToDraw[1],0.5);
+  var centerY = mix(newBoxToDraw[0],newBoxToDraw[2],0.5);
+  var center = vec2(centerX[0],centerY[1]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4),flatten(center));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+1),flatten(center));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+2),flatten(center));
+  gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2']*(startCoordinates*4+3),flatten(center));
+  if(!initiating){
+    click = true;
+    var newX = (cellStartCoordinates[startCoordinates])[0];
+    var newY = (cellStartCoordinates[startCoordinates])[1];
+    clickCenter = convert(newY+width/25/2,newX+width/25/2);
   }
+
 }
 
 function getCellNumberFromXYMouseInput(y,x){ //turn'd the algo the wrong way
@@ -267,8 +276,8 @@ function initWorld(){
 
 function populateBoxes(){
   for(var i = 0; i < gridSize*gridSize; i++){
-    if(i > 349){
-      addBox(i,6);
+    if(i > gridSize*gridSize-gridSize*Math.floor(gridSize/2)-1){
+		addBox(i,4);
     }
   }
 }
@@ -287,21 +296,119 @@ function convert(x,y){
   return vec2(-1+((2*x)/width),-1+(2*(height-y))/height);
 }
 
-function canBuild(worldCoordinates){
+// function canBuild(worldCoordinates){
+//   if(initiating){
+//     return true;
+//   }
+//   //  console.log(worldCoordinates);
+//   var yCoordinate = worldCoordinates[0]+1;
+//   if(yCoordinate > 24){
+//     return true;
+//   }
+//   var boxUnder = world[yCoordinate][worldCoordinates[1]];
+//   var returnBool;
+//   if(!boxUnder==0){
+//     returnBool = true;
+//   } else {
+//     returnBool = false;
+//   }
+//   return returnBool;
+// }
+
+// ----- For mergeing
+
+function pixPosToBoxPos(posX, posY){
+	// converts PixelPosition to BoxIndex
+	var gridx = Math.floor(posX/(canvas.width/gridSize));
+	var gridy = Math.floor(posY/(canvas.height/gridSize));
+
+	return vec2(gridx,gridy);
+}
+
+//Collision detection;
+
+function collisionDown(gridpos){
+	// returns type of collision ; border is type 6
+	return ((gridpos[0]+1)>=gridSize) ? border : world[gridpos[0]+1][gridpos[1]];
+}
+
+function collisionLeft(gridpos){
+	// returns type of collision ; border is type 6
+	return ((gridpos[1]-1)<0) ? border : world[gridpos[0]][gridpos[1]-1];
+}
+
+function collisionRight(gridpos){
+	// returns type of collision ; border is type 6
+	return ((gridpos[1]+1)>=gridSize) ? border : world[gridpos[0]][gridpos[1]+1];
+}
+
+function collisionUp(gridpos){
+	// returns type of collision ; border is type 6
+	return ((gridpos[0]-1)<0) ? border : world[gridpos[0]-1][gridpos[1]];
+}
+
+//bulding
+
+function allowedToBuild(gridpos){
   if(initiating){
     return true;
   }
-  //  console.log(worldCoordinates);
-  var yCoordinate = worldCoordinates[0]+1;
-  if(yCoordinate > 24){
-    return true;
+	if(world[gridpos[0]][gridpos[1]]!= 8){
+		switch(typePicked){
+			case 0 : return allowedToDelete(gridpos); break;
+			case 1 : return allowedToBuildGras(gridpos); break;
+			case 2 : return allowedToBuildWater(gridpos); break;
+			case 3 : return allowedToBuildFire(gridpos); break;
+			case 4 : return allowedToBuildDirt(gridpos); break;
+			case 5 : return allowedToBuildDirt(gridpos); break;
+      case 6 : return allowedToBuildDirt(gridpos); break;
+      case 7 : return allowedToBuildDeath(gridpos); break;
+		}
+	}else{
+		return false;
+	}
+}
+
+function allowedToDelete(gridpos){
+	// only allowed if currentBox is not clear AND but the upper one is clear or top
+	if((typeCurrent!=0)){
+		return true;
   }
-  var boxUnder = world[yCoordinate][worldCoordinates[1]];
-  var returnBool;
-  if(!boxUnder==0){
-    returnBool = true;
-  } else {
-    returnBool = false;
-  }
-  return returnBool;
+}
+
+function allowedToBuildGras(gridpos){
+	// only allowed if currentBox is clear and on top of dirt
+	if(typeCurrent===0 && (collisionDown(gridpos)===4))
+		return (true);
+}
+
+function allowedToBuildWater(gridpos){
+	// only allowed if currentBox is clear AND on top of border, water, dirt AND there is something left or rigth of it
+	if(typeCurrent===0)
+		if(collisionDown(gridpos)===border || collisionDown(gridpos)===2 || collisionDown(gridpos)===4)
+			if ( collisionLeft(gridpos)===border || collisionLeft(gridpos)===2 || collisionLeft(gridpos)===4)
+				if(collisionRight(gridpos)===border || collisionRight(gridpos)===2 || collisionRight(gridpos)===4)
+					return true;
+}
+
+function allowedToBuildFire(gridpos){
+	// only allowed if currentBox is clear AND on top of border, fire, dirt, death AND there is something like this left or rigth of it
+	if(typeCurrent===0)
+		if(collisionDown(gridpos)===border || collisionDown(gridpos)===2 || collisionDown(gridpos)===3 || collisionDown(gridpos)===5)
+			if((collisionLeft(gridpos)!=0 || collisionLeft(gridpos)!=4)&& (collisionRight(gridpos)!=0 || collisionRight(gridpos)===3))
+				return true;
+}
+
+function allowedToBuildDirt(gridpos){
+	// only allowed if currentBox is clear AND on top of border, dirt, death
+	if((typeCurrent===0) && (collisionDown(gridpos)===border || collisionDown(gridpos)===4 || collisionDown(gridpos)===5 ))
+		return true;
+}
+
+function allowedToBuildDeath(gridpos){
+	// only allowed if currentBox is clear AND on top of border, dirt, death AND inbetween border, dirt, death
+	if((typeCurrent===0) && (collisionDown(gridpos)===border || collisionDown(gridpos)===4 || collisionDown(gridpos)===5 ))
+		if(collisionLeft(gridpos)===border || collisionLeft(gridpos)===4 || collisionLeft(gridpos)===5)
+			if(collisionRight(gridpos)===border || collisionRight(gridpos)===4 || collisionRight(gridpos)===4)
+				return true;
 }

@@ -58,7 +58,7 @@ void main()
   } else{
     vec2 dinstance_from_center = fPosition-vertPosition;
     float distanceFactor = 1.0 - length(dinstance_from_center)*8.0;
-    gl_FragColor = vec4(fColor.xyz*distanceFactor-(0.1*amount),1);
+    gl_FragColor = vec4(fColor.xyz*distanceFactor-(0.2*amount),1);
   }
 }
 </script>
@@ -72,13 +72,13 @@ void main()
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 <select id = "mymenu" size = "7">
-    <option value = "0">Delete</option>
-    <option value = "1">grass</option>
-    <option value = "2">water</option>
-    <option value = "3">fire</option>
-    <option value = "4">leafs</option>
-    <option value = "5">wood</option>
-    <option value = "6">dirt</option>
-    <option value = "7">death</option>
+  <option value = "0">delete</option>
+  <option value = "1">grass</option>
+  <option value = "2">water</option>
+  <option value = "3">fire</option>
+  <option value = "4">dirt</option>
+  <option value = "5">leafs</option>
+  <option value = "6">wood</option>
+  <option value = "7">death</option>
 </select>
 </html>
