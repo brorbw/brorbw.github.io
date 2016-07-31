@@ -13,6 +13,17 @@ var typePicked = 0;
 var cellStartCoordinates = [];
 var typeCurrent;
 var border = 9;
+var jumping = false;
+var jumpingPos;
+var up, left, right;
+// stickman globals
+var smBuffer;
+var smBoxW = 50;
+var smIndex;
+var smCurrPos;
+var smMovement = 2;
+var smMaxVelocity = 20;
+var rightKeyDown, leftKeyDown;
 
 // var mouseHold = false;
 
@@ -46,6 +57,9 @@ window.onload = function init(){
   canvas = document.getElementById( "gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas);
   if(!gl){alert("WebGL isn't available");}
+
+  initNavKeys();
+
   width = canvas.width;
   height = canvas.height;
   gl.viewport(0,0,width,height);
@@ -61,6 +75,60 @@ window.onload = function init(){
   gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, sizeOfTheArray(), gl.STATIC_DRAW);
   vPos = gl.getAttribLocation(program, "vPosition");
+
+  // stickman events
+  // keyboard event listener
+  window.addEventListener("keydown", function(event){
+    if (event.keyCode === 68) {
+      rightKeyDown = true;
+      if(!isSolid(collisionRight(pixPosToBoxPos(smCurrPos[0],smCurrPos[1]))))
+        moveRight();
+    } else if (event.keyCode === 65) {
+      leftKeyDown = true;
+      if(!isSolid(collisionLeft(pixPosToBoxPos(smCurrPos[0],smCurrPos[1]))))
+        moveLeft();
+    } else if (event.keyCode === 87) {
+      // if (onSolidBlock()) {
+      jump();
+      // }
+    }
+  });
+  window.addEventListener("keyup", function(event){
+    if (event.keyCode === 68 || event.keyCode === 65) {
+      initNavKeys();
+      // resetVelocity();
+    }
+  });
+  // click event listeners stickman
+  left = document.getElementById("ButtonLeft")
+  left.addEventListener("click", function(){
+    moveLeft();
+  });
+
+  up = document.getElementById("ButtonUp")
+  up.addEventListener("click", function(){
+    jump();
+  });
+
+  right = document.getElementById("ButtonRight")
+  right.addEventListener("click", function(){
+    moveRight();
+  });
+
+  ////////////////////////SM----BEGINNING//////////////////////////////////////////////////////////////////////////////////////////////
+  smBoxW = width/gridSize*2;
+  var yPosMan =  (gridSize%2 === 0) ? height/gridSize*(Math.floor(gridSize/2)-2):(height/gridSize*(Math.floor(gridSize/2)-1));
+  var xPosMan =  height/gridSize;
+  smCurrPos = vec2(yPosMan,xPosMan);
+
+  // Stick man buffer
+  smBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, smBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, sizeof["vec2"]*8*8,gl.DYNAMIC_DRAW);
+  // var sm = smVertices(vec2(smCurrPos[0], smCurrPos[1]));
+  // gl.bufferSubData(gl.ARRAY_BUFFER,
+  //   sizeof["vec2"]*smIndex,
+  //   flatten(sm));
 
   //color buffer
   cBuffer = gl.createBuffer();
@@ -175,9 +243,127 @@ function render(){
       radius += 0.1;
     }
   }
+
+  // Render stickman
+  if (jumping) {
+    jump();
+  }
+  gravity();
+  var sm = drawStickMan(vec2(smCurrPos[0], smCurrPos[1]));
+  gl.bindBuffer(gl.ARRAY_BUFFER, smBuffer);
+  gl.bufferSubData(gl.ARRAY_BUFFER,
+    sizeof["vec2"]*smIndex,
+    flatten(sm));
+  gl.vertexAttribPointer( vPos, 2, gl.FLOAT, false, 0, 0 );
+  gl.enableVertexAttribArray(vPos);
+
+  gl.drawArrays(gl.LINES, smIndex, smIndex);
+
   window.requestAnimFrame(render,canvas);
 }
 
+function isSolid(boxType) {
+  switch (boxType) {
+    case 0: return false; break;
+    case 2: return false; break;
+    case 3: return false; break;
+    default: return true; break;
+  }
+}
+
+function gravity() {
+  var vMove = 5;
+  if (!onSolidBlock() && !jumping) {
+    var boxPosMan =  pixPosToBoxPos(smCurrPos[0]+vMove, smCurrPos[1]);
+    if(isSolid(collisionDown(vec2(boxPosMan[0],boxPosMan[1])))){
+      var ground = boxPosMan[0]*width/gridSize;
+      console.log(ground, smCurrPos[0]);
+    //if (smCurrPos[0] + vMove > ground) {
+      vMove = ground - smCurrPos[0];
+    }else if(collisionDown(vec2(boxPosMan[0],boxPosMan[1]))===3){
+
+      jump();
+      return;
+    }
+
+    smCurrPos[0] += vMove;
+    // if (rightKeyDown) {
+    //   smCurrPos[1] += smMovement;
+    // } else if (leftKeyDown) {
+    //   smCurrPos[1] -= smMovement;
+    // }
+  }
+}
+
+function maxJumpHeight() {
+  return jumpingPos - smBoxW*2;
+}
+
+function jump() {
+  // if max height not reached...
+  if (!jumping) {
+    jumpingPos = smCurrPos[0];
+  }
+  //console.log(maxJumpHeight());
+//  console.log(jumpingPos);
+  var boxPosMan =  pixPosToBoxPos(smCurrPos[0] + 5, smCurrPos[1]);
+  console.log(!isSolid(collisionUp(vec2(boxPosMan[0],boxPosMan[1]))));
+  if (smCurrPos[0] > maxJumpHeight() && !isSolid(collisionUp((vec2(boxPosMan[0],boxPosMan[1]))))) {
+    jumping = true;
+    smCurrPos[0] -= 5;
+    console.log(smCurrPos[0]);
+    if (rightKeyDown) {
+      smCurrPos[1] += 5;
+    } else if (leftKeyDown) {
+      smCurrPos[1] -= 5;
+    }
+    // smCreateBuffer();
+    // render();
+    // requestAnimFrame(jump);
+  } else {
+    jumping = false;
+  }
+}
+
+// stickman stuff
+
+function initNavKeys() {
+  rightKeyDown = false;
+  leftKeyDown = false;
+}
+
+function drawStickMan(locVec2) {
+  var x = locVec2[1];
+  var y = locVec2[0];
+  var smArray =  [
+    convert(x, y),
+    convert(x, y + smBoxW/2),
+    convert(x - (smBoxW/2), y + (smBoxW*0.25)),
+    convert(x + (smBoxW/2), y + (smBoxW*0.25)),
+    convert(x, y + smBoxW /2),
+    convert(x - (smBoxW*0.25), y + smBoxW),
+    convert(x, y + smBoxW /2),
+    convert(x + (smBoxW*0.25), y + smBoxW)
+  ];
+  smIndex = smArray.length;
+  return smArray;
+}
+
+function moveRight() {
+  if (smMovement < smMaxVelocity) {
+    smMovement += 1;
+  }
+  smCurrPos[1] += smMovement;
+}
+
+function moveLeft() {
+  if (smMovement < smMaxVelocity) {
+    // Need collision detection here
+    smMovement += 1;
+    // Need to check if still on solid ground
+  }
+  smCurrPos[1] -= smMovement;
+}
 
 //event listneres
 function clickFunction(event){
@@ -356,6 +542,13 @@ function collisionUp(gridpos){
 	return ((gridpos[0]-1)<0) ? border : world[gridpos[0]-1][gridpos[1]];
 }
 
+function onSolidBlock() {
+  var boxPosMan =  pixPosToBoxPos(smCurrPos[0], smCurrPos[1]);
+  var blockType = collisionDown(vec2(boxPosMan[0]+1,boxPosMan[1]));
+  // console.log((blockType));
+  return isSolid(blockType);
+}
+
 //bulding
 
 function allowedToBuild(gridpos){
@@ -498,11 +691,11 @@ var staticWorld = [
   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0],
-  [1,1,1,3,3,3,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,3,3,1,1,2,2,2,2,2],
-  [4,4,4,3,3,3,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
-  [4,4,4,3,3,3,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
-  [4,4,4,4,3,4,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
-  [4,4,4,4,3,4,4,4,4,4,4,4,4,4,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [1,1,1,3,3,3,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,3,3,1,1,2,2,2,2,2],
+  [4,4,4,3,3,3,4,4,4,4,4,4,4,2,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
+  [4,4,4,3,3,3,4,4,4,4,4,4,4,2,2,4,4,4,4,4,4,3,3,4,4,2,2,2,2,2],
+  [4,4,4,4,3,4,4,4,4,4,4,4,4,2,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
+  [4,4,4,4,3,4,4,4,4,4,4,4,4,2,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
   [4,4,4,4,4,4,4,4,4,4,4,2,2,2,2,4,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
   [4,4,4,4,4,4,4,4,4,4,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,2,2,2,2,2],
   [4,4,4,4,4,4,4,4,4,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,2,2,2,2,2],
