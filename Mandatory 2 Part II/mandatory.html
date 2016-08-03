@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+<script id="vertex-shader" type="x-shader/x-vertex">
+precision mediump float;
+attribute vec4 vPosition;
+attribute vec4 vColor;
+attribute vec2 cPosition;
+
+uniform float radius;
+uniform vec2 clickCenter;
+
+varying vec4 fColor;
+varying vec2 fPosition;
+varying vec2 vertPosition;
+varying float amount;
+void main()
+{
+    float x = (clickCenter.x-vPosition.x);
+    float y = (clickCenter.y-vPosition.y);
+    float r = sqrt(x*x+y*y);
+    float rad = 0.1 + 0.7 * radius;
+    float rad2 = 0.01 + 0.39 * radius;
+    float rad3 = 0.001 + 0.039 * radius;
+    float rad4 = 0.0001 + 0.0029 * radius;
+
+    if(r >= rad2 && r <= rad){
+      gl_Position = vec4(vPosition.x+x*0.04*1.0/radius,vPosition.y+y*0.04*1.0/radius,vPosition.z, 1);
+	  } else if(r >= rad4 && r <= rad3){
+      gl_Position = vec4(vPosition.x+x*0.02*1.0/radius,vPosition.y+y*0.02*1.0/radius,vPosition.z, 1);
+    } else {
+      gl_Position = vec4(vPosition.x,vPosition.y,vPosition.z, 1);
+    }
+
+    vertPosition = vec2(vPosition.x,vPosition.y);
+    amount = (distance(clickCenter,vPosition.xy)*1.0/radius);
+    fColor = vColor;
+    fPosition = cPosition;
+
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor; //current color of the boc
+varying vec2 fPosition; //center of the box
+varying vec2 vertPosition;
+varying float amount;
+uniform float radius;
+void main()
+{
+  if(amount >= 1.0){
+    vec2 dinstance_from_center = fPosition-vertPosition;
+    float distanceFactor = 1.0 - length(dinstance_from_center)*8.0;
+    gl_FragColor = vec4(fColor.xyz*distanceFactor,1);
+  } else{
+    vec2 dinstance_from_center = fPosition-vertPosition;
+    float distanceFactor = 1.0 - length(dinstance_from_center)*8.0;
+    gl_FragColor = vec4(fColor.xyz*distanceFactor-(0.2*amount),1);
+  }
+}
+</script>
+
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/webgl-utils.js"></script>
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/initShaders.js"></script>
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/MV.js"></script>
+<script type="text/javascript" src="mandatory.js"></script>
+
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<br>
+<select id = "mymenu" size = "7">
+  <option value = "0">delete</option>
+  <option value = "1">grass</option>
+  <option value = "2">water</option>
+  <option value = "3">fire</option>
+  <option value = "4">dirt</option>
+  <option value = "5">leafs</option>
+  <option value = "6">wood</option>
+  <option value = "7">death</option>
+</select>
+<button id="ButtonLeft">move left</button>
+<button id="ButtonUp">jump</button>
+<button id="ButtonRight">move right</button>
+</html>
