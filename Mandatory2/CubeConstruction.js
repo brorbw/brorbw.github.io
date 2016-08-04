@@ -1,5 +1,5 @@
-//This is for cube creation, so doing the math for the cube
 
+//This is for cube creation, so doing the math for the cube
 
 var colors;
 var points;
@@ -47,13 +47,13 @@ function buildCube(centerPoint, length){
   quad( 5, 4, 0, 1 ,vertices,faceColor[5]);
 }
 
+
+
 function quad(a,b,c,d,vertices,color){
-  var indices = [ a, b, c, a, c, d ];
+    var indices = [ a, b, c, a, c, d ];
 
     for ( var i = 0; i < indices.length; ++i ) {
         points.push( vertices[indices[i]] );
-
         colors.push(color);
-
     }
 }
