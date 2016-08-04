@@ -91,7 +91,7 @@ window.onload = function init(){
       // if (onSolidBlock()) {
       jump();
       // }
-    }
+    } 
   });
   window.addEventListener("keyup", function(event){
     if (event.keyCode === 68 || event.keyCode === 65) {

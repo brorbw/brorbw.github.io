@@ -18,9 +18,10 @@ var  aspect;       // Viewport aspect ratio
 
 var mvMatrix, pMatrix;
 var modelView, projection;
-var eye;
-const at = vec3(0.0, 0.0, 0.0);
+var eye = vec3(0.0,0.0,-5.0);
+var at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
+var tmpat = vec3(0.0,0.0,0.0);
 
 window.onload = function init() {
 
@@ -47,9 +48,9 @@ window.onload = function init() {
     var p = new Position(0,0,0);
     var box = new Box(p);
     addBox(box);
-    var p = new Position(0,1,0);
-    var box = new Box(p);
-    addBox(box);
+    //var p = new Position(0,1,0);
+    //var box = new Box(p);
+    //addBox(box);
 
 
     var cBuffer = gl.createBuffer();
@@ -81,6 +82,18 @@ window.onload = function init() {
     document.getElementById("Button6").onclick = function(){theta -= dr;};
     document.getElementById("Button7").onclick = function(){phi += dr;};
     document.getElementById("Button8").onclick = function(){phi -= dr;};
+    window.addEventListener("keydown", function(event){
+        if(event.keyCode === 37){
+            eye = add(eye,vec3(-1,0,0));
+        } else if (event.keyCode === 39) {
+            eye = add(eye,vec3(1, 0, 0));
+        } else if (event.keyCode === 38){
+            eye = add(eye,vec3(0, 1, 0));
+        } else if (event.keyCode === 40){
+            eye = add(eye,vec3(0, -1, 0));
+        }
+
+    })
 
     render();
 }
@@ -89,8 +102,8 @@ window.onload = function init() {
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
-        radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+    //at = vec3(radius*Math.sin(theta)*Math.cos(phi),radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+    at = add(tmpat,vec3(radius*Math.sin(theta),radius*Math.sin(phi), 0));//radius*Math.cos(phi));
     mvMatrix = lookAt(eye, at , up);
     pMatrix = perspective(fovy, aspect, near, far);
 
