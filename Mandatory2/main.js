@@ -82,15 +82,21 @@ window.onload = function init() {
     document.getElementById("Button6").onclick = function(){theta -= dr;};
     document.getElementById("Button7").onclick = function(){phi += dr;};
     document.getElementById("Button8").onclick = function(){phi -= dr;};
+
+    //Trying to move the eye
     window.addEventListener("keydown", function(event){
         if(event.keyCode === 37){
-            eye = add(eye,vec3(-1,0,0));
+            eye = add(eye,vec3(-0.25,0,0));
+            tmpat= add(at,vec3(-0.25,0,0));
         } else if (event.keyCode === 39) {
-            eye = add(eye,vec3(1, 0, 0));
+            eye = add(eye,vec3(0.25, 0, 0));
+            tmpat= add(at,vec3(0.25,0,0));
         } else if (event.keyCode === 38){
-            eye = add(eye,vec3(0, 1, 0));
+            eye = add(eye,vec3(0, 0.25, 0));
+            tmpat= add(at,vec3(0,0.25,0));
         } else if (event.keyCode === 40){
-            eye = add(eye,vec3(0, -1, 0));
+            eye = add(eye,vec3(0, -0.25, 0));
+            tmpat= add(at,vec3(0,-0.25,0));
         }
 
     })
