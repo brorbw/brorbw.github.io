@@ -1,13 +1,16 @@
-function buildCube(centerPoint, length) {
+var pointsArray = [];
+var colorsArray = [];
+
+function buildCube(centerPoint) {
     vertForCube = [
-        vec4(centerPoint[0] - length / 2, centerPoint[1] - length / 2, centerPoint[2] + length / 2),
-        vec4(centerPoint[0] - length / 2, centerPoint[1] + length / 2, centerPoint[2] + length / 2),
-        vec4(centerPoint[0] + length / 2, centerPoint[1] + length / 2, centerPoint[2] + length / 2),
-        vec4(centerPoint[0] + length / 2, centerPoint[1] - length / 2, centerPoint[2] + length / 2),
-        vec4(centerPoint[0] - length / 2, centerPoint[1] - length / 2, centerPoint[2] - length / 2),
-        vec4(centerPoint[0] - length / 2, centerPoint[1] + length / 2, centerPoint[2] - length / 2),
-        vec4(centerPoint[0] + length / 2, centerPoint[1] + length / 2, centerPoint[2] - length / 2),
-        vec4(centerPoint[0] + length / 2, centerPoint[1] - length / 2, centerPoint[2] - length / 2)
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + length / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + length / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + length / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + length / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - length / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - length / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - length / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - length / 2)
     ];
     quad( 1, 0, 3, 2 ,vertForCube);
     quad( 2, 3, 7, 6 ,vertForCube);
@@ -18,7 +21,7 @@ function buildCube(centerPoint, length) {
 }
 
 
-function quad(a, b, c, d,verts) {
+function quad(a, b, c, d, verts) {
 
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);

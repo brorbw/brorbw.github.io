@@ -5,6 +5,7 @@ var gl;
 
 var NumVertices  = pointsArray.length;
 
+var boxLength = 1;
 
 var near = 1;
 var far = 8;
@@ -44,7 +45,10 @@ window.onload = function init() {
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    
+    var p = new Position(0,0,0);
+    var box = new Box(p);
+    addBox(box);
+    //drawWorld();
 
     var cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
