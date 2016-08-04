@@ -3,7 +3,6 @@
 var canvas;
 var gl;
 
-var NumVertices  = pointsArray.length;
 
 var boxLength = 1;
 
@@ -48,7 +47,10 @@ window.onload = function init() {
     var p = new Position(0,0,0);
     var box = new Box(p);
     addBox(box);
-    //drawWorld();
+    var p = new Position(0,1,0);
+    var box = new Box(p);
+    addBox(box);
+
 
     var cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
@@ -95,6 +97,6 @@ var render = function(){
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
 
-    gl.drawArrays( gl.TRIANGLES, 0, NumVertices );
+    gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
     requestAnimFrame(render);
 }

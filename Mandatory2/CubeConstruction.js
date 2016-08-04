@@ -2,16 +2,18 @@ var pointsArray = [];
 var colorsArray = [];
 
 function buildCube(centerPoint) {
-    vertForCube = [
-        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + length / 2),
-        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + length / 2),
-        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + length / 2),
-        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + length / 2),
-        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - length / 2),
-        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - length / 2),
-        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - length / 2),
-        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - length / 2)
+    console.log(centerPoint.z);
+    var vertForCube = [
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + boxLength / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + boxLength / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + boxLength / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + boxLength / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - boxLength / 2),
+        vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - boxLength / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - boxLength / 2),
+        vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - boxLength / 2)
     ];
+    console.log(vertForCube.toString());
     quad( 1, 0, 3, 2 ,vertForCube);
     quad( 2, 3, 7, 6 ,vertForCube);
     quad( 3, 0, 4, 7 ,vertForCube);

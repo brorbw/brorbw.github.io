@@ -11,7 +11,7 @@ function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    buildCube(boxToAdd.position);
+    buildCube(position);
 }
 
 //might not be needed
@@ -34,13 +34,3 @@ function Position(x,y,z){
     this.z = z;
 }
 
-function drawWorld(){
-    for(var i = 0; i < world.length; i++){
-        var currentBox = world[i];
-        console.log(currentBox);
-        if(currentBox !== undefined) {
-        } else {
-            continue;
-        }
-    }
-}
