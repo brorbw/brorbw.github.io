@@ -4,4 +4,41 @@
 
 //Right now there is only
 
-var world = [];
+var gridSize = 10;
+var world = [gridSize*gridSize*gridSize];
+
+function addBox(boxToAdd){
+    var position = boxToAdd.position;
+    var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
+    world[index] = boxToAdd.type;
+    boxesAdded.push(boxToAdd);
+}
+
+function getCube(position){
+    return world[position.z*gridSize*gridSize+position.y*gridSize+position.x];
+}
+
+function removeBox(position){
+    world[position.z*gridSize*gridSize+position.y*gridSize+position.x] = 0;
+}
+
+
+function Box(position, matype){
+    this.position = position;
+    this.matype = matype;
+}
+function Position(x,y,z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+
+function drawWorld(){
+    for(var i = 0; i < world.length; i++){
+        
+    }
+}
+
+
+var pointsArray = [];
+var colorsArray = [];
