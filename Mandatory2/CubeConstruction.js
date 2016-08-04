@@ -1,8 +1,8 @@
 
 //This is for cube creation, so doing the math for the cube
 
-var colors;
-var points;
+var colors = [];
+var points = [];
 
 function buildCube(centerPoint, length){
   var vertices = [
@@ -39,12 +39,12 @@ function buildCube(centerPoint, length){
   y = subtract(vertices[5],vertices[4]); //y vector 45
   x = subtract(vertices[0],vertices[4]); //x vector 40
   faceColor.push(vec4(cross(x,y),1));
-  quad( 1, 0, 3, 2 ,vertices,faceColor[1]);
-  quad( 2, 3, 7, 6 ,vertices,faceColor[2]);
-  quad( 3, 0, 4, 7 ,vertices,faceColor[3]);
-  quad( 6, 5, 1, 2 ,vertices,faceColor[6]);
-  quad( 4, 5, 6, 7 ,vertices,faceColor[4]);
-  quad( 5, 4, 0, 1 ,vertices,faceColor[5]);
+  quad( 1, 0, 3, 2 ,vertices,faceColor[0]);
+  quad( 2, 3, 7, 6 ,vertices,faceColor[1]);
+  quad( 3, 0, 4, 7 ,vertices,faceColor[2]);
+  quad( 6, 5, 1, 2 ,vertices,faceColor[5]);
+  quad( 4, 5, 6, 7 ,vertices,faceColor[3]);
+  quad( 5, 4, 0, 1 ,vertices,faceColor[4]);
 }
 
 

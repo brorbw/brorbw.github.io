@@ -1,14 +1,56 @@
-<<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Mandatory2</title>
 </head>
 <body>
+<p> </p>
+<button id = "Button1">Increase Z</button>
+<button id = "Button2">Decrease Z</button>
+<button id = "Button3">Increase R</button>
+<button id = "Button4">Decrease R</button>
+
+<p> </p>
+<button id = "Button5">Increase theta</button>
+<button id = "Button6">Decrease theta</button>
+<button id = "Button7">Increase phi</button>
+<button id = "Button8">Decrease phi</button>
+<p> </p>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+varying vec4 fColor;
+
+uniform mat4 modelView;
+uniform mat4 projection;
+
+void main()
+{
+    gl_Position = projection*modelView*vPosition;
+    fColor = vColor;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/webgl-utils.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/initShaders.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/CODE/Common/MV.js"></script>
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="copy.js"></script>
 
 <canvas id="gl-canvas" width="512" height="512">
     Oops ... your browser doesn't support the HTML5 canvas element
