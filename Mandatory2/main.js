@@ -18,7 +18,7 @@ var  aspect;       // Viewport aspect ratio
 
 var mvMatrix, pMatrix;
 var modelView, projection;
-var eye = vec3(0.0,0.0,-5.0);
+var eye = vec3(0.0,0.0,5.0);
 var at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
 var tmpat = vec3(0.0,0.0,0.0);
@@ -85,18 +85,20 @@ window.onload = function init() {
 
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
+        //im not sure that im handling the movement right, im reading chaptor 4 again
         if(event.keyCode === 37){
-            eye = add(eye,vec3(-0.25,0,0));
+            eye = add(eye,vec3(-0.25,0, 0));
             tmpat= add(at,vec3(-0.25,0,0));
         } else if (event.keyCode === 39) {
-            eye = add(eye,vec3(0.25, 0, 0));
+            eye = add(eye,vec3(0.25,0, 0));
             tmpat= add(at,vec3(0.25,0,0));
         } else if (event.keyCode === 38){
-            eye = add(eye,vec3(0, 0.25, 0));
-            tmpat= add(at,vec3(0,0.25,0));
+            eye = add(eye,vec3(0,0,-0.25));
+            tmpat= add(at,vec3(0,0,-0.25));
         } else if (event.keyCode === 40){
-            eye = add(eye,vec3(0, -0.25, 0));
-            tmpat= add(at,vec3(0,-0.25,0));
+            eye = add(eye,vec3(0,0,0.25));
+            tmpat= add(at,vec3(0,0,0.25));
+
         }
 
     })
@@ -108,7 +110,9 @@ window.onload = function init() {
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    //at = vec3(radius*Math.sin(theta)*Math.cos(phi),radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+    //at = vec3(radius*Math.sin(theta)*Math.cos(phi),radius*Math.sin(theta)*Math.sin(phi), radius*
+
+    //this is what does not work look at the keydown events
     at = add(tmpat,vec3(radius*Math.sin(theta),radius*Math.sin(phi), 0));//radius*Math.cos(phi));
     mvMatrix = lookAt(eye, at , up);
     pMatrix = perspective(fovy, aspect, near, far);
