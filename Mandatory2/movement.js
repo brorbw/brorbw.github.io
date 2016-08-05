@@ -1,17 +1,22 @@
+var near = 0.1;
+var far = 100;
+var radius = 4.0;
+var eye = vec3(0.0,0,12);
+var at = vec3(0,0.0,0);
+const up = vec3(0.0, 1.0, 0.0);
+var pMatrix;
 var mvMatrix = lookAt(eye, at , up);
 
-var camera = {
-    position: new Position (0,0,0),
-    lookLeft: lookLeft,
-    lookRight: lookRight,
-    lookUp: lookUp,
-    lookDown: lookDown,
-    moveForward: moveForward,
-    moveBackwards: moveBackwards,
-    moveLeft: moveLeft,
-    moveRight: moveRight
+function Camera() {
+    this.lookLeft = lookLeft,
+    this.lookRight = lookRight,
+    this.lookUp = lookUp,
+    this.lookDown = lookDown,
+    this.moveForward = moveForward,
+    this.moveBackwards = moveBackwards,
+    this.moveLeft = moveLeft,
+    this.moveRight = moveRight
 }
-
 
 function lookUp(){
     //do stuff that looks up
@@ -30,17 +35,17 @@ function lookRight(){
 }
 
 function moveForward(){
-    //you get the point
+    mvMatrix[2][3] += 0.25;
 }
 
 function moveBackwards(){
-
+    mvMatrix[2][3] -= 0.25;
 }
 
 function moveLeft(){
-
+    mvMatrix[0][3] += 0.25;
 }
 
 function moveRight(){
-
+    mvMatrix[0][3] -= 0.25;
 }

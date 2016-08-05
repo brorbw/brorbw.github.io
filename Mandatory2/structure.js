@@ -11,7 +11,8 @@ function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    buildRegularCube(position);
+    emptyArrays();
+    drawWorld();
     resendBuffers();
 }
 
@@ -23,6 +24,7 @@ function getCube(position){
 function removeBox(position){
     //This is where we should build a rotating cube
     world[position.z*gridSize*gridSize+position.y*gridSize+position.x] = 0;
+    emptyArrays();
     drawWorld();
     resendBuffers();
 }
@@ -49,13 +51,9 @@ function buildWorld(levels){
                 }
             }
         }
-    var p = new Position(0,0,1);
-    removeBox(p);
 }
 
 function drawWorld() {
-    //so we dont push something ontop of the old data
-    emptyArrays();
     for (var z = 0; z < gridSize; z++){
         for (var y = 0; y < gridSize; y++){
             for (var x = 0; x < gridSize; x++){
@@ -64,6 +62,7 @@ function drawWorld() {
                 if(cube !== undefined) {
                     if(cube === 0){
                         buildSpinningCube(p);
+                        console.log(p);
                     } else {
                         buildRegularCube(p);
                     }
