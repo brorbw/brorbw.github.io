@@ -7,9 +7,7 @@ var boxLength = 1;
 var near = 1;
 var far = 8;
 var radius = 4.0;
-var theta  = 0.0;
-var phi    = 0.0;
-var dr = 5.0 * Math.PI/180.0;
+var dr = 60.0 * Math.PI/180.0;
 
 var  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
 var  aspect;       // Viewport aspect ratio
@@ -19,7 +17,10 @@ var modelView, projection;
 var eye = vec3(0.0,0.0,5.0);
 var at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
-var rotMat = mat4();
+var tmpat = vec3(0.0,0.0,0.0);
+var rotX = rotate(0.0,vec3(1,0,0));
+var rotY = rotate(0.0,vec3(0,1,0));
+var rotMat = mult(rotY,rotX);
 mvMatrix = lookAt(eye, at , up);
 
 window.onload = function init() {
@@ -44,14 +45,8 @@ window.onload = function init() {
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    var p = new Position(0,0,0);
-    var box = new Box(p);
-    addBox(box);
-    //var p = new Position(0,1,0);
-    //var box = new Box(p);
-    //addBox(box);
-
-
+    buildWorld(2);
+    
     var cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
@@ -77,10 +72,10 @@ window.onload = function init() {
     document.getElementById("Button2").onclick = function(){near *= 0.9; far *= 0.9;};
     document.getElementById("Button3").onclick = function(){radius *= 2.0;};
     document.getElementById("Button4").onclick = function(){radius *= 0.5;};
-    document.getElementById("Button5").onclick = function(){theta += dr;};
-    document.getElementById("Button6").onclick = function(){theta -= dr;};
-    document.getElementById("Button7").onclick = function(){phi += dr;};
-    document.getElementById("Button8").onclick = function(){phi -= dr;};
+    document.getElementById("Button5").onclick = function(){rotY = rotate(dr,vec3(0,1,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
+    document.getElementById("Button6").onclick = function(){rotY = rotate(-dr,vec3(0,1,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
+    document.getElementById("Button7").onclick = function(){rotX = rotate(dr,vec3(1,0,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
+    document.getElementById("Button8").onclick = function(){rotX = rotate(-dr,vec3(1,0,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
 
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
@@ -94,6 +89,7 @@ window.onload = function init() {
         } else if (event.keyCode === 40){
             mvMatrix[2][3] -= 0.25;
         }
+
     })
 
     render();
@@ -102,11 +98,6 @@ window.onload = function init() {
 
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    var rotX = rotate(phi,vec3(1,0,0));
-    var rotY = rotate(theta,vec3(0,1,0));
-    rotMat = mult(rotY,rotX);
-    mvMatrix = mult(mvMatrix,rotMat);
     pMatrix = perspective(fovy, aspect, near, far);
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
@@ -115,3 +106,5 @@ var render = function(){
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
     requestAnimFrame(render);
 }
+
+

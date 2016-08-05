@@ -34,3 +34,16 @@ function Position(x,y,z){
     this.z = z;
 }
 
+function buildWorld(levels){
+    for (var z = 0; z < 10; z++){
+        for (var y = 0; y < 10; y++){
+            for (var x = 0; x < 10; x++){
+                if(y < levels) {
+                    var p = new Position(x, y, z);
+                    var box = new Box(p);
+                    addBox(box);
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 var pointsArray = [];
 var colorsArray = [];
 
+
 function buildCube(centerPoint) {
     console.log(centerPoint.z);
     var vertForCube = [
