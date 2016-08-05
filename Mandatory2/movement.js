@@ -6,6 +6,10 @@ var camera = {
     lookRight: lookRight,
     lookUp: lookUp,
     lookDown: lookDown,
+    moveForward: moveForward,
+    moveBackwards: moveBackwards,
+    moveLeft: moveLeft,
+    moveRight: moveRight
 }
 
 
@@ -23,4 +27,20 @@ function lookLeft(){
 
 function lookRight(){
     //do stuff that looks right
+}
+
+function moveForward(){
+    //you get the point
+}
+
+function moveBackwards(){
+
+}
+
+function moveLeft(){
+
+}
+
+function moveRight(){
+
 }
