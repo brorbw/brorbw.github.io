@@ -1,5 +1,3 @@
-
-
 var canvas;
 var gl;
 
@@ -21,7 +19,8 @@ var modelView, projection;
 var eye = vec3(0.0,0.0,5.0);
 var at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
-var tmpat = vec3(0.0,0.0,0.0);
+var rotMat = mat4();
+mvMatrix = lookAt(eye, at , up);
 
 window.onload = function init() {
 
@@ -87,20 +86,14 @@ window.onload = function init() {
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
         if(event.keyCode === 37){
-            eye = add(eye,vec3(-0.25,0, 0));
-            tmpat= add(at,vec3(-0.25,0,0));
+            mvMatrix[0][3] += 0.25;
         } else if (event.keyCode === 39) {
-            eye = add(eye,vec3(0.25,0, 0));
-            tmpat= add(at,vec3(0.25,0,0));
+            mvMatrix[0][3] -= 0.25;
         } else if (event.keyCode === 38){
-            eye = add(eye,vec3(0,0,-0.25));
-            tmpat= add(at,vec3(0,0,-0.25));
+            mvMatrix[2][3] += 0.25;
         } else if (event.keyCode === 40){
-            eye = add(eye,vec3(0,0,0.25));
-            tmpat= add(at,vec3(0,0,0.25));
-
+            mvMatrix[2][3] -= 0.25;
         }
-
     })
 
     render();
@@ -110,11 +103,10 @@ window.onload = function init() {
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    //at = vec3(radius*Math.sin(theta)*Math.cos(phi),radius*Math.sin(theta)*Math.sin(phi), radius*
-
-    //this is what does not work look at the keydown events
-    at = add(tmpat,vec3(radius*Math.sin(theta),radius*Math.sin(phi), 0));//radius*Math.cos(phi));
-    mvMatrix = lookAt(eye, at , up);
+    var rotX = rotate(phi,vec3(1,0,0));
+    var rotY = rotate(theta,vec3(0,1,0));
+    rotMat = mult(rotY,rotX);
+    mvMatrix = mult(mvMatrix,rotMat);
     pMatrix = perspective(fovy, aspect, near, far);
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
