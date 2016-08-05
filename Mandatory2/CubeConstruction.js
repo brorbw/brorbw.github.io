@@ -22,7 +22,11 @@ function __buildVertsForCube(centerPoint, boxLength) {
 
 function buildSpinningCube(centerPoint){
     //this is where the spinning cube is build
-    var vertsForCube = __buildVertsForCube(centerPoint,1);
+    var vertsForCube = __buildVertsForCube(centerPoint,0.5);
+
+    //There should be some kind of claculation that
+    //rotats the box in 45° in one direction and then 45° in another direction
+    //and then send the updated array to the __quadSpinning
     __quadSpinning( 1, 0, 3, 2 ,vertsForCube);
     __quadSpinning( 2, 3, 7, 6 ,vertsForCube);
     __quadSpinning( 3, 0, 4, 7 ,vertsForCube);
@@ -33,11 +37,8 @@ function buildSpinningCube(centerPoint){
 
 function buildRegularCube(centerPoint){
     //this is where the regular cube is build
-    var vertsForCube = buildVertsForCube(centerPoint,0.5);
+    var vertsForCube = __buildVertsForCube(centerPoint,0.5);
 
-    //There should be some kind of claculation that
-    //rotats the box in 45° in one direction and then 45° in another direction
-    //and then send the updated array to the __quadSpinning
     __quadRegular( 1, 0, 3, 2 ,vertsForCube);
     __quadRegular( 2, 3, 7, 6 ,vertsForCube);
     __quadRegular( 3, 0, 4, 7 ,vertsForCube);
@@ -50,7 +51,8 @@ function __quadRegular(a, b, c, d, verts) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
-    var color = vec4(cross(x,y),1);
+    var color = vec4(normalize(cross(x,y)),1);
+    console.log(color.toString());
 
     //to the arrays
     pointsArray.push(verts[a]);
@@ -71,19 +73,19 @@ function __quadSpinning(a, b, c, d, verts){
     //Making the normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
-    var color = vec4(cross(x,y),1);
+    var color = vec4(normalize(cross(x,y)),1);
 
     //pushing to the array
     spinningArray.push(verts[a]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
     spinningArray.push(verts[b]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
     spinningArray.push(verts[c]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
     spinningArray.push(verts[a]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
     spinningArray.push(verts[c]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
     spinningArray.push(verts[d]);
-    spinningArray.push(color);
+    spinningNormals.push(color);
 }

@@ -2,8 +2,8 @@ var canvas;
 var gl;
 
 
-var near = 1;
-var far = 8;
+var near = 0.1;
+var far = 100;
 var radius = 4.0;
 var dr = 60.0 * Math.PI/180.0;
 
@@ -12,14 +12,17 @@ var  aspect;       // Viewport aspect ratio
 
 var mvMatrix, pMatrix;
 var modelView, projection;
-var eye = vec3(0.0,0.0,0);
-var at = vec3(0, 0.0,-2);
+var eye = vec3(0.0,0,12);
+var at = vec3(0,0.0,0);
 const up = vec3(0.0, 1.0, 0.0);
 var tmpat = vec3(0.0,0.0,0.0);
 var rotX = rotate(0.0,vec3(1,0,0));
 var rotY = rotate(0.0,vec3(0,1,0));
 var rotMat = mult(rotY,rotX);
 mvMatrix = lookAt(eye, at , up);
+
+var vBuffer,cBuffer,vRBuffer,cRBuffer;
+var vColor,cRColor;
 
 window.onload = function init() {
 
@@ -45,17 +48,31 @@ window.onload = function init() {
 
     buildWorld(2);
 
-    var cBuffer = gl.createBuffer();
+    cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
 
-    var vColor = gl.getAttribLocation( program, "vColor" );
+    vColor = gl.getAttribLocation( program, "vColor" );
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
 
-    var vBuffer = gl.createBuffer();
+    vBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW );
+    /*
+    cRBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(spinningNormals), gl.STATIC_DRAW);
+
+    cRColor = gl.getAttribLocation(program, "cRColor");
+    gl.vertexAttribPointer( cRColor, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( cRColor);
+
+    vRBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(spinningArray), gl.STATIC_DRAW);
+    */
+
 
     var vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );

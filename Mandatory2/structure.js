@@ -11,7 +11,7 @@ function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    buildCube(position);
+    buildRegularCube(position);
 }
 
 //might not be needed
@@ -20,6 +20,7 @@ function getCube(position){
 }
 
 function removeBox(position){
+    //This is where we should build a rotating cube
     world[position.z*gridSize*gridSize+position.y*gridSize+position.x] = 0;
 }
 
