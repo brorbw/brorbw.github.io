@@ -89,3 +89,10 @@ function __quadSpinning(a, b, c, d, verts){
     spinningArray.push(verts[d]);
     spinningNormals.push(color);
 }
+
+function emptyArrays(){
+    pointsArray = [];
+    colorsArray = [];
+    spinningArray = [];
+    spinningNormals = [];
+}

@@ -11,6 +11,8 @@ function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
+    buildRegularCube(position);
+    resendBuffers();
 }
 
 //might not be needed
@@ -21,6 +23,9 @@ function getCube(position){
 function removeBox(position){
     //This is where we should build a rotating cube
     world[position.z*gridSize*gridSize+position.y*gridSize+position.x] = 0;
+    drawWorld();
+    //Resending the array to the buffer
+    resendBuffers();
 }
 
 
@@ -50,6 +55,8 @@ function buildWorld(levels){
 }
 
 function drawWorld() {
+    //so we dont push something ontop of the old data
+    emptyArrays();
     for (var z = 0; z < gridSize; z++){
         for (var y = 0; y < gridSize; y++){
             for (var x = 0; x < gridSize; x++){
