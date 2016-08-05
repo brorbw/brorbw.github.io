@@ -1,10 +1,13 @@
 var pointsArray = [];
 var colorsArray = [];
+var spinningArray = [];
+var spinningNormals = []; //they are not suppose to be here, but they'll stay for now
 
 
-function buildCube(centerPoint) {
-    console.log(centerPoint.z);
-    var vertForCube = [
+function __buildVertsForCube(centerPoint, boxLength) {
+    //second param is suppose to be the size of the cube so we can make
+    //different sized cubes depending of whether we are makeing a spinning og regular cube
+    return [
         vec4(centerPoint.x - boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z + boxLength / 2),
         vec4(centerPoint.x - boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + boxLength / 2),
         vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z + boxLength / 2),
@@ -14,22 +17,42 @@ function buildCube(centerPoint) {
         vec4(centerPoint.x + boxLength / 2, centerPoint.y + boxLength / 2, centerPoint.z - boxLength / 2),
         vec4(centerPoint.x + boxLength / 2, centerPoint.y - boxLength / 2, centerPoint.z - boxLength / 2)
     ];
-    console.log(vertForCube.toString());
-    quad( 1, 0, 3, 2 ,vertForCube);
-    quad( 2, 3, 7, 6 ,vertForCube);
-    quad( 3, 0, 4, 7 ,vertForCube);
-    quad( 6, 5, 1, 2 ,vertForCube);
-    quad( 4, 5, 6, 7 ,vertForCube);
-    quad( 5, 4, 0, 1 ,vertForCube);
 }
 
 
-function quad(a, b, c, d, verts) {
+function buildSpinningCube(centerPoint){
+    //this is where the spinning cube is build
+    var vertsForCube = __buildVertsForCube(centerPoint,1);
+    __quadSpinning( 1, 0, 3, 2 ,vertsForCube);
+    __quadSpinning( 2, 3, 7, 6 ,vertsForCube);
+    __quadSpinning( 3, 0, 4, 7 ,vertsForCube);
+    __quadSpinning( 6, 5, 1, 2 ,vertsForCube);
+    __quadSpinning( 4, 5, 6, 7 ,vertsForCube);
+    __quadSpinning( 5, 4, 0, 1 ,vertsForCube);
+}
 
+function buildRegularCube(centerPoint){
+    //this is where the regular cube is build
+    var vertsForCube = buildVertsForCube(centerPoint,0.5);
+
+    //There should be some kind of claculation that
+    //rotats the box in 45° in one direction and then 45° in another direction
+    //and then send the updated array to the __quadSpinning
+    __quadRegular( 1, 0, 3, 2 ,vertsForCube);
+    __quadRegular( 2, 3, 7, 6 ,vertsForCube);
+    __quadRegular( 3, 0, 4, 7 ,vertsForCube);
+    __quadRegular( 6, 5, 1, 2 ,vertsForCube);
+    __quadRegular( 4, 5, 6, 7 ,vertsForCube);
+    __quadRegular( 5, 4, 0, 1 ,vertsForCube);
+}
+
+function __quadRegular(a, b, c, d, verts) {
+    //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
     var color = vec4(cross(x,y),1);
 
+    //to the arrays
     pointsArray.push(verts[a]);
     colorsArray.push(color);
     pointsArray.push(verts[b]);
@@ -42,4 +65,25 @@ function quad(a, b, c, d, verts) {
     colorsArray.push(color);
     pointsArray.push(verts[d]);
     colorsArray.push(color);
+}
+
+function __quadSpinning(a, b, c, d, verts){
+    //Making the normals
+    var x = subtract(verts[a],verts[b]);
+    var y = subtract(verts[b],verts[c]);
+    var color = vec4(cross(x,y),1);
+
+    //pushing to the array
+    spinningArray.push(verts[a]);
+    spinningArray.push(color);
+    spinningArray.push(verts[b]);
+    spinningArray.push(color);
+    spinningArray.push(verts[c]);
+    spinningArray.push(color);
+    spinningArray.push(verts[a]);
+    spinningArray.push(color);
+    spinningArray.push(verts[c]);
+    spinningArray.push(color);
+    spinningArray.push(verts[d]);
+    spinningArray.push(color);
 }

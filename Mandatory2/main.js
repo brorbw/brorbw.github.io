@@ -2,8 +2,6 @@ var canvas;
 var gl;
 
 
-var boxLength = 1;
-
 var near = 1;
 var far = 8;
 var radius = 4.0;
