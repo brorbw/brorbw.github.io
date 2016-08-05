@@ -47,6 +47,7 @@ window.onload = function init() {
     gl.useProgram( program );
 
     buildWorld(2);
+    drawWorld();
 
     cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );

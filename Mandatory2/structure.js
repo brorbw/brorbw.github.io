@@ -4,14 +4,13 @@
 
 //Right now there is only
 
-var gridSize = 10;
+var gridSize = 2;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    buildRegularCube(position);
 }
 
 //might not be needed
@@ -27,7 +26,6 @@ function removeBox(position){
 
 function Box(position){
     this.position = position;
-    //this.matype = matype;
 }
 function Position(x,y,z){
     this.x = x;
@@ -36,13 +34,33 @@ function Position(x,y,z){
 }
 
 function buildWorld(levels){
-    for (var z = 0; z < 10; z++){
-        for (var y = 0; y < 10; y++){
-            for (var x = 0; x < 10; x++){
-                if(y < levels) {
-                    var p = new Position(x, y, z);
-                    var box = new Box(p);
-                    addBox(box);
+    for (var z = 0; z < gridSize; z++){
+        for (var y = 0; y < gridSize; y++){
+            for (var x = 0; x < gridSize; x++){
+                var p = new Position(x, y, z);
+                    if (y < levels) {
+                        var box = new Box(p);
+                        addBox(box);
+                    }
+                }
+            }
+        }
+    var p = new Position(0,0,1);
+    removeBox(p);
+}
+
+function drawWorld() {
+    for (var z = 0; z < gridSize; z++){
+        for (var y = 0; y < gridSize; y++){
+            for (var x = 0; x < gridSize; x++){
+                var p = new Position(x, y, z);
+                var cube = getCube(p);
+                if(cube !== undefined) {
+                    if(cube === 0){
+                        buildSpinningCube(p);
+                    } else {
+                        buildRegularCube(p);
+                    }
                 }
             }
         }

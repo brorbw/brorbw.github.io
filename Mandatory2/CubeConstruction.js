@@ -37,7 +37,7 @@ function buildSpinningCube(centerPoint){
 
 function buildRegularCube(centerPoint){
     //this is where the regular cube is build
-    var vertsForCube = __buildVertsForCube(centerPoint,0.5);
+    var vertsForCube = __buildVertsForCube(centerPoint,1);
 
     __quadRegular( 1, 0, 3, 2 ,vertsForCube);
     __quadRegular( 2, 3, 7, 6 ,vertsForCube);
