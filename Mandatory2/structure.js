@@ -24,7 +24,6 @@ function removeBox(position){
     //This is where we should build a rotating cube
     world[position.z*gridSize*gridSize+position.y*gridSize+position.x] = 0;
     drawWorld();
-    //Resending the array to the buffer
     resendBuffers();
 }
 

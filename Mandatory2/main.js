@@ -10,16 +10,11 @@ var dr = 60.0 * Math.PI/180.0;
 var  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
 var  aspect;       // Viewport aspect ratio
 
-var mvMatrix, pMatrix;
+var pMatrix;
 var modelView, projection;
 var eye = vec3(0.0,0,12);
 var at = vec3(0,0.0,0);
 const up = vec3(0.0, 1.0, 0.0);
-var tmpat = vec3(0.0,0.0,0.0);
-var rotX = rotate(0.0,vec3(1,0,0));
-var rotY = rotate(0.0,vec3(0,1,0));
-var rotMat = mult(rotY,rotX);
-mvMatrix = lookAt(eye, at , up);
 
 var vBuffer,cBuffer,vRBuffer,cRBuffer;
 var vColor,cRColor;
@@ -52,6 +47,9 @@ window.onload = function init() {
 
     vBuffer = gl.createBuffer();
 
+    vPosition = gl.getAttribLocation( program, "vPosition" );
+
+
     buildWorld(2);
     drawWorld();
 
@@ -72,10 +70,6 @@ window.onload = function init() {
     */
 
 
-    var vPosition = gl.getAttribLocation( program, "vPosition" );
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
-
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
@@ -85,10 +79,10 @@ window.onload = function init() {
     document.getElementById("Button2").onclick = function(){near *= 0.9; far *= 0.9;};
     document.getElementById("Button3").onclick = function(){radius *= 2.0;};
     document.getElementById("Button4").onclick = function(){radius *= 0.5;};
-    document.getElementById("Button5").onclick = function(){rotY = rotate(dr,vec3(0,1,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
-    document.getElementById("Button6").onclick = function(){rotY = rotate(-dr,vec3(0,1,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
-    document.getElementById("Button7").onclick = function(){rotX = rotate(dr,vec3(1,0,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
-    document.getElementById("Button8").onclick = function(){rotX = rotate(-dr,vec3(1,0,0));	rotMat = mult(rotY,rotX);mvMatrix = mult(mvMatrix,rotMat);};
+    document.getElementById("Button5").onclick = function(){lookLeft();};
+    document.getElementById("Button6").onclick = function(){lookRight();};
+    document.getElementById("Button7").onclick = function(){lookUp();};
+    document.getElementById("Button8").onclick = function(){lookDown();};
 
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
@@ -129,4 +123,14 @@ function resendBuffers(){
 
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW );
+
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
 }
+
+/*
+setTimeout(function(){
+    window.location.reload(1);
+}, 5000);
+
+*/
