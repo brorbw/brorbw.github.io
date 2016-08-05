@@ -14,8 +14,8 @@ var  aspect;       // Viewport aspect ratio
 
 var mvMatrix, pMatrix;
 var modelView, projection;
-var eye = vec3(0.0,0.0,5.0);
-var at = vec3(0.0, 0.0, 0.0);
+var eye = vec3(0.0,0.0,0);
+var at = vec3(0, 0.0,-2);
 const up = vec3(0.0, 1.0, 0.0);
 var tmpat = vec3(0.0,0.0,0.0);
 var rotX = rotate(0.0,vec3(1,0,0));
@@ -46,7 +46,7 @@ window.onload = function init() {
     gl.useProgram( program );
 
     buildWorld(2);
-    
+
     var cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW );
