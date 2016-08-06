@@ -67,29 +67,6 @@ function lookRight(){
     mvMatrix=lookAt(eye,at,up);
 }
 
-
-//how its suppose to be, but there is a bug
-//if you rotate after you moved
-//you jump back to the position
-//you where at before you moved
-/*
-function moveForward(){
-    mvMatrix[2][3] += 0.25;
-}
-
-function moveBackwards(){
-    mvMatrix[2][3] -= 0.25;
-}
-
-function moveLeft(){
-    mvMatrix[0][3] += 0.25;
-}
-
-function moveRight(){
-    mvMatrix[0][3] -= 0.25;
-}
-*/
-
 //brors version
 function moveForward(){
     //this does not!!!
@@ -112,7 +89,7 @@ function moveBackwards(){
 }
 
 function moveLeft(){
- //MIA or some other acronym
+ //MIA or some other acronym for not being there
 }
 
 function moveRight(){
