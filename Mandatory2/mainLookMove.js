@@ -140,21 +140,45 @@ window.onload = function init() {
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
-        if(event.keyCode === 37){
-			eye[0] -= 0.25;
-			at[0] -= 0.25;
+        //left arrow
+		if(event.keyCode === 37){
+			// vector from eye to at
+			var atVec = subtract(at,eye);
+			var move = cross(atVec,up);
+			// moving direction
+			move = normalize(move);
+			eye = add(eye,mult(move,vec3(-0.25,-0.25,-0.25)));
+			at = add(at,mult(move,vec3(-0.25,-0.25,-0.25)));
 			mvMatrix = lookAt(eye,at,up);
-        } else if (event.keyCode === 39) {
-			eye[0] += 0.25;
-			at[0] += 0.25;
+        //right arrow
+		} else if (event.keyCode === 39) {
+			// vector from eye to at
+			var atVec = subtract(at,eye);
+			var move = cross(atVec,up);
+			// moving direction
+			move = normalize(move);
+			eye = add(eye,mult(move,vec3(0.25,0.25,0.25)));
+			at = add(at,mult(move,vec3(0.25,0.25,0.25)));
 			mvMatrix = lookAt(eye,at,up);
+		//up arrow
 		} else if (event.keyCode === 38){
-			eye[2] -= 0.25;
-			at[2] -= 0.25;
+			// vector from eye to at
+			var atVec = subtract(at,eye);
+			var move = atVec;
+			// moving direction
+			move = normalize(move);
+			eye = add(eye,mult(move,vec3(0.25,0.25,0.25)));
+			at = add(at,mult(move,vec3(0.25,0.25,0.25)));
 			mvMatrix = lookAt(eye,at,up);
-        } else if (event.keyCode === 40){
-			eye[2] += 0.25;
-			at[2] += 0.25;
+        //down arrow
+		} else if (event.keyCode === 40){
+			// vector from eye to at
+			var atVec = subtract(at,eye);
+			var move = atVec;
+			// moving direction
+			move = normalize(move);
+			eye = add(eye,mult(move,vec3(-0.25,-0.25,-0.25)));
+			at = add(at,mult(move,vec3(-0.25,-0.25,-0.25)));
 			mvMatrix = lookAt(eye,at,up);
         }
 
