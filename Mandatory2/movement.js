@@ -67,6 +67,27 @@ function lookRight(){
     mvMatrix=lookAt(eye,at,up);
 }
 
+//how its suppose to be, but there is a bug
+//if you rotate after you moved
+//you jump back to the position
+//you where at before you moved
+function moveForward(){
+    mvMatrix[2][3] += 0.25;
+}
+
+function moveBackwards(){
+    mvMatrix[2][3] -= 0.25;
+}
+
+function moveLeft(){
+    mvMatrix[0][3] += 0.25;
+}
+
+function moveRight(){
+    mvMatrix[0][3] -= 0.25;
+}
+/*
+dagmars 2th version
 function moveForward(){
     eye[2] -= 0.25;
     at[2] -= 0.25;
@@ -90,6 +111,7 @@ function moveRight(){
     at[0] += 0.25;
     mvMatrix = lookAt(eye,at,up);
 }
+*/
 
 function __matrixVector(m,v){
     //only squared Matrix allowed
