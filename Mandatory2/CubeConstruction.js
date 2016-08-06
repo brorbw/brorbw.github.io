@@ -25,8 +25,13 @@ function buildSpinningCube(centerPoint){
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
     for(var i = 0; i < vertsForCube.length;i++){
         //this is where the code for the initial rotation
-        
-        vertsForCube[i] = vertsForCube[i];
+        var vecCenter = subtract(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1),vertsForCube[i]);
+        var rotatedVec = rotate(45, vec3(0,0,1));
+        vecCenter = mult(rotatedVec,vecCenter);
+        rotatedVec = rotate(45, vec3(1,0,0));
+        vecCenter = mult(rotatedVec,vecCenter);
+
+        vertsForCube[i] = add(vecCenter,vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
     }
     console.log("building spinning cube");
     //There should be some kind of claculation that
@@ -81,7 +86,7 @@ function __quadSpinning(a, b, c, d, verts) {
     //Making the normals
     var x = subtract(verts[a], verts[b]);
     var y = subtract(verts[b], verts[c]);
-    var color = vec4(normalize(cross(x, y)), 1);
+    var color = vec4(normalize(cross(y,x)), 1);
     
     //pushing to the array
     spinningArray.push(verts[a]);

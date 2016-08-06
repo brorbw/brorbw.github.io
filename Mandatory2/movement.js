@@ -72,9 +72,8 @@ function moveForward(){
     //this does not!!!
     var direction = subtract(at,eye);
     direction = normalize(direction);
-    console.log(direction)
-    at = add(at,direction);
-    eye = add(eye,direction)
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
     mvMatrix=lookAt(eye,at,up);
 }
 
@@ -82,9 +81,8 @@ function moveBackwards(){
     //this function works
     var direction = subtract(eye,at);
     direction = normalize(direction);
-    console.log(direction)
-    at = add(at,direction);
-    eye = add(eye,direction)
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
     mvMatrix=lookAt(eye,at,up);
 }
 
