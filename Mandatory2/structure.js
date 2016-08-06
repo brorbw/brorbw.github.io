@@ -4,16 +4,18 @@
 
 //Right now there is only
 
-var gridSize = 2;
+var gridSize = 10;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    emptyArrays();
-    drawWorld();
-    resendBuffers();
+    if(!init) {
+        emptyArrays();
+        drawWorld();
+        resendBuffers();
+    }
 }
 
 //might not be needed

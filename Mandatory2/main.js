@@ -4,10 +4,10 @@ var gl;
 var modelView, projection;
 
 var vBuffer,cBuffer,vRBuffer,cRBuffer, centerSpinningBuffer ,centerBuffer;
-var vPosition,vColor,vRotation, center;
+var vPosition,vColor,vRotation, vCenter;
 var rotationMat;
-
-
+var angle = 0;
+var init = true;
 var camera;
 
 window.onload = function init() {
@@ -35,27 +35,23 @@ window.onload = function init() {
 
     cBuffer = gl.createBuffer();
 
-    centerBuffer = gl.createBuffer();
-    
-    centerSpinningBuffer = gl.createBuffer();
-    
-    center = gl.getAttribLocation(program, "center");
-    
     vColor = gl.getAttribLocation( program, "vColor" );
 
     vBuffer = gl.createBuffer();
 
     vPosition = gl.getAttribLocation( program, "vPosition" );
 
+    centerBuffer = gl.createBuffer();
+
+    centerSpinningBuffer = gl.createBuffer();
+
+    vCenter = gl.getAttribLocation(program, "vCenter");
+
     cRBuffer = gl.createBuffer();
 
     vRBuffer = gl.createBuffer();
 
     vRotation = gl.getUniformLocation(program, "vRotation");
-
-
-
-
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
@@ -88,6 +84,7 @@ window.onload = function init() {
     var p1 = new Position(1,0,1);
     var p2 = new Position(0,1,1);
     removeBox(p2);
+    init = false;
     render();
 }
 
@@ -96,12 +93,13 @@ var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
+    
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
-    gl.vertexAttribPointer( center, 4,gl.FLOAT, false,0,0);
-    gl.enableVertexAttribArray(center);
+    gl.vertexAttribPointer( vCenter, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vCenter);
 
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
@@ -114,12 +112,13 @@ var render = function(){
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
 
     //____SPINNING____
-    rotationMat = flatten(rotate(1,vec3(0,1,0)));
+    rotationMat = flatten(rotate(angle,vec3(0,1,0)));
+    angle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
-    gl.vertexAttribPointer(center, 4,gl.FLOAT, false,0,0);
-    gl.enableVertexAttribArray(center);
+    gl.vertexAttribPointer(vCenter, 4,gl.FLOAT, false,0,0);
+    gl.enableVertexAttribArray(vCenter);
     
     gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );

@@ -27,8 +27,9 @@ function __buildVertsForCube(centerPoint, boxLength) {
 
 function buildSpinningCube(centerPoint){
     //this is where the spinning cube is build
+    var centerPointTmp = vec4(centerPoint.x,centerPoint.y,centerPoint.z,1)
     for(var i = 0; i < 36; i++){
-        centerSpinningArray.push(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
+        centerSpinningArray.push(centerPointTmp);
     }
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
     for(var i = 0; i < vertsForCube.length;i++){
@@ -55,9 +56,9 @@ function buildRegularCube(centerPoint){
     //this is where the regular cube is build
     var vertsForCube = __buildVertsForCube(centerPoint,1);
     console.log("building regular cube");
-
+    var centerPointTmp = vec4(centerPoint.x,centerPoint.y,centerPoint.z,1)
     for(var i = 0; i < 36; i++){
-        centerArray.push(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
+        centerArray.push(centerPointTmp);
     }
     __quadRegular( 1, 0, 3, 2 ,vertsForCube);
     __quadRegular( 2, 3, 7, 6 ,vertsForCube);
