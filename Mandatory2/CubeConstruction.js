@@ -23,7 +23,11 @@ function __buildVertsForCube(centerPoint, boxLength) {
 function buildSpinningCube(centerPoint){
     //this is where the spinning cube is build
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
-
+    for(var i = 0; i < vertsForCube.length;i++){
+        //this is where the code for the initial rotation
+        
+        vertsForCube[i] = vertsForCube[i];
+    }
     console.log("building spinning cube");
     //There should be some kind of claculation that
     //rotats the box in 45° in one direction and then 45° in another direction
@@ -72,6 +76,8 @@ function __quadRegular(a, b, c, d, verts) {
 }
 
 function __quadSpinning(a, b, c, d, verts) {
+
+
     //Making the normals
     var x = subtract(verts[a], verts[b]);
     var y = subtract(verts[b], verts[c]);

@@ -1,18 +1,10 @@
 var canvas;
 var gl;
 
-
-
-var dr = 60.0 * Math.PI/180.0;
-
-var  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
-var  aspect;       // Viewport aspect ratio
-
-
 var modelView, projection;
 
 var vBuffer,cBuffer,vRBuffer,cRBuffer;
-var vPosition,vColor,vRPosition,cRColor;
+var vPosition,vColor;
 
 var camera;
 
