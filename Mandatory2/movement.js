@@ -89,20 +89,23 @@ function moveBackwards(){
 }
 
 function moveLeft(){
- //MIA or some other acronym for not being there
+    var z = subtract(eye,at);
+    var y = cross(z,up);
+    var direction = normalize(y);
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
+    mvMatrix=lookAt(eye,at,up);
 }
 
 function moveRight(){
     //so the direction should be the vector
     //orthgonal on the y and z plane
     //and then the function should work
-    var x = normalize(subtract(at,eye));
-    var z = normalize(subtract(eye,up));
-    var direction = subtract(cross(x,z),eye);
-    direction = normalize(direction);
-    console.log(direction)
-    at = add(at,direction);
-    eye = add(eye,direction)
+    var z = subtract(at,eye);
+    var y = cross(z,up);
+    var direction = normalize(y);
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
     mvMatrix=lookAt(eye,at,up);
 }
 
