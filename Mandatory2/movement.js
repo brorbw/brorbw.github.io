@@ -8,6 +8,8 @@ var  aspect;
 
 var eye = vec3(0.0,0,5);
 var at = vec3(0,0.0,0);
+
+
 const up = vec3(0.0, 1.0, 0.0);
 var pMatrix;
 var mvMatrix = lookAt(eye, at , up);
@@ -24,7 +26,9 @@ function Camera() {
     this.moveForward = moveForward,
     this.moveBackwards = moveBackwards,
     this.moveLeft = moveLeft,
-    this.moveRight = moveRight
+    this.moveRight = moveRight,
+    this.perspec = perspec,
+    this.ortho = orthogonal
 }
 
 function lookUp(){
@@ -43,9 +47,7 @@ function lookDown(){
     var z = subtract(eye,at);
     var y = cross(z,up);
     rotX = rotate(-dr,y);
-    // vector from eye to at
     var atVec = vec4(subtract(at,eye),0);
-    // rotated at
     var atNew  = __matrixVector(rotX,atVec);
     at = add(eye,vec3(atNew[0],atNew[1],atNew[2]));
     mvMatrix=lookAt(eye,at,up);
@@ -53,9 +55,7 @@ function lookDown(){
 
 function lookLeft(){
     rotY = rotate(dr,vec3(0,1,0));
-    // vector from eye to at
     var atVec = vec4(subtract(at,eye),0);
-    // rotated at
     var atNew  = __matrixVector(rotY,atVec);
     at = add(eye,vec3(atNew[0],atNew[1],atNew[2]));
     mvMatrix=lookAt(eye,at,up);
@@ -63,17 +63,13 @@ function lookLeft(){
 
 function lookRight(){
     rotY = rotate(-dr,vec3(0,1,0));
-    // vector from eye to at
     var atVec = vec4(subtract(at,eye),0);
-    // rotated at
     var atNew  = __matrixVector(rotY,atVec);
     at = add(eye,vec3(atNew[0],atNew[1],atNew[2]));
     mvMatrix=lookAt(eye,at,up);
 }
 
-//brors version
 function moveForward(){
-    //this does not!!!
     var direction = subtract(at,eye);
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
@@ -82,7 +78,6 @@ function moveForward(){
 }
 
 function moveBackwards(){
-    //this function works
     var direction = subtract(eye,at);
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
@@ -100,9 +95,6 @@ function moveLeft(){
 }
 
 function moveRight(){
-    //so the direction should be the vector
-    //orthgonal on the y and z plane
-    //and then the function should work
     var z = subtract(at,eye);
     var y = cross(z,up);
     var direction = normalize(y);
@@ -111,10 +103,18 @@ function moveRight(){
     mvMatrix=lookAt(eye,at,up);
 }
 
+function orthogonal(){
+    var halfGridSize = gridSize/2
+    mvMatrix = lookAt(vec3(halfGridSize,10, halfGridSize), vec3(halfGridSize,0, halfGridSize), vec3(0,0,10))
+    pMatrix = ortho(-gridSize,gridSize,-gridSize,gridSize,near,far);
+}
+function perspec(){
+    mvMatrix= lookAt(eye,at,up);
+    pMatrix = perspective(fovy, aspect, near, far);
+
+}
 
 function __matrixVector(m,v){
-    //only squared Matrix allowed
-    //not proofed for matrix vector dim
     var result = vec4(0,0,0,0);
     for (i=0;i<m.length; i++){
         sum = 0;

@@ -19,6 +19,7 @@ window.onload = function init() {
     gl.viewport( 0, 0, canvas.width, canvas.height );
 
     aspect =  canvas.width/canvas.height;
+    pMatrix = perspective(fovy, aspect, near, far)
 
     gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 
@@ -49,8 +50,8 @@ window.onload = function init() {
 
 // buttons for viewing parameters
     camera = new Camera();
-    document.getElementById("Button1").onclick = function(){near  *= 1.1; far *= 1.1;};
-    document.getElementById("Button2").onclick = function(){near *= 0.9; far *= 0.9;};
+    document.getElementById("Button1").onclick = function(){camera.perspec()};
+    document.getElementById("Button2").onclick = function(){camera.ortho()};
     document.getElementById("Button3").onclick = function(){radius *= 2.0;};
     document.getElementById("Button4").onclick = function(){radius *= 0.5;};
     document.getElementById("Button5").onclick = function(){camera.lookLeft();};
@@ -82,7 +83,6 @@ window.onload = function init() {
 
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    pMatrix = perspective(fovy, aspect, near, far);
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
 
