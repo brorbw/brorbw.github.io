@@ -105,11 +105,11 @@ var render = function(){
 
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
-    gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
 
 
     gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
