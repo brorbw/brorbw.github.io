@@ -67,10 +67,12 @@ function lookRight(){
     mvMatrix=lookAt(eye,at,up);
 }
 
+
 //how its suppose to be, but there is a bug
 //if you rotate after you moved
 //you jump back to the position
 //you where at before you moved
+/*
 function moveForward(){
     mvMatrix[2][3] += 0.25;
 }
@@ -86,32 +88,47 @@ function moveLeft(){
 function moveRight(){
     mvMatrix[0][3] -= 0.25;
 }
-/*
-dagmars 2th version
+*/
+
+//brors version
 function moveForward(){
-    eye[2] -= 0.25;
-    at[2] -= 0.25;
-    mvMatrix = lookAt(eye,at,up);
+    //this does not!!!
+    var direction = subtract(at,eye);
+    direction = normalize(direction);
+    console.log(direction)
+    at = add(at,direction);
+    eye = add(eye,direction)
+    mvMatrix=lookAt(eye,at,up);
 }
 
 function moveBackwards(){
-    eye[2] += 0.25;
-    at[2] += 0.25;
-    mvMatrix = lookAt(eye,at,up);
+    //this function works
+    var direction = subtract(eye,at);
+    direction = normalize(direction);
+    console.log(direction)
+    at = add(at,direction);
+    eye = add(eye,direction)
+    mvMatrix=lookAt(eye,at,up);
 }
 
 function moveLeft(){
-    eye[0] -= 0.25;
-    at[0] -= 0.25;
-    mvMatrix = lookAt(eye,at,up);
+ //MIA or some other acronym
 }
 
 function moveRight(){
-    eye[0] += 0.25;
-    at[0] += 0.25;
-    mvMatrix = lookAt(eye,at,up);
+    //so the direction should be the vector
+    //orthgonal on the y and z plane
+    //and then the function should work
+    var x = normalize(subtract(at,eye));
+    var z = normalize(subtract(eye,up));
+    var direction = subtract(cross(x,z),eye);
+    direction = normalize(direction);
+    console.log(direction)
+    at = add(at,direction);
+    eye = add(eye,direction)
+    mvMatrix=lookAt(eye,at,up);
 }
-*/
+
 
 function __matrixVector(m,v){
     //only squared Matrix allowed

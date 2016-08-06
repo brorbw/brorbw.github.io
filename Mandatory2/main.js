@@ -6,6 +6,7 @@ var modelView, projection;
 var vBuffer,cBuffer,vRBuffer,cRBuffer;
 var vPosition,vColor;
 
+
 var camera;
 
 window.onload = function init() {
@@ -41,7 +42,6 @@ window.onload = function init() {
     cRBuffer = gl.createBuffer();
 
     vRBuffer = gl.createBuffer();
-
 
 
     modelView = gl.getUniformLocation( program, "modelView" );
@@ -83,7 +83,6 @@ window.onload = function init() {
 var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     pMatrix = perspective(fovy, aspect, near, far);
-
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
 
