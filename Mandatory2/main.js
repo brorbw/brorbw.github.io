@@ -22,7 +22,7 @@ window.onload = function init() {
     aspect =  canvas.width/canvas.height;
     pMatrix = perspective(fovy, aspect, near, far)
 
-    gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+    gl.clearColor( 0.3, 0.3, 0.3, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
