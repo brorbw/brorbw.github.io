@@ -25,6 +25,7 @@ attribute vec4 vPosition;
 attribute vec4 vColor;
 attribute vec4 vCenter;
 varying vec4 fColor;
+varying vec4 fNormal;
 
 
 uniform mat4 vRotation;
@@ -34,7 +35,8 @@ uniform mat4 projection;
 void main()
 {
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
-    fColor = (vRotation*vColor)-normalize(vec4(0,-1,0,0)*vec4(1.0,0.8,0.8,0.4));
+    fColor = vec4(0.8,0.8,0.8,1);
+    fNormal = vRotation*vColor;
     gl_PointSize = 1.0;
 }
 </script>
@@ -44,11 +46,12 @@ void main()
 precision mediump float;
 
 varying vec4 fColor;
+varying vec4 fNormal;
 
 void
 main()
 {
-    gl_FragColor = fColor;
+    gl_FragColor = fColor+fNormal;
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>

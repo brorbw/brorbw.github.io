@@ -9,7 +9,7 @@ var  aspect;
 var flying = false;
 
 var eye = vec3(gridSize/2,20,gridSize/2+5);
-var at = vec3(gridSize/2,20,gridSize/2);
+var at = vec3(gridSize/2,10,gridSize/2);
 
 
 const up = vec3(0.0, 1.0, 0.0);
