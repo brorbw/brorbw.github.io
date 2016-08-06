@@ -28,7 +28,9 @@ function Camera() {
 }
 
 function lookUp(){
-    rotX = rotate(dr,vec3(1,0,0));
+    var z = subtract(eye,at);
+    var y = cross(z,up);
+    rotX = rotate(dr,y);
     // vector from eye to at
     var atVec = vec4(subtract(at,eye),0);
     // rotated at
@@ -38,7 +40,9 @@ function lookUp(){
 }
 
 function lookDown(){
-    rotX = rotate(-dr,vec3(1,0,0));
+    var z = subtract(eye,at);
+    var y = cross(z,up);
+    rotX = rotate(-dr,y);
     // vector from eye to at
     var atVec = vec4(subtract(at,eye),0);
     // rotated at
