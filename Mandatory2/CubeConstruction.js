@@ -3,6 +3,11 @@ var colorsArray = [];
 var spinningArray = [];
 var spinningNormals = []; //they are not suppose to be here, but they'll stay for now
 
+var centerArray = [];
+var centerSpinningArray = [];
+
+var rotatedZ = rotate(45, vec3(0,0,1));
+var rotatedY = rotate(45, vec3(1,0,0));
 
 function __buildVertsForCube(centerPoint, boxLength) {
     //second param is suppose to be the size of the cube so we can make
@@ -22,14 +27,15 @@ function __buildVertsForCube(centerPoint, boxLength) {
 
 function buildSpinningCube(centerPoint){
     //this is where the spinning cube is build
+    for(var i = 0; i < 36; i++){
+        centerSpinningArray.push(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
+    }
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
     for(var i = 0; i < vertsForCube.length;i++){
         //this is where the code for the initial rotation
         var vecCenter = subtract(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1),vertsForCube[i]);
-        var rotatedVec = rotate(45, vec3(0,0,1));
-        vecCenter = mult(rotatedVec,vecCenter);
-        rotatedVec = rotate(45, vec3(1,0,0));
-        vecCenter = mult(rotatedVec,vecCenter);
+        vecCenter = mult(rotatedZ,vecCenter);
+        vecCenter = mult(rotatedY,vecCenter);
 
         vertsForCube[i] = add(vecCenter,vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
     }
@@ -50,6 +56,9 @@ function buildRegularCube(centerPoint){
     var vertsForCube = __buildVertsForCube(centerPoint,1);
     console.log("building regular cube");
 
+    for(var i = 0; i < 36; i++){
+        centerArray.push(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
+    }
     __quadRegular( 1, 0, 3, 2 ,vertsForCube);
     __quadRegular( 2, 3, 7, 6 ,vertsForCube);
     __quadRegular( 3, 0, 4, 7 ,vertsForCube);
@@ -108,4 +117,6 @@ function emptyArrays(){
     colorsArray = [];
     spinningArray = [];
     spinningNormals = [];
+    centerArray = [];
+    centerSpinningArray = [];
 }
