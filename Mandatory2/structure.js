@@ -4,7 +4,7 @@
 
 //Right now there is only
 
-var gridSize = 10;
+var gridSize = 20;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
@@ -41,6 +41,8 @@ function Position(x,y,z){
     this.z = z;
 }
 
+
+//only buils in planes;
 function buildWorld(levels){
     for (var z = 0; z < gridSize; z++){
         for (var y = 0; y < gridSize; y++){
@@ -67,9 +69,25 @@ function drawWorld() {
                         console.log(p);
                     } else {
                         buildRegularCube(p);
+                        //console.log(p);
                     }
                 }
             }
         }
     }
+}
+//y=sin(5x)*cos(5z)/5
+function buildMountains(){
+    for(var z = 0; z < gridSize; z++){
+        for(var x = 0; x < gridSize;x++){
+            var yl = (Math.sin(x)*Math.cos(z))*5+10;
+            for(var y = 0; y < yl; y++){
+                var pos = new Position(x,y,z);
+                var box = new Box(pos);
+                addBox(box);
+            }
+        }
+    }
+    drawWorld();
+    resendBuffers();
 }

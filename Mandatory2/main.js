@@ -25,6 +25,8 @@ window.onload = function init() {
     gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
 
 
     //
@@ -59,7 +61,7 @@ window.onload = function init() {
     camera = new Camera();
     document.getElementById("Button1").onclick = function(){camera.perspec()};
     document.getElementById("Button2").onclick = function(){camera.ortho()};
-    document.getElementById("Button3").onclick = function(){radius *= 2.0;};
+    document.getElementById("Button3").onclick = function(){toggleFlying()};
     document.getElementById("Button4").onclick = function(){radius *= 0.5;};
     document.getElementById("Button5").onclick = function(){camera.lookLeft();};
     document.getElementById("Button6").onclick = function(){camera.lookRight();};
@@ -69,27 +71,35 @@ window.onload = function init() {
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
-        if(event.keyCode === 37){
+        if(event.keyCode === 65){
             camera.moveLeft();
-        } else if (event.keyCode === 39) {
+        } else if (event.keyCode === 68) {
             camera.moveRight()
-        } else if (event.keyCode === 38){
+        } else if (event.keyCode === 87){
             camera.moveForward();
-        } else if (event.keyCode === 40){
+        } else if (event.keyCode === 83){
             camera.moveBackwards();
+        } else if (event.keyCode === 37) {
+            camera.lookLeft()
+        } else if (event.keyCode === 39) {
+            camera.lookRight()
+        } else if (event.keyCode === 38){
+            camera.lookUp();
+        } else if (event.keyCode === 40){
+            camera.lookDown()
         }
 
     });
-    buildWorld(2);
-    var p1 = new Position(1,0,1);
-    var p2 = new Position(0,1,1);
-    removeBox(p2);
+    buildMountains();
     init = false;
     render();
 }
 
 
 var render = function(){
+    if(flying) {
+        camera.moveForward();
+    }
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );

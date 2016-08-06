@@ -6,8 +6,10 @@ var dr = 60.0 * Math.PI/180.0;
 var  fovy = 45.0;
 var  aspect;
 
-var eye = vec3(0.0,0,5);
-var at = vec3(0,0.0,0);
+var flying = false;
+
+var eye = vec3(gridSize/2,20,gridSize/2+5);
+var at = vec3(gridSize/2,20,gridSize/2);
 
 
 const up = vec3(0.0, 1.0, 0.0);
@@ -72,9 +74,14 @@ function lookRight(){
 }
 
 function moveForward(){
+
     var atVec = subtract(at,eye);
-    var xzAxis = cross(atVec,up);
-    var direction = cross(up,xzAxis);
+    if(!flying){
+        var xzAxis = cross(atVec,up);
+        var direction = cross(up,xzAxis);
+    } else {
+        var direction = atVec;
+    }
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
     at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
@@ -83,8 +90,12 @@ function moveForward(){
 
 function moveBackwards(){
     var atVec = subtract(eye,at);
-    var xzAxis = cross(atVec,up);
-    var direction = cross(up,xzAxis);
+    if(!flying){
+        var xzAxis = cross(atVec,up);
+        var direction = cross(up,xzAxis);
+    } else {
+        var direction = atVec;
+    }
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
     at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
@@ -146,4 +157,9 @@ function __matrixVector(m,v){
         result[i] = sum;
     }
     return result;
+}
+
+function toggleFlying(){
+    flying = !flying;
+    console.log(flying);
 }
