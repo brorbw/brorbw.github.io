@@ -27,6 +27,8 @@ function Camera() {
     this.moveBackwards = moveBackwards,
     this.moveLeft = moveLeft,
     this.moveRight = moveRight,
+    this.moveDown = moveDown,
+    this.moveUp = moveUp,
     this.perspec = perspec,
     this.ortho = orthogonal
 }
