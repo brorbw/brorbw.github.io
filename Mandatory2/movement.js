@@ -72,7 +72,9 @@ function lookRight(){
 }
 
 function moveForward(){
-    var direction = subtract(at,eye);
+    var atVec = subtract(at,eye);
+    var xzAxis = cross(atVec,up);
+    var direction = cross(up,xzAxis);
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
     at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
@@ -80,7 +82,9 @@ function moveForward(){
 }
 
 function moveBackwards(){
-    var direction = subtract(eye,at);
+    var atVec = subtract(eye,at);
+    var xzAxis = cross(atVec,up);
+    var direction = cross(up,xzAxis);
     direction = normalize(direction);
     eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
     at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
