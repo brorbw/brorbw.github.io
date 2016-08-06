@@ -105,6 +105,22 @@ function moveRight(){
     mvMatrix=lookAt(eye,at,up);
 }
 
+function moveUp(){
+    var direction = up;
+    direction = normalize(direction);
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
+    mvMatrix=lookAt(eye,at,up);
+}
+
+function moveDown() {
+    var direction = up;
+    direction = negate(normalize(direction));
+    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
+    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
+    mvMatrix=lookAt(eye,at,up);
+}
+
 function orthogonal(){
     var halfGridSize = gridSize/2
     mvMatrix = lookAt(vec3(halfGridSize,10, halfGridSize), vec3(halfGridSize,0, halfGridSize), vec3(0,0,10))
