@@ -35,12 +35,11 @@ uniform mat4 projection;
 void main()
 {
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
-    fColor = vec4(0.1,0.1,0.1,1)*vColor[0]+vec4(0.1,0.1,0.1,1)*vColor[2]+vec4(0.1,0.1,0.1,1)*vColor[1];
     fNormal = vRotation*vColor;
     gl_PointSize = 1.0;
 }
 </script>
-*fNormal[0]+fColor*fNormal[1]+fColor*fNormal[2]
+
 <script id="fragment-shader" type="x-shader/x-fragment">
 
 precision mediump float;
@@ -48,10 +47,18 @@ precision mediump float;
 varying vec4 fColor;
 varying vec4 fNormal;
 
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uni
+
 void
 main()
 {
-    gl_FragColor = fColor;
+    vec4 lightDirection = vec4(0,1,1,1);
+    vec4 ambient = vec4(0.5,0.5,0.5,1);
+    vec4 amount = normalize(fColor+lightDirection);
+    vec4 shade = ambient*amount[0]+ambient*amount[1]+ambient*amount[2];
+    gl_FragColor = shade;
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>

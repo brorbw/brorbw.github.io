@@ -93,7 +93,7 @@ window.onload = function init() {
     });
 
     canvas.addEventListener("mousemove", mousemove);
-    buildMountains();
+    buildMountainsSmall();
     init = false;
 
     render();
@@ -101,9 +101,6 @@ window.onload = function init() {
 
 
 var render = function(){
-    if(flying) {
-        camera.moveForward();
-    }
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
