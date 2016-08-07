@@ -31,7 +31,6 @@ function removeBox(position){
     resendBuffers();
 }
 
-
 function Box(position){
     this.position = position;
 }
@@ -62,9 +61,11 @@ function drawWorld() {
                 var p = new Position(x, y, z);
                 var cube = getCube(p);
                 if(cube !== undefined) {
-                    if(cube === 0){
-                        buildSpinningCube(p);
-                        console.log(p);
+                    if(cube === 0) {
+                      buildSpinningCube(p);
+                      console.log(p);
+                    } else if (cube===1) {
+                      // do nothing
                     } else {
                         buildRegularCube(p);
                     }

@@ -82,6 +82,7 @@ function moveForward(){
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
     mvMatrix = lookAt(eye, at, up);
+    collect();
   } else {
     // Check if there is a block above the block in front.
     // if not, move up to the center of that block.
@@ -142,6 +143,7 @@ function moveUpOnBlock(pos) {
     eye = add(pos, mult(direction, vec3(1.5, 1.5, 1.5)));
     at = add(at, mult(direction, vec3(1.5, 1.5, 1.5)));
     mvMatrix = lookAt(eye, at, up);
+    collect();
   }
 }
 
@@ -152,6 +154,17 @@ function moveDown() {
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
     mvMatrix = lookAt(eye, at, up);
+    collect();
+  }
+}
+
+function collect() {
+  var p = posToCenter(eye[0], eye[1], eye[2]);
+  if (getCube(p) === 0){
+    world[p.z*gridSize*gridSize+p.y*gridSize+p.x] = 1;
+    emptyArrays();
+    drawWorld();
+    resendBuffers();
   }
 }
 

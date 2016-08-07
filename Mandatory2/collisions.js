@@ -83,7 +83,7 @@ function collisionUp(pos) {
 function collisionDown() {
   var direction = up;
   direction = negate(normalize(direction));
-  eyePrime = add(eye, mult(direction, vec3(0.3, 0.3, 0.3)));
+  var eyePrime = add(eye, mult(direction, vec3(0.3, 0.3, 0.3)));
   if (inWorld(eyePrime[0], eyePrime[1], eyePrime[2])) {
     var p = posToCenter(eyePrime[0], eyePrime[1], eyePrime[2]);
     return getCube(p) !== undefined && getCube(p) !== 0;

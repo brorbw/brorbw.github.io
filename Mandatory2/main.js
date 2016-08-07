@@ -86,7 +86,7 @@ window.onload = function init() {
     var p2 = new Position(0,1,1);
     removeBox(p2);
     init = false;
-    render();
+  render();
 }
 
 
