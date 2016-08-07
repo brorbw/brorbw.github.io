@@ -20,6 +20,28 @@ var rotY = rotate(0.0,vec3(0,1,0));
 var rotMat = mult(rotY,rotX);
 mvMatrix = mult(lookAt(eye, at , up),rotMat);
 
+var firstMouseMove = true;
+var mouseX, mouseY;
+var mouseDir;
+
+function mousemove(event){
+  if(firstMouseMove){
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      firstMouseMove = false;
+  }else{
+    var deltaX = event.clientX-mouseX;
+    var deltaY = event.clientY-mouseY;
+    dr = deltaX;
+    lookRight();
+    dr = deltaY;
+    lookUp();
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  }
+
+}
+
 function Camera() {
     this.lookLeft = lookLeft,
     this.lookRight = lookRight,

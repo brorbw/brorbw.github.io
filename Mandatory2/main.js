@@ -13,6 +13,7 @@ var camera;
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
+    canvas.style.cursor= "none";
 
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
@@ -75,23 +76,26 @@ window.onload = function init() {
             camera.moveLeft();
         } else if (event.keyCode === 68) {
             camera.moveRight()
-        } else if (event.keyCode === 87){
+        } else if (event.keyCode === 87){//w
             camera.moveForward();
-        } else if (event.keyCode === 83){
+        } else if (event.keyCode === 83){//s
             camera.moveBackwards();
         } else if (event.keyCode === 37) {
             camera.lookLeft()
         } else if (event.keyCode === 39) {
             camera.lookRight()
         } else if (event.keyCode === 38){
-            camera.lookUp();
-        } else if (event.keyCode === 40){
             camera.lookDown()
+        } else if (event.keyCode === 40){
+            camera.lookUp();
         }
 
     });
+
+    canvas.addEventListener("mousemove", mousemove);
     buildMountains();
     init = false;
+
     render();
 }
 
@@ -103,7 +107,7 @@ var render = function(){
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
-    
+
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
 
@@ -114,11 +118,11 @@ var render = function(){
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
-    
+
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-    
+
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
 
     //____SPINNING____
@@ -129,11 +133,11 @@ var render = function(){
     gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
     gl.vertexAttribPointer(vCenter, 4,gl.FLOAT, false,0,0);
     gl.enableVertexAttribArray(vCenter);
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
