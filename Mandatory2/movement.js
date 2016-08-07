@@ -87,7 +87,7 @@ function moveForward(){
     // if not, move up to the center of that block.
     // no animation yet.
     var eyePrime = getPosOfBlockInFront();
-    moveUp(eyePrime);
+    moveUpOnBlock(eyePrime);
   }
 }
 
@@ -125,16 +125,23 @@ function moveRight(){
   }
 }
 
-function moveUp(pos){
-  if (!collisionUp(pos)) {
-    var eyePrime = pos || eye;
+function moveUp(){
+  if (!collisionUp()) {
     var direction = up;
     direction = normalize(direction);
-    eye = add(eyePrime, mult(direction, vec3(0.25, 0.25, 0.25)));
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
     mvMatrix = lookAt(eye, at, up);
-  } else {
-    console.log("collision up");
+  }
+}
+
+function moveUpOnBlock(pos) {
+  if (!collisionUp() && !collisionUp(pos)) {
+    var direction = up;
+    direction = normalize(direction);
+    eye = add(pos, mult(direction, vec3(1.5, 1.5, 1.5)));
+    at = add(at, mult(direction, vec3(1.5, 1.5, 1.5)));
+    mvMatrix = lookAt(eye, at, up);
   }
 }
 

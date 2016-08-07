@@ -63,7 +63,7 @@ function collisionUp(pos) {
   if (pos) {
     direction = up;
     direction = normalize(direction);
-    eyePrime = add(pos,mult(direction,vec3(0.3,0.3,0.3)));
+    eyePrime = add(pos,mult(direction,vec3(0.8,0.8,0.8)));
     if (inWorld(eyePrime[0], eyePrime[1], eyePrime[2])) {
       p = posToCenter(eyePrime[0], eyePrime[1], eyePrime[2]);
       return getCube(p) !== undefined && getCube(p) !== 0;
@@ -71,7 +71,7 @@ function collisionUp(pos) {
   } else {
     direction = up;
     direction = normalize(direction);
-    eyePrime = add(eye,mult(direction,vec3(0.3,0.3,0.3)));
+    eyePrime = add(eye,mult(direction,vec3(0.8,0.8,0.8)));
     if (inWorld(eyePrime[0], eyePrime[1], eyePrime[2])) {
       p = posToCenter(eyePrime[0], eyePrime[1], eyePrime[2]);
       return getCube(p) !== undefined && getCube(p) !== 0;
