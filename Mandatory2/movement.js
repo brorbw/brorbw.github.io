@@ -6,11 +6,13 @@ var dr = 60.0 * Math.PI/180.0;
 var  fovy = 45.0;
 var  aspect;
 
-var eye = vec3(0.0,0,5);
-var at = vec3(0,0.0,0);
+// var eye = vec3(0.0,0,5);
+// var at = vec3(0,0.0,0);
 
+var eye = vec3(gridSize/2,2,gridSize/2 + 1);
+var at = vec3(gridSize/2,2,gridSize/2);
 
-const up = vec3(0.0, 1.0, 0.0);
+const up = vec3(0.0, 3.0, 0.0);
 var pMatrix;
 var mvMatrix = lookAt(eye, at , up);
 var rotX = rotate(0.0,vec3(1,0,0));
@@ -72,57 +74,78 @@ function lookRight(){
 }
 
 function moveForward(){
-    var atVec = subtract(at,eye);
-    var xzAxis = cross(atVec,up);
-    var direction = cross(up,xzAxis);
+  if (!collisionForward()) {
+    var atVec = subtract(at, eye);
+    var xzAxis = cross(atVec, up);
+    var direction = cross(up, xzAxis);
     direction = normalize(direction);
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  } else {
+    // Check if there is a block above the block in front.
+    // if not, move up to the center of that block.
+    // no animation yet.
+    var eyePrime = getPosOfBlockInFront();
+    moveUp(eyePrime);
+  }
 }
 
 function moveBackwards(){
-    var atVec = subtract(eye,at);
-    var xzAxis = cross(atVec,up);
-    var direction = cross(up,xzAxis);
+  if (!collisionBack()) {
+    var atVec = subtract(eye, at);
+    var xzAxis = cross(atVec, up);
+    var direction = cross(up, xzAxis);
     direction = normalize(direction);
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  }
 }
 
 function moveLeft(){
-    var z = subtract(eye,at);
-    var y = cross(z,up);
+  if (!collisionLeft()) {
+    var z = subtract(eye, at);
+    var y = cross(z, up);
     var direction = normalize(y);
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  }
 }
 
 function moveRight(){
-    var z = subtract(at,eye);
-    var y = cross(z,up);
+  if (!collisionRight()) {
+    var z = subtract(at, eye);
+    var y = cross(z, up);
     var direction = normalize(y);
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  }
 }
 
-function moveUp(){
+function moveUp(pos){
+  if (!collisionUp(pos)) {
+    var eyePrime = pos || eye;
     var direction = up;
     direction = normalize(direction);
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eyePrime, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  } else {
+    console.log("collision up");
+  }
 }
 
 function moveDown() {
+  if (!collisionDown()) {
     var direction = up;
     direction = negate(normalize(direction));
-    eye = add(eye,mult(direction,vec3(0.25,0.25,0.25)));
-    at = add(at,mult(direction,vec3(0.25,0.25,0.25)));
-    mvMatrix=lookAt(eye,at,up);
+    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
+    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    mvMatrix = lookAt(eye, at, up);
+  }
 }
 
 function orthogonal(){

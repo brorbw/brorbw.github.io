@@ -20,7 +20,7 @@ function addBox(boxToAdd){
 
 //might not be needed
 function getCube(position){
-    return world[position.z*gridSize*gridSize+position.y*gridSize+position.x];
+  return world[position.z*gridSize*gridSize+position.y*gridSize+position.x];
 }
 
 function removeBox(position){
