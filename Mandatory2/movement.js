@@ -101,6 +101,7 @@ function moveBackwards(){
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
     mvMatrix = lookAt(eye, at, up);
+    collect();
   }
 }
 
@@ -112,6 +113,7 @@ function moveLeft(){
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
     mvMatrix = lookAt(eye, at, up);
+    collect();
   }
 }
 
@@ -161,7 +163,7 @@ function moveDown() {
 function collect() {
   var p = posToCenter(eye[0], eye[1], eye[2]);
   if (getCube(p) === 0){
-    world[p.z*gridSize*gridSize+p.y*gridSize+p.x] = 1;
+    world[p.z*gridSize*gridSize+p.y*gridSize+p.x] = undefined;
     emptyArrays();
     drawWorld();
     resendBuffers();
@@ -176,7 +178,6 @@ function orthogonal(){
 function perspec(){
     mvMatrix= lookAt(eye,at,up);
     pMatrix = perspective(fovy, aspect, near, far);
-
 }
 
 function __matrixVector(m,v){

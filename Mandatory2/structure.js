@@ -64,8 +64,6 @@ function drawWorld() {
                     if(cube === 0) {
                       buildSpinningCube(p);
                       console.log(p);
-                    } else if (cube===1) {
-                      // do nothing
                     } else {
                         buildRegularCube(p);
                     }
