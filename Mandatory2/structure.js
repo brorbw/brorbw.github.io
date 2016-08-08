@@ -4,7 +4,7 @@
 
 //Right now there is only
 
-var gridSize =10;
+var gridSize =20;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
