@@ -8,6 +8,8 @@ var vPosition,vColor,vRotation, vCenter;
 var sunPivot,vSun,cSun;
 var vEye;
 var rotationMat;
+var sunMat;
+var sunRotation;
 var angle = 0;
 var init = true;
 var camera;
@@ -65,6 +67,7 @@ window.onload = function init() {
 
     vEye = gl.getUniformLocation(program, "eyePosition");
     vRotation = gl.getUniformLocation(program, "vRotation");
+    sunRotation = gl.getUniformLocation(program, "sunRotation");
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
@@ -110,7 +113,6 @@ window.onload = function init() {
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
     buildMountains();
-    
     init = false;
     render();
 }
@@ -174,9 +176,10 @@ var render = function() {
     }
 
 
-    rotationMat = flatten(rotate(sunAngle,vec3(0,0,1)));
+    sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
     sunAngle++;
-    gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
+    gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
+    gl.uniformMatrix4fv( sunRotation, false, flatten(sunMat));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, sunPivot);
     gl.vertexAttribPointer(vCenter, 4,gl.FLOAT, false,0,0);
@@ -186,9 +189,9 @@ var render = function() {
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
 
-    //gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
-    //gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    //gl.enableVertexAttribArray( vPosition );
+    gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
 
     gl.drawArrays(gl.TRIANGLES, 0, centerSun.length);
 

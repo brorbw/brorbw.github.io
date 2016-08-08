@@ -31,12 +31,13 @@ uniform mat4 vRotation;
 uniform mat4 modelView;
 uniform mat4 projection;
 uniform vec3 eyePosition;
+uniform mat4 sunRotation;
 
 uniform vec4 lightPosition;
 
 void main()
 {
-    vec4 light = lightPosition;
+    vec4 light = sunRotation*lightPosition;
     if(light.w == 0.0)  l = normalize(light);
     else  l = normalize(light - vPosition);
     vec4 normal = normalize(vRotation*vColor);
