@@ -60,6 +60,7 @@ window.onload = function init() {
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
+    cDBuffer = gl.createBuffer();
     vDBuffer = gl.createBuffer();
     vDPosition = gl.getAttribLocation( program, "vPosition" );
 
