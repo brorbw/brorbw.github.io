@@ -136,15 +136,11 @@ function moveBackwards(){
 }
 
 function moveLeft(){
-<<<<<<< HEAD
-    console.log("move");
-    var z = subtract(eye,at);
-    var y = cross(z,up);
-=======
+
   if (!collisionLeft()) {
     var z = subtract(eye, at);
     var y = cross(z, up);
->>>>>>> dagmar2
+
     var direction = normalize(y);
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
@@ -154,15 +150,10 @@ function moveLeft(){
 }
 
 function moveRight(){
-<<<<<<< HEAD
-    console.log("move");
-    var z = subtract(at,eye);
-    var y = cross(z,up);
-=======
+
   if (!collisionRight()) {
     var z = subtract(at, eye);
     var y = cross(z, up);
->>>>>>> dagmar2
     var direction = normalize(y);
     eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
     at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
