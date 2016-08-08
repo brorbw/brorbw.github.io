@@ -93,6 +93,7 @@ window.onload = function init() {
 
     });
 
+    canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
     buildMountainsSmall();
     init = false;
