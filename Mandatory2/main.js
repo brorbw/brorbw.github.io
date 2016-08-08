@@ -122,6 +122,9 @@ var render = function() {
         }
     }
 
+    //allowedToBuild();
+    //allowedToRemove();
+
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
 
