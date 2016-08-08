@@ -101,6 +101,9 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
+//    canvas.addEventListener("click", function(event) {event.preventDefault(); if(event.button==2){allowedToRemove}  return false;},false);
+    canvas.addEventListener("dblclick", allowedToRemove);
+
     buildMountains();
     init = false;
     render();
@@ -122,8 +125,7 @@ var render = function() {
         }
     }
 
-    //allowedToBuild();
-    //allowedToRemove();
+  //  allowedToBuild();
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
@@ -166,6 +168,7 @@ var render = function() {
 
     requestAnimFrame(render);
 }
+
 
 function resendBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
