@@ -66,10 +66,13 @@ main()
   vec3 h = normalize(l+e);
   vec4 ambient = ambientProduct;
 
+
   float ln = dot(l,n);
+  //the diffusion
   float kd = max(ln,0.0);
   vec4 diffuse = kd * diffuseProduct;
 
+  //the specular
   float ks = pow(max(dot(n,h),0.0),shininess);
   vec4 specular = ks * specularProduct;
 

@@ -6,8 +6,8 @@ var dr = 60.0 * Math.PI/180.0;
 var  fovy = 45.0;
 var  aspect;
 
-var flying = false;
-
+//var flying = false;
+var flying = true;
 var eye = vec3(gridSize/2,20,gridSize/2+5);
 var at = vec3(gridSize/2,10,gridSize/2);
 //var eye = vec3(0,0,5);
