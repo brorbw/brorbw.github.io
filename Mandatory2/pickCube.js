@@ -34,7 +34,7 @@ function allowedToBuild(){
         build = false;
         break;
       }
-      //drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
+      drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
       break;
     } else{
       //console.log('not allowed to build');

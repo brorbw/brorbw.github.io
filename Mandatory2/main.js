@@ -105,8 +105,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-//    canvas.addEventListener("click", function(event) {event.preventDefault(); if(event.button==2){allowedToRemove}  return false;},false);
-    canvas.addEventListener("dblclick", allowedToRemove);
+    canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
     canvas.addEventListener("click", function(){build=true;});
 
     buildMountains();
