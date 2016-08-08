@@ -60,6 +60,9 @@ window.onload = function init() {
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
+    vDBuffer = gl.createBuffer();
+    vDPosition = gl.getAttribLocation( program, "vPosition" );
+
 // buttons for viewing parameters
     camera = new Camera();
     document.getElementById("Button1").onclick = function(){camera.perspec()};
@@ -125,7 +128,9 @@ var render = function() {
         }
     }
 
-  //  allowedToBuild();
+    allowedToBuild();
+
+
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
