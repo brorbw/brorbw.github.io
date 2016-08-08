@@ -36,14 +36,12 @@ uniform vec4 lightPosition;
 
 void main()
 {
-    vec3 L;
-    if(lightPosition.w == 0.0)  L = normalize( lightPosition.xyz);
+    if(lightPosition.w == 0.0)  l = normalize( lightPosition.xyz);
     else  l = normalize( (lightPosition - vPosition) .xyz);
-    vec3 pos = normalize(-(modelView * vPosition).xyz);
+    vec3 pos = -normalize((modelView * vPosition).xyz);
     vec4 normal = normalize(vRotation*vColor);
-
     e = -pos;
-    n = normalize(normal.xyz);
+    n = normalize(normal).xyz;
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
 }
 </script>
@@ -78,7 +76,7 @@ main()
   vec4 specular = ks * specularProduct;
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
-  fColor = ambient + diffuse;
+  fColor = ambient + diffuse + specular;
 
   fColor.a = 1.0;
   gl_FragColor = fColor;
