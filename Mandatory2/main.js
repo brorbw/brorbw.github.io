@@ -110,6 +110,7 @@ window.onload = function init() {
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
     buildMountains();
+    
     init = false;
     render();
 }
@@ -152,23 +153,25 @@ var render = function() {
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
 
     //____SPINNING____
-    rotationMat = flatten(rotate(angle,vec3(0,1,0)));
-    angle++;
-    gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
+    if(spinningArray.length !== 0) {
+        rotationMat = flatten(rotate(angle, vec3(0, 1, 0)));
+        angle++;
+        gl.uniformMatrix4fv(vRotation, false, flatten(rotationMat));
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
-    gl.vertexAttribPointer(vCenter, 4,gl.FLOAT, false,0,0);
-    gl.enableVertexAttribArray(vCenter);
+        gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
+        gl.vertexAttribPointer(vCenter, 4, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(vCenter);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
-    gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vColor);
+        gl.bindBuffer(gl.ARRAY_BUFFER, cRBuffer);
+        gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(vColor);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
+        gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
+        gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(vPosition);
 
-    gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
+        gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
+    }
 
 
     rotationMat = flatten(rotate(sunAngle,vec3(0,0,1)));
@@ -183,11 +186,11 @@ var render = function() {
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
+    //gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
+    //gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    //gl.enableVertexAttribArray( vPosition );
 
-    gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
+    gl.drawArrays(gl.TRIANGLES, 0, centerSun.length);
 
     requestAnimFrame(render);
 }

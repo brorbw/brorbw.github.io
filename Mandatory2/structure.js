@@ -93,18 +93,7 @@ function buildMountains(){
     drawWorld();
     resendBuffers();
 }
-function buildHollowMountains(){
-    for(var z = 0; z < gridSize; z++){
-        for(var x = 0; x < gridSize;x++){
-            var y = Math.floor(Math.sin(0.1*x)*Math.cos(0.1*z)*20+20);
-                var pos = new Position(x,y,z);
-                var box = new Box(pos);
-                addBox(box);
-            }
-        }
-    drawWorld();
-    resendBuffers();
-}
+
 
 
 function buildMountainsSmall(){
