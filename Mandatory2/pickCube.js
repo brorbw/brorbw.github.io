@@ -22,11 +22,11 @@ function allowedToBuild(){
     // cubeInFront at least at the distance 2
     if (cubeInFront !== undefined && cubeInFront !== 0){
       var centerNew = getPosOfBlockInFrontForward(i-1);
-      console.log('allowed to build '+ centerNew);
+      //console.log('allowed to build '+ centerNew);
       drawWireFrame(centerNew[0],centerNew[1],centerNew[2],1);
       break;
     } else{
-      console.log('not allowed to build');
+      //console.log('not allowed to build');
     }
   }
 }
@@ -73,7 +73,7 @@ function drawWireFrame(x,y,z, boxLength){
       framePoints.push(verts[4]);
       framePoints.push(verts[5]);
       framePoints.push(verts[6]);
-
+console.log('should draw');
       gl.bindBuffer( gl.ARRAY_BUFFER, vDBuffer );
       gl.bufferData(gl.ARRAY_BUFFER, flatten(framePoints), gl.STATIC_DRAW);
       gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
