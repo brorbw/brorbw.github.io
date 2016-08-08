@@ -1,5 +1,5 @@
 var near = 0.1;
-var far = 100;
+var far = 30;
 var radius = 4.0;
 var dr = 60.0 * Math.PI/180.0;
 
@@ -10,6 +10,8 @@ var flying = false;
 
 var eye = vec3(gridSize/2,20,gridSize/2+5);
 var at = vec3(gridSize/2,10,gridSize/2);
+//var eye = vec3(0,0,5);
+//var at = vec3(0,0,0);
 
 
 const up = vec3(0.0, 1.0, 0.0);
@@ -125,6 +127,7 @@ function moveBackwards(){
 }
 
 function moveLeft(){
+    console.log("move");
     var z = subtract(eye,at);
     var y = cross(z,up);
     var direction = normalize(y);
@@ -134,6 +137,7 @@ function moveLeft(){
 }
 
 function moveRight(){
+    console.log("move");
     var z = subtract(at,eye);
     var y = cross(z,up);
     var direction = normalize(y);

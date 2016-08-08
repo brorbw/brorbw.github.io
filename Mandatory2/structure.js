@@ -4,7 +4,7 @@
 
 //Right now there is only
 
-var gridSize = 50;
+var gridSize =10;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
@@ -55,6 +55,8 @@ function buildWorld(levels){
                 }
             }
         }
+    drawWorld();
+    resendBuffers();
 }
 
 function drawWorld() {
@@ -80,7 +82,7 @@ function drawWorld() {
 function buildMountains(){
     for(var z = 0; z < gridSize; z++){
         for(var x = 0; x < gridSize;x++){
-            var yl = (Math.sin(0.08*x)*Math.cos(0.08*z)/0.08)*12+12;
+            var yl = (Math.sin(0.08*x)*Math.cos(0.08*z))*12+12;
             for(var y = 0; y < yl; y++){
                 var pos = new Position(x,y,z);
                 var box = new Box(pos);

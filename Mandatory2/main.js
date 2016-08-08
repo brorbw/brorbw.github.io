@@ -35,7 +35,7 @@ window.onload = function init() {
     //
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
-
+    initShader(program);
     cBuffer = gl.createBuffer();
 
     vColor = gl.getAttribLocation( program, "vColor" );
@@ -75,17 +75,18 @@ window.onload = function init() {
         if(event.keyCode === 65){
             camera.moveLeft();
         } else if (event.keyCode === 68) {
-            camera.moveRight()
+            console.log("right");
+            camera.moveRight();
         } else if (event.keyCode === 87){//w
             camera.moveForward();
         } else if (event.keyCode === 83){//s
             camera.moveBackwards();
         } else if (event.keyCode === 37) {
-            camera.lookLeft()
+            camera.lookLeft();
         } else if (event.keyCode === 39) {
-            camera.lookRight()
+            camera.lookRight();
         } else if (event.keyCode === 38){
-            camera.lookDown()
+            camera.lookDown();
         } else if (event.keyCode === 40){
             camera.lookUp();
         }
@@ -95,7 +96,6 @@ window.onload = function init() {
     canvas.addEventListener("mousemove", mousemove);
     buildMountainsSmall();
     init = false;
-
     render();
 }
 

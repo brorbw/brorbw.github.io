@@ -32,6 +32,7 @@ function buildSpinningCube(centerPoint){
         centerSpinningArray.push(centerPointTmp);
     }
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
+    /*
     for(var i = 0; i < vertsForCube.length;i++){
         //this is where the code for the initial rotation
         var vecCenter = subtract(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1),vertsForCube[i]);
@@ -39,7 +40,7 @@ function buildSpinningCube(centerPoint){
         vecCenter = mult(rotatedY,vecCenter);
 
         vertsForCube[i] = add(vecCenter,vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
-    }
+    } */
     console.log("building spinning cube");
     //There should be some kind of claculation that
     //rotats the box in 45° in one direction and then 45° in another direction
