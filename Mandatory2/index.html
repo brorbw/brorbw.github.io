@@ -36,12 +36,11 @@ uniform vec4 lightPosition;
 
 void main()
 {
-    vec4 pos = -(modelView*vPosition);
-    vec4 light = modelView*lightPosition;
+    vec4 light = lightPosition;
     if(light.w == 0.0)  l = normalize(light);
-    else  l = normalize(light - pos);
-    vec4 normal = normalize(modelView*vRotation*vColor);
-    e = -pos;
+    else  l = normalize(light - vPosition);
+    vec4 normal = normalize(vRotation*vColor);
+    e = normalize(vec4(eyePosition.xyz,1));
     n = normalize(normal);
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
 }
@@ -65,7 +64,6 @@ main()
   vec4 fColor;
   vec4 h = normalize(l+e);
   vec4 ambient = ambientProduct;
-
 
   float ln = dot(l,n);
   //the diffusion
@@ -92,6 +90,7 @@ main()
 <script type="text/javascript" src="main.js"></script>
 <script type="text/javascript" src="movement.js"></script>
 <script type="text/javascript" src="ligthing.js"></script>
+<script type="text/javascript" src="sun.js"></script>
 <!--<script type="text/javascript" src="copy.js"></script>-->
 
 

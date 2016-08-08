@@ -5,12 +5,15 @@ var modelView, projection;
 
 var vBuffer,cBuffer,vRBuffer,cRBuffer, centerSpinningBuffer ,centerBuffer;
 var vPosition,vColor,vRotation, vCenter;
+var sunPivot,vSun,cSun;
+var vEye;
 var rotationMat;
 var angle = 0;
 var init = true;
 var camera;
 var jump = false;
 var jumpTime = 0;
+var sunAngle = 0;
 
 window.onload = function init() {
 
@@ -56,6 +59,11 @@ window.onload = function init() {
 
     vRBuffer = gl.createBuffer();
 
+    sunPivot = gl.createBuffer();
+    vSun = gl.createBuffer();
+    cSun = gl.createBuffer();
+
+    vEye = gl.getUniformLocation(program, "eyePosition");
     vRotation = gl.getUniformLocation(program, "vRotation");
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
@@ -124,6 +132,7 @@ var render = function() {
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
+    gl.uniform3fv(vEye,flatten(eye));
 
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
@@ -156,6 +165,25 @@ var render = function() {
     gl.enableVertexAttribArray( vColor);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vRBuffer);
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
+
+    gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
+
+
+    rotationMat = flatten(rotate(sunAngle,vec3(0,0,1)));
+    sunAngle++;
+    gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, sunPivot);
+    gl.vertexAttribPointer(vCenter, 4,gl.FLOAT, false,0,0);
+    gl.enableVertexAttribArray(vCenter);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, cSun);
+    gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vColor);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
 

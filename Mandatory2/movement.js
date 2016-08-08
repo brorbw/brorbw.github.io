@@ -1,5 +1,5 @@
 var near = 0.1;
-var far = 30;
+var far = 100;
 var radius = 4.0;
 var dr = 60.0 * Math.PI/180.0;
 
@@ -317,7 +317,7 @@ function collisionUp(pos) {
 function collisionDown() {
   var direction = up;
   direction = negate(normalize(direction));
-  var eyePrime = add(eye, mult(direction, vec3(1, 1, 1)));
+  var eyePrime = add(eye, mult(direction, vec3(1, 3, 1)));
   if (inWorld(eyePrime[0], eyePrime[1], eyePrime[2])) {
     var p = posToCenter(eyePrime[0], eyePrime[1], eyePrime[2]);
     return getCube(p) !== undefined && getCube(p) !== 0;

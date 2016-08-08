@@ -4,7 +4,7 @@
 
 //Right now there is only
 
-var gridSize =30;
+var gridSize =40;
 var world = [gridSize*gridSize*gridSize];
 
 function addBox(boxToAdd){
@@ -79,9 +79,10 @@ function drawWorld() {
 }
 //y=sin(5x)*cos(5z)/5
 function buildMountains(){
+    buildSun(sunInitPosition);
     for(var z = 0; z < gridSize; z++){
         for(var x = 0; x < gridSize;x++){
-            var yl = (Math.sin(0.2*x)*Math.cos(0.2*z))*10+10;
+            var yl = (Math.sin(0.1*x)*Math.cos(0.1*z))*20+20;
             for(var y = 0; y < yl; y++){
                 var pos = new Position(x,y,z);
                 var box = new Box(pos);
@@ -89,6 +90,18 @@ function buildMountains(){
             }
         }
     }
+    drawWorld();
+    resendBuffers();
+}
+function buildHollowMountains(){
+    for(var z = 0; z < gridSize; z++){
+        for(var x = 0; x < gridSize;x++){
+            var y = Math.floor(Math.sin(0.1*x)*Math.cos(0.1*z)*20+20);
+                var pos = new Position(x,y,z);
+                var box = new Box(pos);
+                addBox(box);
+            }
+        }
     drawWorld();
     resendBuffers();
 }

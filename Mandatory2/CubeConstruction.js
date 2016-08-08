@@ -2,7 +2,10 @@ var pointsArray = [];
 var colorsArray = [];
 var spinningArray = [];
 var spinningNormals = []; //they are not suppose to be here, but they'll stay for now
+var sunArray = [];
+var sunNormals = [];
 
+var centerSun = [];
 var centerArray = [];
 var centerSpinningArray = [];
 
@@ -32,7 +35,6 @@ function buildSpinningCube(centerPoint){
         centerSpinningArray.push(centerPointTmp);
     }
     var vertsForCube = __buildVertsForCube(centerPoint,0.5);
-    /*
     for(var i = 0; i < vertsForCube.length;i++){
         //this is where the code for the initial rotation
         var vecCenter = subtract(vec4(centerPoint.x,centerPoint.y,centerPoint.z,1),vertsForCube[i]);
@@ -40,7 +42,7 @@ function buildSpinningCube(centerPoint){
         vecCenter = mult(rotatedY,vecCenter);
 
         vertsForCube[i] = add(vecCenter,vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
-    } */
+    }
     console.log("building spinning cube");
     //There should be some kind of claculation that
     //rotats the box in 45° in one direction and then 45° in another direction
@@ -121,4 +123,41 @@ function emptyArrays(){
     spinningNormals = [];
     centerArray = [];
     centerSpinningArray = [];
+}
+
+function buildSun(centerPoint){
+    //this is where the regular cube is build
+    var vertsForCube = __buildVertsForCube(centerPoint,1);
+    // console.log("building regular cube");
+    var centerPointTmp = vec4(gridSize/2,0,gridSize/2,1)
+    for(var i = 0; i < 36; i++){
+        centerSun.push(centerPointTmp);
+    }
+    __quadSun( 1, 0, 3, 2 ,vertsForCube);
+    __quadSun( 2, 3, 7, 6 ,vertsForCube);
+    __quadSun( 3, 0, 4, 7 ,vertsForCube);
+    __quadSun( 6, 5, 1, 2 ,vertsForCube);
+    __quadSun( 4, 5, 6, 7 ,vertsForCube);
+    __quadSun( 5, 4, 0, 1 ,vertsForCube);
+}
+
+
+function __quadSun(a, b, c, d, verts) {
+    //normals
+    var x = subtract(verts[a],verts[b]);
+    var y = subtract(verts[b],verts[c]);
+    var color = vec4(normalize(cross(x,y)),1);
+    //to the arrays
+    sunArray.push(verts[a]);
+    sunNormals.push(color);
+    sunArray.push(verts[b]);
+    sunNormals.push(color);
+    sunArray.push(verts[c]);
+    sunNormals.push(color);
+    sunArray.push(verts[a]);
+    sunNormals.push(color);
+    sunArray.push(verts[c]);
+    sunNormals.push(color);
+    sunArray.push(verts[d]);
+    sunNormals.push(color);
 }
