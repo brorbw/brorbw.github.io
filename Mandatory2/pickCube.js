@@ -1,3 +1,4 @@
+var build = false;
 var framePoints=[];
 function allowedToRemove(){
   for (i=1;i<5;i++){
@@ -23,7 +24,17 @@ function allowedToBuild(){
     if (cubeInFront !== undefined && cubeInFront !== 0){
       var posNew = getPosOfBlockInFrontForward(i-1);
       var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
-      drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
+      if(build){
+        console.log('build'+centerNew.x+', '+centerNew.y+', '+centerNew.z);
+        var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
+        var box = new Box(pos);
+        addBox(box);
+        drawWorld();
+        resendBuffers();
+        build = false;
+        break;
+      }
+      //drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
       break;
     } else{
       //console.log('not allowed to build');
@@ -83,10 +94,10 @@ function drawWireFrame(x,y,z, boxLength){
 
       gl.bindBuffer( gl.ARRAY_BUFFER, vDBuffer );
       gl.bufferData(gl.ARRAY_BUFFER, flatten(framePoints), gl.STATIC_DRAW);
-      gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-      gl.enableVertexAttribArray( vPosition );
+      gl.vertexAttribPointer( vDPosition, 2, gl.FLOAT, false, 0, 0 );
+      gl.enableVertexAttribArray( vDPosition );
 
-      gl.drawArrays( gl.LINES, 0, framePoints.length );
+      gl.drawArrays( gl.LINES, 0, 24 );
 }
 
 

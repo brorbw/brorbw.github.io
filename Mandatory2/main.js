@@ -107,6 +107,7 @@ window.onload = function init() {
     canvas.addEventListener("mousemove", mousemove);
 //    canvas.addEventListener("click", function(event) {event.preventDefault(); if(event.button==2){allowedToRemove}  return false;},false);
     canvas.addEventListener("dblclick", allowedToRemove);
+    canvas.addEventListener("click", function(){build=true;});
 
     buildMountains();
     init = false;

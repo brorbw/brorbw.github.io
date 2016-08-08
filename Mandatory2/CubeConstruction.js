@@ -31,7 +31,7 @@ function buildSpinningCube(centerPoint){
     for(var i = 0; i < 36; i++){
         centerSpinningArray.push(centerPointTmp);
     }
-    var vertsForCube = __buildVertsForCube(centerPoint,0.5);
+    var vertsForCube = __buildVertsForCube(centerPoint,1);
     /*
     for(var i = 0; i < vertsForCube.length;i++){
         //this is where the code for the initial rotation
