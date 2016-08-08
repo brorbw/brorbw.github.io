@@ -30,6 +30,7 @@ varying vec3 n,l,e;
 uniform mat4 vRotation;
 uniform mat4 modelView;
 uniform mat4 projection;
+uniform vec3 eyePosition;
 
 uniform vec4 lightPosition;
 
@@ -42,7 +43,7 @@ void main()
     vec4 normal = normalize(vRotation*vColor);
 
     e = -pos;
-    n = normalize((modelView*normal).xyz);
+    n = normalize(normal.xyz);
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
 }
 </script>
