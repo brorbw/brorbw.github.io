@@ -166,8 +166,8 @@ function moveUp(){
   if (!collisionUp()) {
     var direction = up;
     direction = normalize(direction);
-    eye = add(eye, mult(direction, vec3(0.25, 0.25, 0.25)));
-    at = add(at, mult(direction, vec3(0.25, 0.25, 0.25)));
+    eye = add(eye, mult(direction, vec3(0.4, 0.4, 0.4)));
+    at = add(at, mult(direction, vec3(0.4, 0.4, 0.4)));
     mvMatrix = lookAt(eye, at, up);
     collect();
   }

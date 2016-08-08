@@ -9,6 +9,8 @@ var rotationMat;
 var angle = 0;
 var init = true;
 var camera;
+var jump = false;
+var jumpTime = 0;
 
 window.onload = function init() {
 
@@ -89,6 +91,10 @@ window.onload = function init() {
             camera.lookDown();
         } else if (event.keyCode === 40){
             camera.lookUp();
+        } else if (event.keyCode === 32){
+            if(collisionDown()) {
+                jump = true;
+            }
         }
 
     });
@@ -101,11 +107,21 @@ window.onload = function init() {
 }
 
 
-var render = function(){
-    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+var render = function() {
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     if (!flying) {
-      gravity();
+        gravity();
     }
+    if (jump == true) {
+        if (jumpTime <= 20) {
+            moveUp();
+            jumpTime++;
+        } else {
+            jump = false;
+            jumpTime = 0;
+        }
+    }
+
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
 
