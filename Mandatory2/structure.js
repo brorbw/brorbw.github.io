@@ -31,7 +31,6 @@ function removeBox(position){
     resendBuffers();
 }
 
-
 function Box(position){
     this.position = position;
 }

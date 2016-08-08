@@ -56,7 +56,7 @@ function buildSpinningCube(centerPoint){
 function buildRegularCube(centerPoint){
     //this is where the regular cube is build
     var vertsForCube = __buildVertsForCube(centerPoint,1);
-    console.log("building regular cube");
+    // console.log("building regular cube");
     var centerPointTmp = vec4(centerPoint.x,centerPoint.y,centerPoint.z,1)
     for(var i = 0; i < 36; i++){
         centerArray.push(centerPointTmp);
@@ -98,7 +98,7 @@ function __quadSpinning(a, b, c, d, verts) {
     var x = subtract(verts[a], verts[b]);
     var y = subtract(verts[b], verts[c]);
     var color = vec4(normalize(cross(y,x)), 1);
-    
+
     //pushing to the array
     spinningArray.push(verts[a]);
     spinningNormals.push(color);
