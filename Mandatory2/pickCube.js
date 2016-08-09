@@ -143,22 +143,24 @@ function onClickBuild(event){
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     console.log(readColor);
     var position;
-    if(readColor[3]===30){
-        position = new Position(readColor[0],readColor[1]+1,readColor[2]);
-    } else if(readColor[3]===10){
+    if(readColor[3]<=10){
         position = new Position(readColor[0]+1,readColor[1],readColor[2]);
-    } else if(readColor[3]===20){
-        position = new Position(readColor[0]-1,readColor[1]+1,readColor[2]);
-    } else if(readColor[3]===40){
+    } else if(readColor[3]<=20){
+        position = new Position(readColor[0]-1,readColor[1],readColor[2]);
+    } else if(readColor[3]===30){
+        position = new Position(readColor[0],readColor[1]+1,readColor[2]);
+    } else if(readColor[3]<=40){
         position = new Position(readColor[0],readColor[1]-1,readColor[2]);
-    } else if(readColor[3]===50){
+    } else if(readColor[3]<=50){
         position = new Position(readColor[0],readColor[1],readColor[2]+1);
-    } else if(readColor[3]===60){
-        position = new Position(readColor[0],readColor[1]+1,readColor[2]-1);
+    } else if(readColor[3]>=51){
+        position = new Position(readColor[0],readColor[1],readColor[2]-1);
     }
-    console.log(position.x,position.y,position.z);
-    var box = new Box(position);
-    addBox(box);
+    if(position != undefined) {
+        console.log(position.x, position.y, position.z);
+        var box = new Box(position);
+        addBox(box);
+    }
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
