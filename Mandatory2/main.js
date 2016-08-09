@@ -32,7 +32,6 @@ var program;
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
-    canvas.style.cursor= "none";
 
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
