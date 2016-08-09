@@ -125,8 +125,9 @@ function emptyArrays(){
     centerSpinningArray = [];
 }
 
-function buildSun(centerPoint){
+function buildSun(){
     //this is where the regular cube is build
+    var centerPoint = new Position(lightPosition[0],lightPosition[1],lightPosition[2]);
     var vertsForCube = __buildVertsForCube(centerPoint,1);
     // console.log("building regular cube");
     var centerPointTmp = vec4(gridSize/2,0,gridSize/2,1)
