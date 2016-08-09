@@ -12,6 +12,8 @@ var centerSpinningArray = [];
 
 var texCoordsArray = [];
 
+var frameColors = [];
+
 var rotatedZ = rotate(45, vec3(0,0,1));
 var rotatedY = rotate(45, vec3(1,0,0));
 
@@ -109,6 +111,28 @@ function __quadRegular(a, b, c, d, verts, s,t) {
     var y = subtract(verts[b],verts[c]);
     var color = vec4(normalize(cross(x,y)),0);
     var texCoord = getTexture(s,t);
+    var w;
+    if(color[0]==1){
+        w = 0.1; //right
+    } if(color[0]==-1){
+        w = 0.2; //left
+    } if(color[1]==1){
+        w = 0.3; //top
+    } if(color[1]==-1){
+        w = 0.4; //bottom
+    } if(color[2]==1){
+        w = 0.5; //front
+    } if(color[2]==-1){
+        w = 0.6; //back
+    }
+    var texCoord = getTexture(s,t);
+    var frameColor = vec4(center[0]*.01,center[1]*.01,center[2]*.01,w);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
 
     //to the arrays
     pointsArray.push(verts[a]);
@@ -161,6 +185,7 @@ function emptyArrays(){
     spinningNormals = [];
     centerArray = [];
     centerSpinningArray = [];
+    frameColors = [];
 }
 
 function buildSun(){

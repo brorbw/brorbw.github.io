@@ -111,3 +111,11 @@ function getPosOfBlocksInFront(i) {
   direction  =normalize(atVec);
   return add(eye, mult(direction, vec3(i+0.3, i+0.3, i+0.3)));
 }
+
+
+function onClick(){
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufferBuffer);
+    gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( bufferColor );
+    
+}

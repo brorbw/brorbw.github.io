@@ -22,6 +22,9 @@ var tBuffer;
 
 var vTexCoord;
 
+var bufferState;
+var bufferColor;
+var bufferBuffer;
 
 
 var program;
@@ -42,7 +45,7 @@ window.onload = function init() {
     gl.clearColor( 0.3, 0.3, 0.7, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
-    //gl.enable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
     //gl.cullFace(gl.BACK);
 
 
@@ -78,6 +81,12 @@ window.onload = function init() {
     cSun = gl.createBuffer();
 
     vDBuffer = gl.createBuffer();
+
+    bufferBuffer = gl.createBuffer();
+    bufferColor = gl.getAttribLocation(program,"bufferColor");
+
+
+
 
     vEye = gl.getUniformLocation(program, "eyePosition");
     vAt = gl.getUniformLocation(program, "atPosition");
@@ -254,6 +263,9 @@ function resendBuffers() {
 
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
+
+    gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,flatten(frameColors), gl.STATIC_DRAW);
 }
 
 function configureTexture( image ) {

@@ -22,6 +22,7 @@
 
 attribute vec4 vPosition;
 attribute vec4 vColor; //normal
+attribute vec4 bufferColor;
 attribute vec4 vCenter;
 attribute vec2 vTexCoord;
 varying vec2 fTexCoord;
@@ -29,7 +30,7 @@ varying vec2 fTexCoord;
 varying vec3 n,l,e;
 varying vec3 l1,e1;
 varying vec3 dist;
-
+varying vec4 fBufferColor;
 
 uniform mat4 vRotation;
 uniform mat4 modelView;
@@ -74,7 +75,10 @@ uniform vec4 diffuseProduct1;
 uniform vec4 specularProduct1;
 uniform float shininess;
 
+uniform float bufferOrNot;
+
 varying vec2 fTexCoord;
+varying vec4  fBufferColor;
 
 uniform sampler2D texture;
 
@@ -85,44 +89,49 @@ varying vec3 dist;
 void
 main()
 {
-  //point light
-  vec4 fColor;
-  vec3 h = normalize(l+e);
-  vec4 ambient = ambientProduct;
+    if(bufferOrNot == 0){
+      //point light
+      vec4 fColor;
+      vec3 h = normalize(l+e);
+      vec4 ambient = ambientProduct;
 
-  float ln = dot(l,n);
-  //the diffusion
-  float kd = max(ln,0.0);
+      float ln = dot(l,n);
+      //the diffusion
+      float kd = max(ln,0.0);
 
-  vec4 diffuse = kd * diffuseProduct;
+      vec4 diffuse = kd * diffuseProduct;
 
-  //the specular
-  float ks = pow(max(dot(n,h),0.0),shininess);
-  vec4 specular = ks * specularProduct;
+      //the specular
+      float ks = pow(max(dot(n,h),0.0),shininess);
+      vec4 specular = ks * specularProduct;
 
-  if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
-
-
-
-  //torch
-  vec3 h1 = normalize(l1+e);
-  vec4 ambient1 = ambientProduct1;
-
-  float ln1 = dot(l1,n);
-  float kd1 = max(ln1,0.0);
-  float distance = 1.0/(.2*length(dist)+.1*pow(length(dist),2.0));
-  vec4 diffuse1 = kd1 * diffuseProduct1 * distance;
-  float ks1 = pow(max(dot(n,h1),0.0),shininess);
-  vec4 specular1 = ks1 * specularProduct1*distance;
-
-  if(ln1<0.0) specular = vec4(0.0,0.0,0.0,1.0);
-
-  fColor = ambient + diffuse + specular + ambientProduct1 + diffuse1 + specular1;
-
-  fColor.a = 1.0;
+      if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
 
-  gl_FragColor = fColor * texture2D( texture, fTexCoord );
+
+
+        //torch
+        vec3 h1 = normalize(l1+e);
+        vec4 ambient1 = ambientProduct1;
+
+        float ln1 = dot(l1,n);
+        float kd1 = max(ln1,0.0);
+        float distance = 1.0/(.2*length(dist)+.1*pow(length(dist),2.0));
+        vec4 diffuse1 = kd1 * diffuseProduct1 * distance;
+        float ks1 = pow(max(dot(n,h1),0.0),shininess);
+        vec4 specular1 = ks1 * specularProduct1*distance;
+
+        if(ln1<0.0) specular = vec4(0.0,0.0,0.0,1.0);
+
+        fColor = ambient + diffuse + specular + ambientProduct1 + diffuse1 + specular1;
+
+        fColor.a = 1.0;
+
+
+        gl_FragColor = fColor * texture2D( texture, fTexCoord );
+         } else {
+            gl_FragColor = fBufferColor;
+        }
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
