@@ -26,7 +26,7 @@ attribute vec4 vCenter;
 attribute vec2 vTexCoord;
 varying vec2 fTexCoord;
 
-varying vec4 n,l,e;
+varying vec3 n,l,e;
 varying vec4 n1,l1,e1;
 
 
@@ -44,13 +44,11 @@ uniform vec4 lightPosition;
 void main()
 {
     //point light
-    vec4 pos = vPosition;
-    vec4 light = (sunRotation*lightPosition);
-    if(light.w == 0.0)  l = normalize(light);
-    else  l = normalize(light-pos);
-    vec4 normal = (vRotation*vColor);
-    e = normalize(vec4(eyePosition.xyz,1));
-    n = normalize(modelView*normal);
+    vec3 pos = (modelView*vPosition).xyz;
+    vec3 light = (modelView*(sunRotation*lightPosition)).xyz;
+    l = normalize(light-pos);
+    e = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);//;
+    n = normalize((modelView*(vRotation*vColor)).xyz);
 
 
     fTexCoord = vTexCoord;
@@ -71,31 +69,15 @@ varying vec2 fTexCoord;
 
 uniform sampler2D texture;
 
-varying vec4 n, l, e;
+varying vec3 n, l, e;
 varying vec4 n1,l1,e1;
 
 void
 main()
 {
-  vec4 h1 = normalize(l1+e1);
-  vec4 ambient1 = ambientProduct;
-
-  float ln1 = dot(l1,n1);
-  //the diffusion
-  float kd1 = max(ln1,0.0);
-  vec4 diffuse1 = kd1 * diffuseProduct;
-
-  //the specular
-  float ks1 = pow(max(dot(n1,h1),0.0),shininess);
-  vec4 specular1 = ks1 * specularProduct;
-
-  if(ln1<0.0) specular1 = vec4(0.0,0.0,0.0,1.0);
-
-
-
   //point light
   vec4 fColor;
-  vec4 h = normalize(l+e);
+  vec3 h = normalize(l+e);
   vec4 ambient = ambientProduct;
 
   float ln = dot(l,n);
@@ -109,12 +91,12 @@ main()
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
-  fColor = vec4(n.xyz,1);//ambient + diffuse + specular;// + ambient1 + diffuse1 + specular1;
+  fColor = diffuse + specular;// + ambient1 + diffuse1 + specular1;
 
   fColor.a = 1.0;
 
 
-  gl_FragColor = fColor;// * texture2D( texture, fTexCoord );
+  gl_FragColor = fColor * texture2D( texture, fTexCoord );
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
