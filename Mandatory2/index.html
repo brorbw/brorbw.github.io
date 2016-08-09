@@ -44,22 +44,13 @@ uniform vec4 lightPosition;
 void main()
 {
     //point light
-    vec4 pos = -(modelView*vPosition);
-    vec4 light = sunRotation*lightPosition;
+    vec4 pos = vPosition;
+    vec4 light = (sunRotation*lightPosition);
     if(light.w == 0.0)  l = normalize(light);
     else  l = normalize(light-pos);
-    vec4 normal = normalize(vRotation*vColor);
-    e = -normalize(vec4(eyePosition.xyz,1));
-    n = normalize(normal);
-
-
-    //torch
-    vec4 light1 = vec4(eyePosition.xyz,1);
-    if(light1.w == 0.0)  l1 = normalize(light1);
-    else  l1 = normalize(light1 - pos);
-    vec4 normal1 = normalize(vRotation*vColor);
-    e1 = -normalize(vec4(eyePosition.xyz,1));
-    n1 = normalize(normal1);
+    vec4 normal = (vRotation*vColor);
+    e = normalize(vec4(eyePosition.xyz,1));
+    n = normalize(modelView*normal);
 
 
     fTexCoord = vTexCoord;
@@ -118,12 +109,12 @@ main()
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
-  fColor = ambient + diffuse + specular;// + ambient1 + diffuse1 + specular1;
+  fColor = vec4(n.xyz,1);//ambient + diffuse + specular;// + ambient1 + diffuse1 + specular1;
 
   fColor.a = 1.0;
 
 
-  gl_FragColor = fColor * texture2D( texture, fTexCoord );
+  gl_FragColor = fColor;// * texture2D( texture, fTexCoord );
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
