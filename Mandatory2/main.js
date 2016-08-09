@@ -134,7 +134,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildMountains();
+    buildWorld(2);
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
@@ -211,7 +211,7 @@ var render = function() {
     allowedToBuild();
     sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
-    //sunAngle++;
+    sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
     gl.uniformMatrix4fv( sunRotation, false, flatten(sunMat));
 

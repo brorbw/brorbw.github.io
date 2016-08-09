@@ -8,10 +8,10 @@ var  aspect;
 
 var flying = false;
 
-//var eye = vec3(gridSize/2,20,gridSize/2);
-//var at = vec3(gridSize/2,10,gridSize/2-1);
-var eye = vec3(15.739875791103808, 37.84516938594207, 5.332126809700223);
-var at = vec3(22.6179039403004, 34.77905992424347, 11.52513117203133);
+var eye = vec3(gridSize/2,15,gridSize/2);
+var at = vec3(gridSize/2,15,gridSize/2-1);
+//var eye = vec3(15.739875791103808, 37.84516938594207, 5.332126809700223);
+//var at = vec3(22.6179039403004, 34.77905992424347, 11.52513117203133);
 //var eye = vec3(0,0,5);
 //var at = vec3(0,0,0);
 

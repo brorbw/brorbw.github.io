@@ -27,7 +27,7 @@ attribute vec2 vTexCoord;
 varying vec2 fTexCoord;
 
 varying vec3 n,l,e;
-varying vec4 n1,l1,e1;
+varying vec3 l1,e1;
 
 
 uniform mat4 vRotation;
@@ -47,8 +47,12 @@ void main()
     vec3 pos = (modelView*vPosition).xyz;
     vec3 light = (modelView*(sunRotation*lightPosition)).xyz;
     l = normalize(light-pos);
-    e = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);//;
+    e = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
     n = normalize((modelView*(vRotation*vColor)).xyz);
+
+    vec3 light1 = (modelView*vec4(eyePosition.xyz,1)).xyz;
+    l1 = normalize(light1-pos);
+    e1 = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
 
 
     fTexCoord = vTexCoord;
@@ -63,6 +67,9 @@ precision mediump float;
 uniform vec4 ambientProduct;
 uniform vec4 diffuseProduct;
 uniform vec4 specularProduct;
+uniform vec4 ambientProduct1;
+uniform vec4 diffuseProduct1;
+uniform vec4 specularProduct1;
 uniform float shininess;
 
 varying vec2 fTexCoord;
@@ -70,7 +77,7 @@ varying vec2 fTexCoord;
 uniform sampler2D texture;
 
 varying vec3 n, l, e;
-varying vec4 n1,l1,e1;
+varying vec3 l1,e1;
 
 void
 main()
@@ -91,7 +98,22 @@ main()
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
-  fColor = diffuse + specular;// + ambient1 + diffuse1 + specular1;
+
+
+  //torch
+  vec3 h1 = normalize(l1+e);
+  vec4 ambient1 = ambientProduct1;
+
+  float ln1 = dot(l1,n);
+  float kd1 = max(ln1,0.0);
+  vec4 diffuse1 = kd1 * diffuseProduct1;
+
+  float ks1 = pow(max(dot(n,h1),0.0),shininess);
+  vec4 specular1 = ks1 * specularProduct1;
+
+  if(ln1<0.0) specular = vec4(0.0,0.0,0.0,1.0);
+
+  fColor = ambient + diffuse + specular + ambientProduct1 + diffuse1 + specular1;
 
   fColor.a = 1.0;
 
