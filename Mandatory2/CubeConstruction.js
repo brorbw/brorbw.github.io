@@ -107,7 +107,7 @@ function __quadRegular(a, b, c, d, verts, s,t) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
-    var color = vec4(normalize(cross(x,y)),1);
+    var color = vec4(normalize(cross(x,y)),0);
     var texCoord = getTexture(s,t);
 
     //to the arrays
@@ -137,7 +137,7 @@ function __quadSpinning(a, b, c, d, verts) {
     //Making the normals
     var x = subtract(verts[a], verts[b]);
     var y = subtract(verts[b], verts[c]);
-    var color = vec4(normalize(cross(y,x)), 1);
+    var color = vec4(normalize(cross(y,x)), 0);
 
     //pushing to the array
     spinningArray.push(verts[a]);
@@ -192,7 +192,7 @@ function __quadSun(a, b, c, d, verts) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
-    var color = vec4(normalize(cross(x,y)),1);
+    var color = vec4(normalize(cross(x,y)),0);
     //to the arrays
     sunArray.push(verts[a]);
     sunNormals.push(color);
