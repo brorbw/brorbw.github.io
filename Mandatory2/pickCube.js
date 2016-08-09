@@ -11,9 +11,6 @@ function allowedToRemove(){
     var cubeInFront = getCube(centerFront);
     if (cubeInFront !== undefined && cubeInFront !== 0){
        world[centerFront.z*gridSize*gridSize+centerFront.y*gridSize+centerFront.x] = 0;
-       emptyArrays();
-       drawWorld();
-       resendBuffers();
        return;
     }
   }
@@ -34,8 +31,6 @@ function allowedToBuild(){
             var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
             var box = new Box(pos);
             addBox(box);
-            drawWorld();
-            resendBuffers();
             build = false;
             break;
           }
