@@ -22,20 +22,24 @@ function allowedToBuild(){
     var cubeInFront = getCube(centerFront);
     // cubeInFront at least at the distance 2
     if (cubeInFront !== undefined && cubeInFront !== 0){
-      var posNew = getPosOfBlockInFrontForward(i-1);
-      var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
-      if(build){
-        console.log('build'+centerNew.x+', '+centerNew.y+', '+centerNew.z);
-        var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
-        var box = new Box(pos);
-        addBox(box);
-        drawWorld();
-        resendBuffers();
-        build = false;
-        break;
+      for(j=0;j<11;j++){
+        var posNew = getPosOfBlockInFrontForward(i-0.1*j);
+        var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
+        if(centerNew.x!==centerFront.x || centerNew.y!==centerFront.y ||centerNew.z!==centerFront.z){
+          if(build){
+            console.log('build'+centerNew.x+', '+centerNew.y+', '+centerNew.z);
+            var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
+            var box = new Box(pos);
+            addBox(box);
+            drawWorld();
+            resendBuffers();
+            build = false;
+            break;
+          }
+          drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
+          break;
+        }
       }
-      drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
-      break;
     } else{
       //console.log('not allowed to build');
     }
