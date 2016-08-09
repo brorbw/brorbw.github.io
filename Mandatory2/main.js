@@ -206,7 +206,7 @@ var render = function() {
 
     sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
-    //sunAngle++;
+    sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
     gl.uniformMatrix4fv( sunRotation, false, flatten(sunMat));
 
