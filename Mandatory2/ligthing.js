@@ -39,12 +39,12 @@ function calcProducts(){
 }
 
 function sunShader(){
-  lightAmbient = vec4 ( 1 , 1 , 0.8 , 1.0 );
+  lightAmbient = vec4 ( 1 , 1 , 1 , 1.0 );
   //materinal propeties
   materialAmbient = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   materialDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   materialSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
-  materialShininess = 30;
+  materialShininess = 100;
   calcProducts();
   sendMaterial();
 }

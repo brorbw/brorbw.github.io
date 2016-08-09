@@ -192,7 +192,7 @@ function __quadSun(a, b, c, d, verts) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
-    var color = vec4(normalize(cross(x,y)),0);
+    var color = vec4(normalize(cross(y,x)),0);
     //to the arrays
     sunArray.push(verts[a]);
     sunNormals.push(color);
