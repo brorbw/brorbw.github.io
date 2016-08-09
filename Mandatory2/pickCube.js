@@ -1,6 +1,8 @@
 var build = false;
 var framePoints=[];
 
+var texture2;
+
 function allowedToRemove(){
   for (i=1;i<5;i++){
     var pos = getPosOfBlocksInFront(i);
@@ -117,20 +119,22 @@ function onClick(){
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    //gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
 
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
+
+
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferBuffer);
     gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( bufferColor );
 
-    gl.drawArrays(gl.TRIANGLES,0,frameColors.length);
+    gl.drawArrays(gl.TRIANGLES,0, 4);
 
-    //this is where the off screen render should go
-    gl.disableVertexAttribArray(bufferColor);
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-    //gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+
+
+    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
 
@@ -144,22 +148,23 @@ function onClick(){
 
 }
 function initFramebuffer(){
-    var texture = gl.createTexture();
-    gl.bindTexture( gl.TEXTURE_2D, texture );
+    texture2 = gl.createTexture();
+    gl.bindTexture( gl.TEXTURE_2D, texture2 );
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.generateMipmap(gl.TEXTURE_2D);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture2, 0);
 
-    //gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
-    //gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16, canvas.width, canvas.height);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16, canvas.width, canvas.height);
 
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
 
+    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    //gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+
 
 }

@@ -25,7 +25,7 @@ var vTexCoord;
 
 var bufferColor;
 var bufferBuffer;
-
+var texture1;
 
 var program;
 
@@ -267,11 +267,12 @@ function resendBuffers() {
 
     gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
     gl.bufferData(gl.ARRAY_BUFFER,flatten(frameColors), gl.STATIC_DRAW);
+    
 }
 
 function configureTexture( image ) {
-    texture = gl.createTexture();
-    gl.bindTexture( gl.TEXTURE_2D, texture );
+    texture1 = gl.createTexture();
+    gl.bindTexture( gl.TEXTURE_2D, texture1 );
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
         gl.RGB, gl.UNSIGNED_BYTE, image );
@@ -280,7 +281,7 @@ function configureTexture( image ) {
         gl.NEAREST_MIPMAP_LINEAR );
     gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
+    gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
 }
 
 

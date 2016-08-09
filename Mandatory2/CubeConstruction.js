@@ -126,7 +126,7 @@ function __quadRegular(a, b, c, d, verts, s,t,center) {
         w = 0.6; //back
     }
     var texCoord = getTexture(s,t);
-    var frameColor = vec4(center[0]*.01,center[1]*.01,center[2]*.01,w);
+    var frameColor = vec4(center.x*.01,center.y*.01,center.z*.01,w);
     frameColors.push(frameColor);
     frameColors.push(frameColor);
     frameColors.push(frameColor);
