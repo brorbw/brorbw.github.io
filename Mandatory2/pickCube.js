@@ -114,7 +114,13 @@ function getPosOfBlocksInFront(i) {
     direction  =normalize(atVec);
   return add(eye, mult(direction, vec3(i+0.3, i+0.3, i+0.3)));
 }
-
+function buildBox(centerNew){
+  var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
+  var box = new Box(pos);
+  addBox(box);
+  drawWorld();
+  resendBuffers();
+}
 
 function onClick(event){
     var mouseX = event.clientX;
@@ -146,7 +152,38 @@ function onClick(event){
 
     var readColor = new Uint8Array(4);
     gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
-    readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
+    readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 25.5)];
+    if(readColor[3]===1){
+      console.log('build right');
+      var centerNew = posToCenter(readColor[0]+1,readColor[1],readColor[2]);
+      buildBox(centerNew);
+         //right
+    } if(readColor[3]===2){
+         //left
+         console.log('build left');
+         var centerNew = posToCenter(readColor[0]-1,readColor[1],readColor[2]);
+         buildBox(centerNew);
+    } if(readColor[3]===3){
+      console.log('build top');
+        var centerNew = posToCenter(readColor[0],readColor[1]+1,readColor[2]);
+        buildBox(centerNew);
+         //top
+    } if(readColor[3]===4){
+    console.log('build bottom');
+      var centerNew = posToCenter(readColor[0],readColor[1]-1,readColor[2]);
+      buildBox(centerNew);
+         //bottom
+    } if(readColor[3]===5){
+      console.log('build front');
+      var centerNew = posToCenter(readColor[0],readColor[1],readColor[2]+1);
+      buildBox(centerNew);
+         //front
+    } if(readColor[3]===6){
+            console.log('build back');
+      var centerNew = posToCenter(readColor[0],readColor[1],readColor[2]-1);
+      buildBox(centerNew);
+         //back
+    }
     console.log(readColor.toString());
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
