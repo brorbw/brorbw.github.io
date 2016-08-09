@@ -110,7 +110,7 @@ function getPosOfBlocksInFront(i) {
 }
 
 
-function onClick(event){
+function onClickBuild(event){
     var mouseX = event.clientX;
     var mouseY = event.clientY;
 
@@ -131,6 +131,59 @@ function onClick(event){
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
 
+
+    gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
+
+    gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
+
+    gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
+
+    var readColor = new Uint8Array(4);
+    gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    console.log(readColor[0],readColor[1],readColor[2],readColor[3]);
+    readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
+    console.log(readColor);
+    var position;
+    if(readColor[3]===30){
+        position = new Position(readColor[0]/10,readColor[1]/10+1,readColor[2]/10);
+    } else if(readColor[3]===10){
+        position = new Position(readColor[0]/10+1,readColor[1]/10,readColor[2]/10);
+    } else if(readColor[3]===20){
+        position = new Position(readColor[0]/10-1,readColor[1]/10+1,readColor[2]/10);
+    } else if(readColor[3]===40){
+        position = new Position(readColor[0]/10,readColor[1]/10-1,readColor[2]/10);
+    } else if(readColor[3]===50){
+        position = new Position(readColor[0]/10,readColor[1]/10,readColor[2]/10+1);
+    } else if(readColor[3]===60){
+        position = new Position(readColor[0]/10,readColor[1]/10+1,readColor[2]/10-1);
+    }
+    console.log(position.x,position.y,position.z);
+    var box = new Box(position);
+    addBox(box);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    gl.finish();
+}
+function onClickRemove(event){
+    event.preventDefault();
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
+    gl.vertexAttribPointer( vCenter, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vCenter);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
+
+    gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
+    gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( bufferColor );
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
 

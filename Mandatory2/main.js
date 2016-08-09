@@ -143,9 +143,9 @@ window.onload = function init() {
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
-    canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
-    canvas.addEventListener("click", onClick);
-    init = false;
+    canvas.addEventListener("contextmenu", onClickRemove,false);
+    canvas.addEventListener("click", onClickBuild);
+    initialize = false;
     configureTexture( image );
     initFramebuffer();
     configureTexture( image );
