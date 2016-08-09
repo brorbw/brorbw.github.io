@@ -113,7 +113,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildWorld(2)
+    buildMountainsSmall();
     buildSun();
     initMaterial();
     init = false;
@@ -138,7 +138,7 @@ var render = function() {
     boxShader();
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
-    gl.uniform3fv(vEye,flatten(subtract(at, eye)));
+    gl.uniform3fv(vEye,flatten(eye));
 
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
