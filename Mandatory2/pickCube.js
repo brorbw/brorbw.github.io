@@ -140,7 +140,6 @@ function onClickBuild(event){
 
     var readColor = new Uint8Array(4);
     gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
-    console.log(readColor[0],readColor[1],readColor[2],readColor[3]);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     console.log(readColor);
     var position;
