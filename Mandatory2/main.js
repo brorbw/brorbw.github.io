@@ -18,7 +18,7 @@ var jumpTime = 0;
 var sunAngle = 0;
 
 var framebuffer;
-var renderbuffer
+
 var tBuffer;
 
 var vTexCoord;
@@ -45,8 +45,6 @@ window.onload = function init() {
     gl.clearColor( 0.3, 0.3, 0.7, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
 
 
     //
@@ -145,11 +143,12 @@ window.onload = function init() {
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
-    configureTexture( image );
     canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
     canvas.addEventListener("click", onClick);
     init = false;
+    configureTexture( image );
     initFramebuffer();
+    configureTexture( image );
     render();
 }
 
@@ -195,6 +194,7 @@ var render = function() {
     gl.enableVertexAttribArray( vTexCoord );
 
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
+    
 
     //____SPINNING____
     if(spinningArray.length !== 0) {
@@ -215,6 +215,7 @@ var render = function() {
         gl.enableVertexAttribArray(vPosition);
 
         gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
+
     }
     allowedToBuild();
     sunShader();
@@ -236,6 +237,10 @@ var render = function() {
     gl.enableVertexAttribArray( vPosition );
 
     gl.drawArrays(gl.TRIANGLES, 0, centerSun.length);
+
+    gl.disableVertexAttribArray(vCenter);
+    gl.disableVertexAttribArray(vColor);
+    gl.disableVertexAttribArray(vPosition);
 
 
 

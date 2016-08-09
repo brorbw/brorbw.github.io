@@ -79,7 +79,7 @@ uniform float shininess;
 uniform float bufferOrNot;
 
 varying vec2 fTexCoord;
-varying vec4  fBufferColor;
+varying vec4 fBufferColor;
 
 uniform sampler2D texture;
 
@@ -90,7 +90,7 @@ varying vec3 dist;
 void
 main()
 {
-    if(bufferOrNot == 1.){
+    if(bufferOrNot == 0.){
       //point light
       vec4 fColor;
       vec3 h = normalize(l+e);

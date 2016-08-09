@@ -2,7 +2,7 @@ function readWireFramePixel(xP, yP) {
     updatePoints();
     gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    
     var cubesDrawn = 0;
     for (var i = 0; i < m; i++) {
 
@@ -27,7 +27,7 @@ function readWireFramePixel(xP, yP) {
     }
     gl.finish();
     readColor = new Uint8Array(4);
-    gl.readPixels(xP, canvas.height-yP, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    gl.readPixels(xP, canvas.height-yP, 1,1, gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.uniform4fv(gl.getUniformLocation(program, "fPickColor"), flatten(vec4(1,0,0,0)));

@@ -17,18 +17,6 @@ var frameColors = [];
 var rotatedZ = rotate(45, vec3(0,0,1));
 var rotatedY = rotate(45, vec3(1,0,0));
 
-var grassTop = 0;
-var grassSide = 3;
-var grassBottom = 2;
-var rocks = 1;
-
-
-var texCoord = [
-    vec2(0, 0),
-    vec2(0, 1/16),
-    vec2(1/16, 1/16),
-    vec2(1/16, 0)
-];
 
 function getTexture(indexX,indexY){
     return [vec2(indexX*1/16,indexY*1/16),
@@ -77,7 +65,6 @@ function buildSpinningCube(centerPoint){
 
         vertsForCube[i] = add(vecCenter,vec4(centerPoint.x,centerPoint.y,centerPoint.z,1));
     }
-    console.log("building spinning cube");
     //There should be some kind of claculation that
     //rotats the box in 45° in one direction and then 45° in another direction
     //and then send the updated array to the __quadSpinning
@@ -126,7 +113,7 @@ function __quadRegular(a, b, c, d, verts, s,t,center) {
         w = 0.6; //back
     }
     var texCoord = getTexture(s,t);
-    var frameColor = vec4(center.x*.02,center.y*.02,center.z*.02,w);
+    var frameColor = vec4(center.x*.01,center.y*.01,center.z*.01,w);
     //console.log(frameColor);
     frameColors.push(frameColor);
     frameColors.push(frameColor);

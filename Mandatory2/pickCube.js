@@ -2,7 +2,7 @@ var build = false;
 var framePoints=[];
 var framebuffer;
 var renderbuffer;
-//var texture2;
+var texture2;
 
 function allowedToRemove(){
   for (i=1;i<5;i++){
@@ -10,7 +10,6 @@ function allowedToRemove(){
     var centerFront = posToCenter(pos[0],pos[1],pos[2]);
     var cubeInFront = getCube(centerFront);
     if (cubeInFront !== undefined && cubeInFront !== 0){
-       console.log('allowed to remove cube');
        world[centerFront.z*gridSize*gridSize+centerFront.y*gridSize+centerFront.x] = 0;
        emptyArrays();
        drawWorld();
@@ -32,7 +31,6 @@ function allowedToBuild(){
         var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
         if(centerNew.x!==centerFront.x || centerNew.y!==centerFront.y ||centerNew.z!==centerFront.z){
           if(build){
-            console.log('build'+centerNew.x+', '+centerNew.y+', '+centerNew.z);
             var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
             var box = new Box(pos);
             addBox(box);
@@ -106,6 +104,7 @@ function drawWireFrame(x,y,z, boxLength){
       for(var i = 0; i < framePoints.length; i+=4){
         gl.drawArrays( gl.LINE_LOOP, i, 4);
       }
+    gl.finish();
 }
 
 
@@ -121,10 +120,14 @@ function onClick(event){
     var mouseY = event.clientY;
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
+    gl.vertexAttribPointer( vCenter, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vCenter);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
+
     gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
     gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( bufferColor );
@@ -139,20 +142,19 @@ function onClick(event){
     gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-    gl.finish();
+
     var readColor = new Uint8Array(4);
-    gl.readPixels(mouseX, canvas.height-mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
-    console.log(readColor[0],readColor[1],readColor[2]);
+    gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
-    //console.log(readColor.toString());
+    console.log(readColor.toString());
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
-
+    gl.finish();
 }
 function initFramebuffer(){
-    gl.enable(gl.CULL_FACE);
-    var texture2 = gl.createTexture();
+
+    texture2 = gl.createTexture();
     gl.bindTexture( gl.TEXTURE_2D, texture2 );
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -168,12 +170,10 @@ function initFramebuffer(){
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
 
 
-
-
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
-    gl.disable(gl.CULL_FACE);
-    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
     gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
