@@ -107,7 +107,10 @@ window.onload = function init() {
     document.getElementById("Button6").onclick = function(){camera.lookRight();};
     document.getElementById("Button7").onclick = function(){camera.lookUp();};
     document.getElementById("Button8").onclick = function(){camera.lookDown();};
-
+    //sunSilder
+        document.getElementById("sunSlider").onchange = function(event) {
+          sunAngle = event.target.value;
+        };
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
