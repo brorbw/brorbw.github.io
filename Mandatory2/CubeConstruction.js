@@ -35,16 +35,7 @@ function getTexture(indexX,indexY){
             vec2(indexX*1/16,(indexY+1)*1/16),
             vec2((indexX+1)*1/16,(indexY+1)*1/16),
             vec2((indexX+1)*1/16,indexY*1/16)];
-
 }
-
-/*
-var texCoord = [
-    vec2(0, 0),
-    vec2(0, 1),
-    vec2(1, 1),
-    vec2(1, 0)
-];*/
 
 function __buildVertsForCube(centerPoint, boxLength) {
     //second param is suppose to be the size of the cube so we can make

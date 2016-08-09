@@ -129,7 +129,8 @@ function drawWireFrame(x,y,z, boxLength){
 
 function getPosOfBlocksInFront(i) {
   var atVec = subtract(at, eye);
-  direction  =normalize(atVec);
+  if(atVec.length!==0)
+    direction  =normalize(atVec);
   return add(eye, mult(direction, vec3(i+0.3, i+0.3, i+0.3)));
 }
 
@@ -159,11 +160,6 @@ function onClick(){
 
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
-
-
-
-
-
 
 }
 function initFramebuffer(){
