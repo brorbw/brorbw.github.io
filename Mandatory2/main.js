@@ -18,7 +18,7 @@ var jumpTime = 0;
 var sunAngle = 0;
 
 var framebuffer;
-
+var renderbuffer
 var tBuffer;
 
 var vTexCoord;
@@ -87,6 +87,7 @@ window.onload = function init() {
     bufferColor = gl.getAttribLocation(program,"bufferColor");
 
     framebuffer = gl.createFramebuffer();
+    renderbuffer = gl.createRenderbuffer();
 
 
     vEye = gl.getUniformLocation(program, "eyePosition");
