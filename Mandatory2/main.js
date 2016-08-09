@@ -17,7 +17,6 @@ var jump = false;
 var jumpTime = 0;
 var sunAngle = 0;
 
-var texSize = 64;
 
 var tBuffer;
 
@@ -85,6 +84,10 @@ window.onload = function init() {
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
 
+    cDBuffer = gl.createBuffer();
+    vDBuffer = gl.createBuffer();
+    vDPosition = gl.getAttribLocation( program, "vPosition" );
+
 // buttons for viewing parameters
     camera = new Camera();
     document.getElementById("Button1").onclick = function(){camera.perspec()};
@@ -131,6 +134,8 @@ window.onload = function init() {
     initMaterial();
     var image = document.getElementById("texImage");
     configureTexture( image );
+    canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
+    canvas.addEventListener("click", function(){build=true;});
     init = false;
     render();
 }
@@ -151,6 +156,8 @@ var render = function() {
         }
     }
     boxShader();
+    allowedToBuild();
+
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
     gl.uniform3fv(vEye,flatten(eye));
@@ -220,6 +227,7 @@ var render = function() {
 
     requestAnimFrame(render);
 }
+
 
 function resendBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
