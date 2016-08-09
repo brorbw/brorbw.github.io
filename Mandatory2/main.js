@@ -213,7 +213,7 @@ var render = function() {
         gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
     }
     allowedToBuild();
-    sunShader();
+    sunShader(sunAngle);
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
     //sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
