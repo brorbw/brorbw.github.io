@@ -50,7 +50,7 @@ function sunShader(){
 }
 
 function boxShader() {
-  lightAmbient = vec4 ( 0.1 , 0.05 , 0.05 , 1.0 );
+  lightAmbient = vec4 ( 0.5 , 0.5 , 0.5 , 1.0 );
   //materinal propeties
   materialAmbient = vec4 ( 0.3 , 0.3 , 0.3 , 1.0 );
   materialDiffuse = vec4 ( 0.7 , 0.5 , 0.5 , 1.0 );

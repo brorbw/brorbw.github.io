@@ -17,6 +17,9 @@ var jump = false;
 var jumpTime = 0;
 var sunAngle = 0;
 
+var texSize = 64;
+
+
 var program
 
 window.onload = function init() {
@@ -114,7 +117,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildMountains();
+    buildMountains(2);
     buildSun();
     initMaterial();
     init = false;
@@ -223,7 +226,19 @@ function resendBuffers() {
     gl.bufferData(gl.ARRAY_BUFFER, flatten(centerSpinningArray), gl.STATIC_DRAW);
 }
 
+function configureTexture( image ) {
+    texture = gl.createTexture();
+    gl.bindTexture( gl.TEXTURE_2D, texture );
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
+        gl.RGB, gl.UNSIGNED_BYTE, image );
+    gl.generateMipmap( gl.TEXTURE_2D );
+    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+        gl.NEAREST_MIPMAP_LINEAR );
+    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
 
+    gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
+}
 
 
 /*
