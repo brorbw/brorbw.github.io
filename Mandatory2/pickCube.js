@@ -115,7 +115,7 @@ function getPosOfBlocksInFront(i) {
   return add(eye, mult(direction, vec3(i+0.3, i+0.3, i+0.3)));
 }
 function buildBox(centerNew){
-  var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
+  var pos = new Position(centerNew[0],centerNew[1],centerNew[2]);
   var box = new Box(pos);
   addBox(box);
   drawWorld();
@@ -154,36 +154,42 @@ function onClick(event){
     gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 25.5)];
     if(readColor[3]===1){
-      console.log('build right');
-      var centerNew = posToCenter(readColor[0]+1,readColor[1],readColor[2]);
-      buildBox(centerNew);
+      console.log('build right'+event.which);
+      var centerNew = vec3(readColor[0]+1,readColor[1],readColor[2]);
+      (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
          //right
-    } if(readColor[3]===2){
+    }
+    if(readColor[3]===2){
          //left
          console.log('build left');
-         var centerNew = posToCenter(readColor[0]-1,readColor[1],readColor[2]);
-         buildBox(centerNew);
-    } if(readColor[3]===3){
-      console.log('build top');
-        var centerNew = posToCenter(readColor[0],readColor[1]+1,readColor[2]);
-        buildBox(centerNew);
+         var centerNew = vec3(readColor[0]-1,readColor[1],readColor[2]);
+         (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
+    }
+    if(readColor[3]===3){
+       console.log('build top'+event.which);
+        var centerNew = vec3(readColor[0],readColor[1]+1,readColor[2]);
+        (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
          //top
-    } if(readColor[3]===4){
-    console.log('build bottom');
-      var centerNew = posToCenter(readColor[0],readColor[1]-1,readColor[2]);
-      buildBox(centerNew);
+    }
+    if(readColor[3]===4){
+      console.log('build bottom');
+      var centerNew = vec3(readColor[0],readColor[1]-1,readColor[2]);
+      (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
          //bottom
-    } if(readColor[3]===5){
+    }
+    if(readColor[3]===5){
       console.log('build front');
-      var centerNew = posToCenter(readColor[0],readColor[1],readColor[2]+1);
-      buildBox(centerNew);
+      var centerNew = vec3(readColor[0],readColor[1],readColor[2]+1);
+      (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
          //front
-    } if(readColor[3]===6){
-            console.log('build back');
-      var centerNew = posToCenter(readColor[0],readColor[1],readColor[2]-1);
-      buildBox(centerNew);
+    }
+    if(readColor[3]===6){
+      console.log('build back');
+      var centerNew = vec3(readColor[0],readColor[1],readColor[2]-1);
+      (event.which===1) ? (buildBox(centerNew)):( world[readColor[2]*gridSize*gridSize+readColor[1]*gridSize+readColor[0]] = 0);
          //back
     }
+
     console.log(readColor.toString());
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
