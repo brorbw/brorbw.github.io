@@ -17,6 +17,7 @@ var jump = false;
 var jumpTime = 0;
 var sunAngle = 0;
 
+var framebuffer;
 
 var tBuffer;
 
@@ -85,7 +86,7 @@ window.onload = function init() {
     bufferBuffer = gl.createBuffer();
     bufferColor = gl.getAttribLocation(program,"bufferColor");
 
-
+    framebuffer = gl.createFramebuffer();
 
 
     vEye = gl.getUniformLocation(program, "eyePosition");
