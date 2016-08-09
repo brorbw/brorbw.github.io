@@ -135,7 +135,7 @@ var render = function() {
             jumpTime = 0;
         }
     }
-    //boxShader();
+    boxShader();
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
     gl.uniform3fv(vEye,flatten(eye));
@@ -178,7 +178,7 @@ var render = function() {
         gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
     }
 
-    //sunShader();
+    sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
     sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));

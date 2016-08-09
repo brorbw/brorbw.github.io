@@ -39,32 +39,21 @@ function calcProducts(){
 }
 
 function sunShader(){
-  //point light
-  lightDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
-  lightAmbient = vec4 ( 0.5 , 0.2 , 0.3 , 1.0 );
-  lightSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
-  lightPosition = vec4 ( 20.0, 50.0 , 30.0 , 1.0 );
-
-//materinal propeties
-  materialAmbient = vec4 ( 0.7 , 0.7 , 0.7 , 1.0 );
-  materialDiffuse = vec4 ( 0.5 , 0.5 , 0.5 , 1.0 );
+  lightAmbient = vec4 ( 1 , 1 , 1 , 1.0 );
+  //materinal propeties
+  materialAmbient = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
+  materialDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   materialSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
-  materialShininess = 100.0;
+  materialShininess = 1000.0;
   calcProducts();
   sendMaterial();
-
 }
 
 function boxShader() {
-  //point light
-  lightDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   lightAmbient = vec4 ( 0.5 , 0.2 , 0.3 , 1.0 );
-  lightSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
-  lightPosition = vec4 ( 20.0, 50.0 , 30.0 , 1.0 );
-
-//materinal propeties
+  //materinal propeties
   materialAmbient = vec4 ( 0.7 , 0.7 , 0.7 , 1.0 );
-  materialDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
+  materialDiffuse = vec4 ( 0.5 , 0.5 , 0.5 , 1.0 );
   materialSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   materialShininess = 100.0;
   calcProducts();
