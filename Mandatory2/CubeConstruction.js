@@ -1,6 +1,7 @@
 var pointsArray = [];
 var colorsArray = [];
 var spinningArray = [];
+
 var spinningNormals = []; //they are not suppose to be here, but they'll stay for now
 var sunArray = [];
 var sunNormals = [];
@@ -9,8 +10,39 @@ var centerSun = [];
 var centerArray = [];
 var centerSpinningArray = [];
 
+var texCoordsArray = [];
+
 var rotatedZ = rotate(45, vec3(0,0,1));
 var rotatedY = rotate(45, vec3(1,0,0));
+
+var grassTop = 0;
+var grassSide = 3;
+var grassBottom = 2;
+var rocks = 1;
+
+
+var texCoord = [
+    vec2(0, 0),
+    vec2(0, 1/16),
+    vec2(1/16, 1/16),
+    vec2(1/16, 0)
+];
+
+function getTexture(indexX,indexY){
+    return [vec2(indexX*1/16,indexY*1/16),
+            vec2(indexX*1/16,(indexY+1)*1/16),
+            vec2((indexX+1)*1/16,(indexY+1)*1/16),
+            vec2((indexX+1)*1/16,indexY*1/16)];
+
+}
+
+/*
+var texCoord = [
+    vec2(0, 0),
+    vec2(0, 1),
+    vec2(1, 1),
+    vec2(1, 0)
+];*/
 
 function __buildVertsForCube(centerPoint, boxLength) {
     //second param is suppose to be the size of the cube so we can make
@@ -63,34 +95,40 @@ function buildRegularCube(centerPoint){
     for(var i = 0; i < 36; i++){
         centerArray.push(centerPointTmp);
     }
-    __quadRegular( 1, 0, 3, 2 ,vertsForCube);
-    __quadRegular( 2, 3, 7, 6 ,vertsForCube);
-    __quadRegular( 3, 0, 4, 7 ,vertsForCube);
-    __quadRegular( 6, 5, 1, 2 ,vertsForCube);
-    __quadRegular( 4, 5, 6, 7 ,vertsForCube);
-    __quadRegular( 5, 4, 0, 1 ,vertsForCube);
+    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15);  //front
+    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15);  //right
+    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15);  //bottom
+    __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15);  //top
+    __quadRegular( 4, 5, 6, 7 ,vertsForCube,3,15);  //back
+    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15);  //left
 }
 
-function __quadRegular(a, b, c, d, verts) {
+function __quadRegular(a, b, c, d, verts, s,t) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
     var color = vec4(normalize(cross(x,y)),1);
-
+    var texCoord = getTexture(s,t);
 
     //to the arrays
     pointsArray.push(verts[a]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[0]);
     pointsArray.push(verts[b]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[1]);
     pointsArray.push(verts[c]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[2]);
     pointsArray.push(verts[a]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[0]);
     pointsArray.push(verts[c]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[2]);
     pointsArray.push(verts[d]);
     colorsArray.push(color);
+    texCoordsArray.push(texCoord[3]);
 }
 
 function __quadSpinning(a, b, c, d, verts) {

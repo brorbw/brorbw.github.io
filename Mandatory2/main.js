@@ -19,6 +19,11 @@ var sunAngle = 0;
 
 var texSize = 64;
 
+var tBuffer;
+
+var vTexCoord;
+
+
 
 var program
 
@@ -64,6 +69,10 @@ window.onload = function init() {
     cRBuffer = gl.createBuffer();
 
     vRBuffer = gl.createBuffer();
+
+    tBuffer = gl.createBuffer();
+
+    vTexCoord = gl.getAttribLocation( program, "vTexCoord" );
 
     sunPivot = gl.createBuffer();
     vSun = gl.createBuffer();
@@ -120,6 +129,8 @@ window.onload = function init() {
     buildMountains(2);
     buildSun();
     initMaterial();
+    var image = document.getElementById("texImage");
+    configureTexture( image );
     init = false;
     render();
 }
@@ -159,6 +170,10 @@ var render = function() {
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
+    gl.vertexAttribPointer( vTexCoord, 2, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vTexCoord );
 
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
 
@@ -224,6 +239,9 @@ function resendBuffers() {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(centerSpinningArray), gl.STATIC_DRAW);
+
+    gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
 }
 
 function configureTexture( image ) {

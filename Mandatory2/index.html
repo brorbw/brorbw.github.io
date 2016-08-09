@@ -25,11 +25,11 @@ attribute vec4 vPosition;
 attribute vec4 vColor; //normal
 attribute vec4 vCenter;
 attribute vec2 vTexCoord;
-
+varying vec2 fTexCoord;
 
 varying vec4 n,l,e;
 varying vec4 n1,l1,e1;
-varying vec4 fTexCoord;
+
 
 uniform mat4 vRotation;
 uniform mat4 modelView;
@@ -77,7 +77,7 @@ uniform vec4 diffuseProduct;
 uniform vec4 specularProduct;
 uniform float shininess;
 
-varying  vec2 fTexCoord;
+varying vec2 fTexCoord;
 
 uniform sampler2D texture;
 
@@ -124,7 +124,7 @@ main()
   fColor.a = 1.0;
 
 
-  gl_FragColor = fColor * texture2D( texture, fTexCoord );;
+  gl_FragColor = fColor * texture2D( texture, fTexCoord );
 }
 </script>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
@@ -138,7 +138,7 @@ main()
 <script type="text/javascript" src="sun.js"></script>
 <!--<script type="text/javascript" src="copy.js"></script>-->
 
-
+<img id = "texImage" src = "2.png" hidden>
 <canvas id="gl-canvas" width="512" height="512">
     Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
