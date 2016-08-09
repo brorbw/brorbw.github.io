@@ -1,10 +1,12 @@
 var build = false;
 var framePoints=[];
+var frameColor=[];
+var frameCenter=[];
 
 var texture2;
 
 function allowedToRemove(){
-  for (i=1;i<5;i++){
+  for (var i=1;i<5;i++){
     var pos = getPosOfBlocksInFront(i);
     var centerFront = posToCenter(pos[0],pos[1],pos[2]);
     var cubeInFront = getCube(centerFront);
@@ -20,13 +22,13 @@ function allowedToRemove(){
 }
 
 function allowedToBuild(){
-  for (i=2;i<5;i++){
+  for (var i=2;i<5;i++){
     var pos = getPosOfBlocksInFront(i);
     var centerFront = posToCenter(pos[0],pos[1],pos[2]);
     var cubeInFront = getCube(centerFront);
     // cubeInFront at least at the distance 2
     if (cubeInFront !== undefined && cubeInFront !== 0){
-      for(j=0;j<11;j++){
+      for(var j=0;j<11;j++){
         var posNew = getPosOfBlocksInFront(i-0.1*j);
         var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
         if(centerNew.x!==centerFront.x || centerNew.y!==centerFront.y ||centerNew.z!==centerFront.z){
@@ -45,7 +47,9 @@ function allowedToBuild(){
         }
       }
     } else{
-      //console.log('not allowed to build');
+      framePoints=[];
+      frameColor=[];
+      frameCenter=[];
     }
   }
 }
@@ -54,6 +58,8 @@ function allowedToBuild(){
 function drawWireFrame(x,y,z, boxLength){
 
       framePoints=[];
+      frameColor=[];
+      frameCenter=[];
       //second param is suppose to be the size of the cube so we can make
       //different sized cubes depending of whether we are makeing a spinning og regular cube
       var verts = [  vec4( x - boxLength / 2,  y - boxLength / 2,  z + boxLength / 2),
@@ -95,8 +101,21 @@ function drawWireFrame(x,y,z, boxLength){
       framePoints.push(verts[6]);
       framePoints.push(verts[7]);
       framePoints.push(verts[4]);
-// console.log('should dra'+x+', '+y+', '+z);
 
+      for(var i= 0; i<framePoints.length;i++){
+        frameColor.push(vec4(0.0,0.0,0.0,1.0));
+        frameCenter.push(vec4(x,y,z,1));
+      }
+
+      gl.bindBuffer( gl.ARRAY_BUFFER, cDCenterBuffer );
+      gl.bufferData(gl.ARRAY_BUFFER, flatten(frameCenter), gl.STATIC_DRAW);
+      gl.vertexAttribPointer( vCenter, 4, gl.FLOAT, false, 0, 0 );
+      gl.enableVertexAttribArray( vCenter );
+
+      gl.bindBuffer( gl.ARRAY_BUFFER, cDBuffer );
+      gl.bufferData(gl.ARRAY_BUFFER, flatten(frameColor), gl.STATIC_DRAW);
+      gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
+      gl.enableVertexAttribArray( vColor );
 
       gl.bindBuffer( gl.ARRAY_BUFFER, vDBuffer );
       gl.bufferData(gl.ARRAY_BUFFER, flatten(framePoints), gl.STATIC_DRAW);

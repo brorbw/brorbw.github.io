@@ -45,7 +45,7 @@ window.onload = function init() {
     gl.clearColor( 0.3, 0.3, 0.7, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
+    //gl.enable(gl.CULL_FACE);
     //gl.cullFace(gl.BACK);
 
 
@@ -80,6 +80,8 @@ window.onload = function init() {
     vSun = gl.createBuffer();
     cSun = gl.createBuffer();
 
+    cDCenterBuffer = gl.createBuffer();
+    cDBuffer = gl.createBuffer();
     vDBuffer = gl.createBuffer();
 
     bufferBuffer = gl.createBuffer();
@@ -180,6 +182,8 @@ var render = function() {
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
 
+    allowedToBuild();
+
     gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
     gl.vertexAttribPointer( vCenter, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vCenter);
@@ -218,7 +222,7 @@ var render = function() {
 
         gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
     }
-    allowedToBuild();
+
     sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
     sunAngle++;
@@ -267,7 +271,7 @@ function resendBuffers() {
 
     gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
     gl.bufferData(gl.ARRAY_BUFFER,flatten(frameColors), gl.STATIC_DRAW);
-    
+
 }
 
 function configureTexture( image ) {
