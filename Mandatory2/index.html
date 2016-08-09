@@ -129,7 +129,7 @@ main()
         fColor.a = 1.0;
 
 
-        gl_FragColor = fBufferColor;//fColor * texture2D( texture, fTexCoord );
+        gl_FragColor = fColor * texture2D( texture, fTexCoord );
          } else {
             gl_FragColor = fBufferColor;
         }
