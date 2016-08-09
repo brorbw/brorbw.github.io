@@ -99,7 +99,7 @@ function buildRegularCube(centerPoint){
     __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15);  //right
     __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15);  //bottom
     __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15);  //top
-    __quadRegular( 4, 5, 6, 7 ,vertsForCube,3,15);  //back
+    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15);  //back
     __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15);  //left
 }
 
