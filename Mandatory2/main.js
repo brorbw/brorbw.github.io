@@ -17,6 +17,8 @@ var jump = false;
 var jumpTime = 0;
 var sunAngle = 0;
 
+var program
+
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
@@ -40,9 +42,8 @@ window.onload = function init() {
     //
     //  Load shaders and initialize attribute buffers
     //
-    var program = initShaders( gl, "vertex-shader", "fragment-shader" );
+    program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
-    initShader(program);
     cBuffer = gl.createBuffer();
 
     vColor = gl.getAttribLocation( program, "vColor" );
@@ -113,7 +114,8 @@ window.onload = function init() {
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
     buildWorld(2)
-    buildSun(new Position(0,0,0));
+    buildSun();
+    initMaterial();
     init = false;
     render();
 }
@@ -133,7 +135,7 @@ var render = function() {
             jumpTime = 0;
         }
     }
-
+    //boxShader();
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
     gl.uniform3fv(vEye,flatten(eye));
@@ -176,7 +178,7 @@ var render = function() {
         gl.drawArrays(gl.TRIANGLES, 0, spinningArray.length);
     }
 
-
+    //sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
     sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
