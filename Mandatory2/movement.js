@@ -1,5 +1,5 @@
 var near = 0.1;
-var far = 30;
+var far = 100;
 var radius = 4.0;
 var dr = 60.0 * Math.PI/180.0;
 
@@ -8,8 +8,10 @@ var  aspect;
 
 var flying = false;
 
-var eye = vec3(gridSize/2,20,gridSize/2);
-var at = vec3(gridSize/2,10,gridSize/2-1);
+//var eye = vec3(gridSize/2,20,gridSize/2);
+//var at = vec3(gridSize/2,10,gridSize/2-1);
+var eye = vec3(15.739875791103808, 37.84516938594207, 5.332126809700223);
+var at = vec3(22.6179039403004, 34.77905992424347, 11.52513117203133);
 //var eye = vec3(0,0,5);
 //var at = vec3(0,0,0);
 
@@ -317,7 +319,7 @@ function collisionUp(pos) {
 function collisionDown() {
   var direction = up;
   direction = negate(normalize(direction));
-  var eyePrime = add(eye, mult(direction, vec3(1, 1, 1)));
+  var eyePrime = add(eye, mult(direction, vec3(1, 3, 1)));
   if (inWorld(eyePrime[0], eyePrime[1], eyePrime[2])) {
     var p = posToCenter(eyePrime[0], eyePrime[1], eyePrime[2]);
     return getCube(p) !== undefined && getCube(p) !== 0;
