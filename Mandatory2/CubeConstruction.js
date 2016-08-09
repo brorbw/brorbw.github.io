@@ -113,22 +113,22 @@ function __quadRegular(a, b, c, d, verts, s,t) {
     //to the arrays
     pointsArray.push(verts[a]);
     colorsArray.push(color);
-    texCoordsArray.push(texCoord[0]);
+    texCoordsArray.push(texCoord[1]);
     pointsArray.push(verts[b]);
+    colorsArray.push(color);
+    texCoordsArray.push(texCoord[0]);
+    pointsArray.push(verts[c]);
+    colorsArray.push(color);
+    texCoordsArray.push(texCoord[3]);
+    pointsArray.push(verts[a]);
     colorsArray.push(color);
     texCoordsArray.push(texCoord[1]);
     pointsArray.push(verts[c]);
     colorsArray.push(color);
-    texCoordsArray.push(texCoord[2]);
-    pointsArray.push(verts[a]);
-    colorsArray.push(color);
-    texCoordsArray.push(texCoord[0]);
-    pointsArray.push(verts[c]);
-    colorsArray.push(color);
-    texCoordsArray.push(texCoord[2]);
+    texCoordsArray.push(texCoord[3]);
     pointsArray.push(verts[d]);
     colorsArray.push(color);
-    texCoordsArray.push(texCoord[3]);
+    texCoordsArray.push(texCoord[2]);
 }
 
 function __quadSpinning(a, b, c, d, verts) {
