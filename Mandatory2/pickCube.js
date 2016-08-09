@@ -12,7 +12,7 @@ function allowedToRemove(){
        emptyArrays();
        drawWorld();
        resendBuffers();
-       break;
+       return;
     }
   }
 }
@@ -50,8 +50,8 @@ function allowedToBuild(){
 
 
 function drawWireFrame(x,y,z, boxLength){
+
       framePoints=[];
-      colorsDArray=[];
       //second param is suppose to be the size of the cube so we can make
       //different sized cubes depending of whether we are makeing a spinning og regular cube
       var verts = [  vec4( x - boxLength / 2,  y - boxLength / 2,  z + boxLength / 2),
@@ -66,47 +66,44 @@ function drawWireFrame(x,y,z, boxLength){
 
       framePoints.push(verts[0]);
       framePoints.push(verts[1]);
-      framePoints.push(verts[0]);
+      framePoints.push(verts[2]);
       framePoints.push(verts[3]);
-      framePoints.push(verts[0]);
-      framePoints.push(verts[4]);
 
       framePoints.push(verts[2]);
       framePoints.push(verts[1]);
-      framePoints.push(verts[2]);
-      framePoints.push(verts[3]);
-      framePoints.push(verts[2]);
+      framePoints.push(verts[5]);
       framePoints.push(verts[6]);
 
-      framePoints.push(verts[7]);
       framePoints.push(verts[2]);
-      framePoints.push(verts[7]);
       framePoints.push(verts[3]);
       framePoints.push(verts[7]);
       framePoints.push(verts[6]);
 
       framePoints.push(verts[5]);
       framePoints.push(verts[1]);
-      framePoints.push(verts[5]);
+      framePoints.push(verts[0]);
       framePoints.push(verts[4]);
+
+      framePoints.push(verts[4]);
+      framePoints.push(verts[0]);
+      framePoints.push(verts[3]);
+      framePoints.push(verts[7]);
+
       framePoints.push(verts[5]);
       framePoints.push(verts[6]);
-      for (i=0;i<24;i++){
-        colorsDArray.push(vec4(0.0,0.0,0.0,1.0));
-      }
+      framePoints.push(verts[7]);
+      framePoints.push(verts[4]);
 // console.log('should dra'+x+', '+y+', '+z);
-  gl.bindBuffer(gl.ARRAY_BUFFER, cDBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsDArray), gl.STATIC_DRAW);
+
 
       gl.bindBuffer( gl.ARRAY_BUFFER, vDBuffer );
       gl.bufferData(gl.ARRAY_BUFFER, flatten(framePoints), gl.STATIC_DRAW);
-      gl.vertexAttribPointer( vDPosition, 2, gl.FLOAT, false, 0, 0 );
-      gl.enableVertexAttribArray( vDPosition );
-
-  //    gl.drawArrays( gl.LINES, 0, 24 );
+      gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+      gl.enableVertexAttribArray( vPosition );
+      for(var i = 0; i < framePoints.length; i+=4){
+        gl.drawArrays( gl.LINE_LOOP, i, 4);
+      }
 }
-
-
 
 
 function getPosOfBlocksInFront(i) {
