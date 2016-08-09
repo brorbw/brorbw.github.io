@@ -100,7 +100,10 @@ window.onload = function init() {
     document.getElementById("Button6").onclick = function(){camera.lookRight();};
     document.getElementById("Button7").onclick = function(){camera.lookUp();};
     document.getElementById("Button8").onclick = function(){camera.lookDown();};
-
+//sunSilder
+    document.getElementById("sunSlider").onchange = function(event) {
+      sunAngle = event.target.value;
+    };
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
@@ -194,7 +197,7 @@ var render = function() {
     gl.enableVertexAttribArray( vTexCoord );
 
     gl.drawArrays( gl.TRIANGLES, 0, pointsArray.length );
-    
+
 
     //____SPINNING____
     if(spinningArray.length !== 0) {
@@ -220,7 +223,7 @@ var render = function() {
     allowedToBuild();
     sunShader();
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
-    sunAngle++;
+
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
     gl.uniformMatrix4fv( sunRotation, false, flatten(sunMat));
 
@@ -272,7 +275,7 @@ function resendBuffers() {
 
     gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
     gl.bufferData(gl.ARRAY_BUFFER,flatten(frameColors), gl.STATIC_DRAW);
-    
+
 }
 
 function configureTexture( image ) {
