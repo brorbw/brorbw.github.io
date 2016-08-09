@@ -11,7 +11,7 @@ function addBox(boxToAdd){
     var position = boxToAdd.position;
     var index = position.z*gridSize*gridSize+position.y*gridSize+position.x;
     world[index] = boxToAdd;
-    if(!init) {
+    if(!initialize) {
         emptyArrays();
         drawWorld();
         resendBuffers();

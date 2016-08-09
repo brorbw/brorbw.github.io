@@ -90,7 +90,7 @@ varying vec3 dist;
 void
 main()
 {
-    if(bufferOrNot == 0.){
+    if(bufferOrNot == 1.){
       //point light
       vec4 fColor;
       vec3 h = normalize(l+e);
@@ -129,7 +129,7 @@ main()
         fColor.a = 1.0;
 
 
-        gl_FragColor = fColor * texture2D( texture, fTexCoord );
+        gl_FragColor = fBufferColor;//fColor * texture2D( texture, fTexCoord );
          } else {
             gl_FragColor = fBufferColor;
         }

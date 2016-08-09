@@ -1,7 +1,8 @@
 var build = false;
 var framePoints=[];
-
-var texture2;
+var framebuffer;
+var renderbuffer;
+//var texture2;
 
 function allowedToRemove(){
   for (i=1;i<5;i++){
@@ -115,54 +116,64 @@ function getPosOfBlocksInFront(i) {
 }
 
 
-function onClick(){
+function onClick(event){
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vPosition );
+    gl.bindBuffer(gl.ARRAY_BUFFER,bufferBuffer);
+    gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( bufferColor );
+
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+
 
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
 
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, bufferBuffer);
-    gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( bufferColor );
-
-    gl.drawArrays(gl.TRIANGLES,0, 4);
+    gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
+    gl.finish();
+    var readColor = new Uint8Array(4);
+    gl.readPixels(mouseX, canvas.height-mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    console.log(readColor[0],readColor[1],readColor[2]);
+    readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
+    //console.log(readColor.toString());
 
-
-    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-
-    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-    console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
-
-
-
-
 
 
 }
 function initFramebuffer(){
-    texture2 = gl.createTexture();
+    gl.enable(gl.CULL_FACE);
+    var texture2 = gl.createTexture();
     gl.bindTexture( gl.TEXTURE_2D, texture2 );
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.generateMipmap(gl.TEXTURE_2D);
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture2, 0);
-
+    renderbuffer = gl.createRenderbuffer();
     gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
     gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16, canvas.width, canvas.height);
 
+    framebuffer= gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture2, 0);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderbuffer);
+
+
+
+
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
-
+    gl.disable(gl.CULL_FACE);
+    gl.bindTexture(gl.TEXTURE_2D, null);
     gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 

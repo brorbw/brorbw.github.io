@@ -11,7 +11,7 @@ var rotationMat;
 var sunMat;
 var sunRotation;
 var angle = 0;
-var init = true;
+var initialize = true;
 var camera;
 var jump = false;
 var jumpTime = 0;
@@ -46,7 +46,7 @@ window.onload = function init() {
 
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
-    //gl.cullFace(gl.BACK);
+    gl.cullFace(gl.BACK);
 
 
     //
@@ -84,9 +84,6 @@ window.onload = function init() {
 
     bufferBuffer = gl.createBuffer();
     bufferColor = gl.getAttribLocation(program,"bufferColor");
-
-    framebuffer = gl.createFramebuffer();
-    renderbuffer = gl.createRenderbuffer();
 
 
     vEye = gl.getUniformLocation(program, "eyePosition");
@@ -150,8 +147,9 @@ window.onload = function init() {
     var image = document.getElementById("texImage");
     configureTexture( image );
     canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
-    canvas.addEventListener("click", function(){build=true;});
+    canvas.addEventListener("click", onClick);
     init = false;
+    initFramebuffer();
     render();
 }
 
@@ -239,6 +237,8 @@ var render = function() {
 
     gl.drawArrays(gl.TRIANGLES, 0, centerSun.length);
 
+
+
     requestAnimFrame(render);
 }
 
@@ -281,7 +281,7 @@ function configureTexture( image ) {
         gl.NEAREST_MIPMAP_LINEAR );
     gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
+    //gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
 }
 
 
