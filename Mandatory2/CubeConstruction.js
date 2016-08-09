@@ -23,6 +23,24 @@ var grassBottom = 2;
 var rocks = 1;
 
 
+var side = 3;
+var top = 0;
+var bottom=2;
+
+if(cIndex===0){
+  side = 3;
+  top = 0;
+  bottom=2;
+}else if (cIndex===1) {
+  console.log(cIndex)
+  side = 1;
+  top = 1;
+  bottom=1;
+}
+
+
+
+
 var texCoord = [
     vec2(0, 0),
     vec2(0, 1/16),
@@ -36,6 +54,7 @@ function getTexture(indexX,indexY){
             vec2((indexX+1)*1/16,(indexY+1)*1/16),
             vec2((indexX+1)*1/16,indexY*1/16)];
 }
+
 
 function __buildVertsForCube(centerPoint, boxLength) {
     //second param is suppose to be the size of the cube so we can make
@@ -88,12 +107,12 @@ function buildRegularCube(centerPoint){
     for(var i = 0; i < 36; i++){
         centerArray.push(centerPointTmp);
     }
-    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15, centerPoint);  //front
-    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15, centerPoint);  //right
-    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15, centerPoint);  //bottom
+    __quadRegular( 1, 0, 3, 2 ,vertsForCube,side,15, centerPoint);  //front
+    __quadRegular( 2, 3, 7, 6 ,vertsForCube,side,15, centerPoint);  //right
+    __quadRegular( 3, 0, 4, 7 ,vertsForCube,bottom,15, centerPoint);  //bottom
     __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15, centerPoint);  //top
-    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15, centerPoint);  //back
-    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15, centerPoint);  //left
+    __quadRegular( 6, 7 ,4,5,vertsForCube,side,15, centerPoint);  //back
+    __quadRegular( 5, 4, 0, 1 ,vertsForCube,side,15, centerPoint);  //left
 }
 
 function __quadRegular(a, b, c, d, verts, s,t,center) {
