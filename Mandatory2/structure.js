@@ -79,7 +79,6 @@ function drawWorld() {
 }
 //y=sin(5x)*cos(5z)/5
 function buildMountains(){
-    buildSun(sunInitPosition);
     for(var z = 0; z < gridSize; z++){
         for(var x = 0; x < gridSize;x++){
             var yl = (Math.sin(0.1*x)*Math.cos(0.1*z))*20+20;

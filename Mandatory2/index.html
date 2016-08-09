@@ -25,24 +25,45 @@ attribute vec4 vPosition;
 attribute vec4 vColor; //normal
 attribute vec4 vCenter;
 
+
 varying vec4 n,l,e;
+varying vec4 n1,l1,e1;
 
 uniform mat4 vRotation;
 uniform mat4 modelView;
 uniform mat4 projection;
 uniform vec3 eyePosition;
+uniform vec3 atPosition;
 uniform mat4 sunRotation;
 
 uniform vec4 lightPosition;
 
+
+
 void main()
 {
+    //point light
     vec4 light = sunRotation*lightPosition;
     if(light.w == 0.0)  l = normalize(light);
     else  l = normalize(light - vPosition);
     vec4 normal = normalize(vRotation*vColor);
-    e = normalize(vec4(eyePosition.xyz,0));
+    e = normalize(modelView*vec4(eyePosition.xyz,1));
     n = normalize(normal);
+
+
+
+    vec4 light1 = vec4(eyePosition.xyz,1);
+    if(light.w == 0.0)  l1 = normalize(light1);
+    else  l1 = normalize(light1 - vPosition);
+    vec4 normal1 = normalize(vRotation*vColor);
+    e1 = normalize(modelView*vec4(eyePosition.xyz,1));
+    n1 = normal1;
+
+
+
+    //spotlight
+
+
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
 }
 </script>
@@ -58,10 +79,28 @@ uniform float shininess;
 
 
 varying vec4 n, l, e;
+varying vec4 n1,l1,e1;
 
 void
 main()
 {
+  vec4 h1 = normalize(l1+e1);
+  vec4 ambient1 = ambientProduct;
+
+  float ln1 = dot(l1,n1);
+  //the diffusion
+  float kd1 = max(ln1,0.0);
+  vec4 diffuse1 = kd1 * diffuseProduct;
+
+  //the specular
+  float ks1 = pow(max(dot(n1,h1),0.0),shininess);
+  vec4 specular1 = ks1 * specularProduct;
+
+  if(ln1<0.0) specular1 = vec4(0.0,0.0,0.0,1.0);
+
+
+
+  //point light
   vec4 fColor;
   vec4 h = normalize(l+e);
   vec4 ambient = ambientProduct;
@@ -77,7 +116,7 @@ main()
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
-  fColor = ambient + diffuse + specular;
+  fColor = /* ambient + diffuse + specular +  */ ambient1 + diffuse1 + specular1;
 
   fColor.a = 1.0;
   gl_FragColor = fColor;

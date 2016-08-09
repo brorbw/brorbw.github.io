@@ -6,7 +6,7 @@ var modelView, projection;
 var vBuffer,cBuffer,vRBuffer,cRBuffer, centerSpinningBuffer ,centerBuffer;
 var vPosition,vColor,vRotation, vCenter;
 var sunPivot,vSun,cSun;
-var vEye;
+var vEye,vAt;
 var rotationMat;
 var sunMat;
 var sunRotation;
@@ -67,6 +67,7 @@ window.onload = function init() {
     cSun = gl.createBuffer();
 
     vEye = gl.getUniformLocation(program, "eyePosition");
+    vAt = gl.getUniformLocation(program, "atPosition");
     vRotation = gl.getUniformLocation(program, "vRotation");
     sunRotation = gl.getUniformLocation(program, "sunRotation");
     modelView = gl.getUniformLocation( program, "modelView" );
@@ -113,7 +114,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildMountainsSmall();
+    buildMountains();
     buildSun();
     initMaterial();
     init = false;
@@ -139,6 +140,7 @@ var render = function() {
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
     gl.uniform3fv(vEye,flatten(eye));
+    gl.uniform3fv(vAt, flatten(at));
 
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
