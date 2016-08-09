@@ -4,7 +4,7 @@ var ap,dp,sp,lp,sh;
 var lightDiffuse = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
 var lightAmbient = vec4 ( 0.7 , 0.6 , 0.4 , 1.0 );
 var lightSpecular = vec4 ( 1 , 1.0 , 1.0 , 1.0 );
-var lightPosition = vec4 ( gridSize/2, 8, 0 , 1.0 );
+var lightPosition = vec4 ( gridSize/2, 50, gridSize/2 , 1.0 );
 
 //materinal propeties
 var materialAmbient = vec4 ( 0.7 , 0.7 , 0.7 , 1.0 );
