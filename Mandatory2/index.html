@@ -28,6 +28,7 @@ varying vec2 fTexCoord;
 
 varying vec3 n,l,e;
 varying vec3 l1,e1;
+varying vec3 dist;
 
 
 uniform mat4 vRotation;
@@ -52,6 +53,7 @@ void main()
 
     vec3 light1 = (modelView*vec4(eyePosition.xyz,1)).xyz;
     l1 = normalize(light1-pos);
+    dist = light1-pos;
     e1 = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
 
 
@@ -78,6 +80,7 @@ uniform sampler2D texture;
 
 varying vec3 n, l, e;
 varying vec3 l1,e1;
+varying vec3 dist;
 
 void
 main()
@@ -90,6 +93,7 @@ main()
   float ln = dot(l,n);
   //the diffusion
   float kd = max(ln,0.0);
+
   vec4 diffuse = kd * diffuseProduct;
 
   //the specular
@@ -106,10 +110,10 @@ main()
 
   float ln1 = dot(l1,n);
   float kd1 = max(ln1,0.0);
-  vec4 diffuse1 = kd1 * diffuseProduct1;
-
+  float distance = 1.0/(.2*length(dist)+.1*pow(length(dist),2.0));
+  vec4 diffuse1 = kd1 * diffuseProduct1 * distance;
   float ks1 = pow(max(dot(n,h1),0.0),shininess);
-  vec4 specular1 = ks1 * specularProduct1;
+  vec4 specular1 = ks1 * specularProduct1*distance;
 
   if(ln1<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 

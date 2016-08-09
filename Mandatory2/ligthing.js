@@ -2,14 +2,14 @@ var ap,dp,sp,lp,sh;
 var ap1,dp1,sp1;
 
 //point light
-var lightDiffuse = vec4 ( 0.8 , 0.8 , 0.7 , 1.0 );
+var lightDiffuse = vec4 ( 0.7 , 0.8 , 0.7 , 1.0 );
 var lightAmbient = vec4 ( 0.5 , 0.4 , 0.3 , 1.0 );
 var lightSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
 var lightPosition = vec4 ( gridSize/2, 50, gridSize/2 , 1.0 );
 
-var lightDiffuse1 = vec4 ( 0.5 , 0 , 0 , 0.5 );
-var lightAmbient1 = vec4 ( 0.6 , 0.3 , 0.2 , 1.0 );
-var lightSpecular1 = vec4 ( 1.0 , 0 , 0 , 1.0 );
+var lightDiffuse1 = vec4 ( 1.0 , 0.2 , 0.2 , 1.0 );
+var lightAmbient1 = vec4 ( 0.8 , 0.3 , 0.2 , 1.0 );
+var lightSpecular1 = vec4 ( 1.0 , 0.3 , 0.3 , 1.0 );
 
 //materinal propeties
 var materialAmbient = vec4 ( 0.7 , 0.7 , 0.7 , 1.0 );
@@ -67,11 +67,11 @@ function sunShader(){
 }
 
 function boxShader() {
-  lightAmbient = vec4 ( 0.5 , 0.4 , 0.3 , 1.0 );
+  lightAmbient = vec4 ( 0.2 , 0.2 , 0.2 , 1.0 );
   //materinal propeties
-  materialAmbient = vec4 ( 0.2 , 0.3 , 0.2 , 1.0 );
-  materialDiffuse = vec4 ( 0.7 , 0.5 , 0.5 , 1.0 );
-  materialSpecular = vec4 ( 1.0 , 0.5 , 1.0 , 1.0 );
+  materialAmbient = vec4 ( 0.7 , 0.7 , 0.7 , 1.0 );
+  materialDiffuse = vec4 ( 0.5 , 0.5 , 0.5 , 1.0 );
+  materialSpecular = vec4 ( 1.0 , 1.0 , 1.0 , 1.0 );
   materialShininess = 60;
   calcProducts();
   sendMaterial();
