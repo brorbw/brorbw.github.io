@@ -112,7 +112,8 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildMountains();
+    buildWorld(2)
+    buildSun(new Position(0,0,0));
     init = false;
     render();
 }
@@ -217,6 +218,9 @@ function resendBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(centerSpinningArray), gl.STATIC_DRAW);
 }
+
+
+
 
 /*
 setTimeout(function(){

@@ -139,6 +139,13 @@ function buildSun(centerPoint){
     __quadSun( 6, 5, 1, 2 ,vertsForCube);
     __quadSun( 4, 5, 6, 7 ,vertsForCube);
     __quadSun( 5, 4, 0, 1 ,vertsForCube);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, sunPivot);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(centerSun), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, cSun);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sunNormals), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vSun);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sunArray), gl.STATIC_DRAW);
 }
 
 
