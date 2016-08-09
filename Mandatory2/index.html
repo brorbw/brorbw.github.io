@@ -9,7 +9,6 @@
 <button id = "Button1">1st Person</button>
 <button id = "Button2">Ortho</button>
 <button id = "Button3">Flying</button>
-<button id = "Button4">Decrease R</button>
 
 <p> </p>
 <button id = "Button5">Left</button>
@@ -119,7 +118,7 @@ main()
 
   if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
 
-  fColor =  ambient + diffuse + specular;// + ambient1 + diffuse1 + specular1;
+  fColor = ambient + diffuse + specular;// + ambient1 + diffuse1 + specular1;
 
   fColor.a = 1.0;
 

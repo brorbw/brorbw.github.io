@@ -24,7 +24,7 @@ var vTexCoord;
 
 
 
-var program
+var program;
 
 window.onload = function init() {
 
@@ -39,11 +39,11 @@ window.onload = function init() {
     aspect =  canvas.width/canvas.height;
     pMatrix = perspective(fovy, aspect, near, far)
 
-    gl.clearColor( 0.3, 0.3, 0.3, 1.0 );
+    gl.clearColor( 0.3, 0.3, 0.7, 1.0 );
 
     gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
+    //gl.enable(gl.CULL_FACE);
+    //gl.cullFace(gl.BACK);
 
 
     //
@@ -93,7 +93,6 @@ window.onload = function init() {
     document.getElementById("Button1").onclick = function(){camera.perspec()};
     document.getElementById("Button2").onclick = function(){camera.ortho()};
     document.getElementById("Button3").onclick = function(){toggleFlying()};
-    document.getElementById("Button4").onclick = function(){radius *= 0.5;};
     document.getElementById("Button5").onclick = function(){camera.lookLeft();};
     document.getElementById("Button6").onclick = function(){camera.lookRight();};
     document.getElementById("Button7").onclick = function(){camera.lookUp();};
@@ -129,7 +128,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildMountains(2);
+    buildMountainsSmall();
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
