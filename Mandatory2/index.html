@@ -41,7 +41,7 @@ void main()
     if(light.w == 0.0)  l = normalize(light);
     else  l = normalize(light - vPosition);
     vec4 normal = normalize(vRotation*vColor);
-    e = normalize(vec4(eyePosition.xyz,1));
+    e = normalize(vec4(eyePosition.xyz,0));
     n = normalize(normal);
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
 }

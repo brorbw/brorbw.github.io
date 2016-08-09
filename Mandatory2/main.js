@@ -138,7 +138,7 @@ var render = function() {
     boxShader();
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
-    gl.uniform3fv(vEye,flatten(eye));
+    gl.uniform3fv(vEye,flatten(subtract(at, eye)));
 
     rotationMat = flatten(rotate(0,vec3(0,1,0)));
     gl.uniformMatrix4fv( vRotation, false, flatten(rotationMat));
@@ -160,7 +160,7 @@ var render = function() {
     //____SPINNING____
     if(spinningArray.length !== 0) {
         rotationMat = flatten(rotate(angle, vec3(0, 1, 0)));
-        angle++;
+        angle += 0.5;
         gl.uniformMatrix4fv(vRotation, false, flatten(rotationMat));
 
         gl.bindBuffer(gl.ARRAY_BUFFER, centerSpinningBuffer);
