@@ -120,6 +120,8 @@ function onClick(){
     gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( bufferColor );
 
+    
+
     //this is where the off screen render should go
     gl.disableVertexAttribArray(bufferColor);
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
