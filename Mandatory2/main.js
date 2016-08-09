@@ -18,6 +18,12 @@ var jumpTime = 0;
 var sunAngle = 0;
 
 
+var vPos,cCol;
+var vPosBuf, cColBuf;
+var mvBuf,pjBuf;
+var frameBuffer;
+var renderBuffer;
+
 var tBuffer;
 
 var vTexCoord;
@@ -25,8 +31,11 @@ var vTexCoord;
 
 
 var program;
+var offScreenProgram;
 
 window.onload = function init() {
+
+    //var ctx = canvas.getContext("experimental-webgl",{preserveDrawingBuffer:true});
 
     canvas = document.getElementById( "gl-canvas" );
     canvas.style.cursor= "none";
@@ -50,6 +59,17 @@ window.onload = function init() {
     //  Load shaders and initialize attribute buffers
     //
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
+    offScreenProgram = initShaders(gl, "vertex-buffer-shader","fragment-buffer-shader");
+    
+    gl.useProgram(offScreenProgram);
+    vPos =  gl.getAttribLocation( offScreenProgram, "vPos" );
+    cCol =  gl.getAttribLocation( offScreenProgram, "cCol" );
+    vPosBuf = gl.createBuffer();
+    cColBuf = gl.createBuffer();
+
+    mvBuf = gl.getUniformLocation( program, "modelViewBuf" );
+    pjBuf = gl.getUniformLocation( program, "projectionBuf" );
+    
     gl.useProgram( program );
     cBuffer = gl.createBuffer();
 
@@ -138,10 +158,15 @@ window.onload = function init() {
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
-    configureTexture( image );
+
     canvas.addEventListener("contextmenu", function(event) {allowedToRemove(); event.preventDefault();},false);
     canvas.addEventListener("click", function(){build=true;});
     init = false;
+    gl.useProgram(offScreenProgram);
+    initFrameBuffer();
+    gl.useProgram(program);
+    configureTexture( image );
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     render();
 }
 

@@ -12,6 +12,8 @@ var centerSpinningArray = [];
 
 var texCoordsArray = [];
 
+var frameColors = [];
+
 var rotatedZ = rotate(45, vec3(0,0,1));
 var rotatedY = rotate(45, vec3(1,0,0));
 
@@ -95,20 +97,41 @@ function buildRegularCube(centerPoint){
     for(var i = 0; i < 36; i++){
         centerArray.push(centerPointTmp);
     }
-    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15);  //front
-    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15);  //right
-    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15);  //bottom
-    __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15);  //top
-    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15);  //back
-    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15);  //left
+    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15,centerPoint);  //front
+    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15,centerPoint);  //right
+    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15,centerPoint);  //bottom
+    __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15,centerPoint);  //top
+    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15,centerPoint);  //back
+    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15,centerPoint);  //left
 }
 
-function __quadRegular(a, b, c, d, verts, s,t) {
+function __quadRegular(a, b, c, d, verts, s,t,center) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
     var color = vec4(normalize(cross(x,y)),0);
+    var w;
+    if(color[0]==1){
+        w = 0.1; //right
+    } if(color[0]==-1){
+        w = 0.2; //left
+    } if(color[1]==1){
+        w = 0.3; //top
+    } if(color[1]==-1){
+        w = 0.4; //bottom
+    } if(color[2]==1){
+        w = 0.5; //front
+    } if(color[2]==-1){
+        w = 0.6; //back
+    }
     var texCoord = getTexture(s,t);
+    var frameColor = vec4(center[0]*.01,center[1]*.01,center[2]*.01,w);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
+    frameColors.push(frameColor);
 
     //to the arrays
     pointsArray.push(verts[a]);
@@ -161,6 +184,8 @@ function emptyArrays(){
     spinningNormals = [];
     centerArray = [];
     centerSpinningArray = [];
+    texCoordsArray = [];
+    frameColors = [];
 }
 
 function buildSun(){
