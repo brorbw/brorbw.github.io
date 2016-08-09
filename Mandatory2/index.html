@@ -57,6 +57,7 @@ void main()
     dist = light1-pos;
     e1 = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
 
+    fBufferColor = bufferColor;
 
     fTexCoord = vTexCoord;
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
@@ -89,7 +90,7 @@ varying vec3 dist;
 void
 main()
 {
-    if(bufferOrNot == 0){
+    if(bufferOrNot == 0.){
       //point light
       vec4 fColor;
       vec3 h = normalize(l+e);

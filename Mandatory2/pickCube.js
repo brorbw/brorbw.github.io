@@ -114,8 +114,13 @@ function getPosOfBlocksInFront(i) {
 
 
 function onClick(){
+    gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferBuffer);
     gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( bufferColor );
-    
+
+    //this is where the off screen render should go
+
+    gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
+
 }

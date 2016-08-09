@@ -97,15 +97,15 @@ function buildRegularCube(centerPoint){
     for(var i = 0; i < 36; i++){
         centerArray.push(centerPointTmp);
     }
-    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15);  //front
-    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15);  //right
-    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15);  //bottom
-    __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15);  //top
-    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15);  //back
-    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15);  //left
+    __quadRegular( 1, 0, 3, 2 ,vertsForCube,3,15, centerPoint);  //front
+    __quadRegular( 2, 3, 7, 6 ,vertsForCube,3,15, centerPoint);  //right
+    __quadRegular( 3, 0, 4, 7 ,vertsForCube,2,15, centerPoint);  //bottom
+    __quadRegular( 6, 5, 1, 2 ,vertsForCube,0,15, centerPoint);  //top
+    __quadRegular( 6, 7 ,4,5,vertsForCube,3,15, centerPoint);  //back
+    __quadRegular( 5, 4, 0, 1 ,vertsForCube,3,15, centerPoint);  //left
 }
 
-function __quadRegular(a, b, c, d, verts, s,t) {
+function __quadRegular(a, b, c, d, verts, s,t,center) {
     //normals
     var x = subtract(verts[a],verts[b]);
     var y = subtract(verts[b],verts[c]);
