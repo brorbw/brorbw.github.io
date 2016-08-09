@@ -23,7 +23,6 @@ var tBuffer;
 
 var vTexCoord;
 
-var bufferState;
 var bufferColor;
 var bufferBuffer;
 

@@ -115,24 +115,9 @@ function getPosOfBlocksInFront(i) {
 
 function onClick(){
 
-
-    
-    var texture = gl.createTexture();
-    gl.bindTexture( gl.TEXTURE_2D, texture );
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0,
-        gl.RGBA, gl.UNSIGNED_BYTE, null);
-    gl.generateMipmap(gl.TEXTURE_2D);
-
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-    gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
-    gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16, canvas.width, canvas.height);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-
-    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-    console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
-
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    //gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
 
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
@@ -140,12 +125,41 @@ function onClick(){
     gl.vertexAttribPointer( bufferColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( bufferColor );
 
-    
+    gl.drawArrays(gl.TRIANGLES,0,frameColors.length);
 
     //this is where the off screen render should go
     gl.disableVertexAttribArray(bufferColor);
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-    gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+    //gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+
+    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
+
+
+
+
+
+
+}
+function initFramebuffer(){
+    var texture = gl.createTexture();
+    gl.bindTexture( gl.TEXTURE_2D, texture );
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 512, 512, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+    //gl.bindRenderbuffer(gl.RENDERBUFFER, renderbuffer);
+    //gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16, canvas.width, canvas.height);
+
+    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    console.log(status +":"+ gl.FRAMEBUFFER_COMPLETE);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    //gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 
 }
