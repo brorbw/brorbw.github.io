@@ -77,16 +77,14 @@ window.onload = function init() {
     vSun = gl.createBuffer();
     cSun = gl.createBuffer();
 
+    vDBuffer = gl.createBuffer();
+
     vEye = gl.getUniformLocation(program, "eyePosition");
     vAt = gl.getUniformLocation(program, "atPosition");
     vRotation = gl.getUniformLocation(program, "vRotation");
     sunRotation = gl.getUniformLocation(program, "sunRotation");
     modelView = gl.getUniformLocation( program, "modelView" );
     projection = gl.getUniformLocation( program, "projection" );
-
-    cDBuffer = gl.createBuffer();
-    vDBuffer = gl.createBuffer();
-    vDPosition = gl.getAttribLocation( program, "vPosition" );
 
 // buttons for viewing parameters
     camera = new Camera();
@@ -155,7 +153,6 @@ var render = function() {
         }
     }
     boxShader();
-    allowedToBuild();
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );
@@ -223,7 +220,7 @@ var render = function() {
     gl.enableVertexAttribArray( vPosition );
 
     gl.drawArrays(gl.TRIANGLES, 0, centerSun.length);
-
+    allowedToBuild();
     requestAnimFrame(render);
 }
 
