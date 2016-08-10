@@ -17,7 +17,8 @@
 <button id = "Button8">Up</button>
 <p> </p>
 
-
+sunrise<input id="sunSlider" type="range" min="-90" max="90" step="1" value ="0">sunset
+</br>
 <script id="vertex-shader" type="x-shader/x-vertex">
 
 attribute vec4 vPosition;
@@ -27,10 +28,12 @@ attribute vec4 vCenter;
 attribute vec2 vTexCoord;
 varying vec2 fTexCoord;
 
+
 varying vec3 n,l,e;
 varying vec3 l1,e1;
 varying vec3 dist;
 varying vec4 fBufferColor;
+
 
 uniform mat4 vRotation;
 uniform mat4 modelView;
@@ -41,8 +44,6 @@ uniform mat4 sunRotation;
 
 uniform vec4 lightPosition;
 
-
-
 void main()
 {
     //point light
@@ -52,12 +53,14 @@ void main()
     e = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
     n = normalize((modelView*(vRotation*vColor)).xyz);
 
+
     vec3 light1 = (modelView*vec4(eyePosition.xyz,1)).xyz;
     l1 = normalize(light1-pos);
     dist = light1-pos;
     e1 = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
 
     fBufferColor = bufferColor;
+
 
     fTexCoord = vTexCoord;
     gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
@@ -76,16 +79,20 @@ uniform vec4 diffuseProduct1;
 uniform vec4 specularProduct1;
 uniform float shininess;
 
+
 uniform float bufferOrNot;
+
 
 varying vec2 fTexCoord;
 varying vec4 fBufferColor;
 
 uniform sampler2D texture;
 
+
 varying vec3 n, l, e;
 varying vec3 l1,e1;
 varying vec3 dist;
+
 
 void
 main()

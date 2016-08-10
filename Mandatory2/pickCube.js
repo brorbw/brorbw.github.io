@@ -27,13 +27,6 @@ function allowedToBuild(){
         var posNew = getPosOfBlocksInFront(i-0.1*j);
         var centerNew = posToCenter(posNew[0],posNew[1],posNew[2]);
         if(centerNew.x!==centerFront.x || centerNew.y!==centerFront.y ||centerNew.z!==centerFront.z){
-          if(build){
-            var pos = new Position(centerNew.x,centerNew.y,centerNew.z);
-            var box = new Box(pos);
-            addBox(box);
-            build = false;
-            break;
-          }
           drawWireFrame(centerNew.x,centerNew.y,centerNew.z,1);
           break;
         }

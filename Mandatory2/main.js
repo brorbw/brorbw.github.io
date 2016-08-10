@@ -99,6 +99,10 @@ window.onload = function init() {
     document.getElementById("Button6").onclick = function(){camera.lookRight();};
     document.getElementById("Button7").onclick = function(){camera.lookUp();};
     document.getElementById("Button8").onclick = function(){camera.lookDown();};
+//sunSilder
+    document.getElementById("sunSlider").onchange = function(event) {
+      sunAngle = event.target.value;
+    };
 
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
@@ -138,7 +142,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildWorld(2);
+    buildMountainsSmall();
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");
@@ -217,9 +221,9 @@ var render = function() {
 
     }
     allowedToBuild();
-    sunShader();
+    sunShader(sunAngle);
     sunMat = flatten(rotate(sunAngle,vec3(0,0,1)));
-    sunAngle++;
+    //sunAngle++;
     gl.uniformMatrix4fv( vRotation, false, flatten(sunMat));
     gl.uniformMatrix4fv( sunRotation, false, flatten(sunMat));
 
