@@ -27,18 +27,6 @@ var side = 3;
 var top = 0;
 var bottom=2;
 
-if(cIndex===0){
-  side = 3;
-  top = 0;
-  bottom=2;
-}else if (cIndex===1) {
-  console.log(cIndex)
-  side = 1;
-  top = 1;
-  bottom=1;
-}
-
-
 
 
 var texCoord = [

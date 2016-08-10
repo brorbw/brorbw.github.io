@@ -28,7 +28,6 @@ var bufferBuffer;
 var texture1;
 
 var program;
-var cIndex;
 
 window.onload = function init() {
 
@@ -112,11 +111,7 @@ window.onload = function init() {
     document.getElementById("sunSlider").onchange = function(event) {
       sunAngle = event.target.value;
     };
-    var m = document.getElementById("mymenu");
 
-    m.addEventListener("click", function() {
-        cIndex = m.selectedIndex;
-    });
     //Trying to move the eye
     window.addEventListener("keydown", function(event){
         //im not sure that im handling the movement right, im reading chaptor 4 again
