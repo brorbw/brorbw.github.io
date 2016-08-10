@@ -150,7 +150,7 @@ window.onload = function init() {
 
     canvas.addEventListener("mouseout", function(){firstMouseMove=true;});
     canvas.addEventListener("mousemove", mousemove);
-    buildWorld(2);
+    buildMountains();
     buildSun();
     initMaterial();
     var image = document.getElementById("texImage");

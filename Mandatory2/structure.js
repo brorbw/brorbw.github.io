@@ -81,7 +81,7 @@ function drawWorld() {
 function buildMountains(){
     for(var z = 0; z < gridSize; z++){
         for(var x = 0; x < gridSize;x++){
-            var yl = (Math.sin(0.1*x)*Math.cos(0.1*z))*20+20;
+            var yl = (Math.sin(0.2*x)*Math.cos(0.2*z))*5+5;
             for(var y = 0; y < yl; y++){
                 var pos = new Position(x,y,z);
                 var box = new Box(pos);
