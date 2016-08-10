@@ -122,17 +122,15 @@ function onClickBuild(event){
 
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-
-
-
+    
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 1);
 
     gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-
+    gl.disable(gl.DITHER);
     var readColor = new Uint8Array(4);
-    gl.readPixels(mouseX, mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     console.log(readColor);
     var position;
@@ -154,7 +152,7 @@ function onClickBuild(event){
         var box = new Box(position);
         addBox(box);
     }
-
+    gl.enable(gl.DITHER);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     gl.finish();
@@ -188,25 +186,13 @@ function onClickRemove(event){
     var readColor = new Uint8Array(4);
     gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
-    console.log(readColor.toString());
     var position;
-    if(readColor[3]<=10){
-        position = new Position(readColor[0]+1,readColor[1],readColor[2]);
-    } else if(readColor[3]<=20){
-        position = new Position(readColor[0]-1,readColor[1],readColor[2]);
-    } else if(readColor[3]===30){
-        position = new Position(readColor[0],readColor[1]+1,readColor[2]);
-    } else if(readColor[3]<=40){
-        position = new Position(readColor[0],readColor[1]-1,readColor[2]);
-    } else if(readColor[3]<=50){
-        position = new Position(readColor[0],readColor[1],readColor[2]+1);
-    } else if(readColor[3]>=51){
-        position = new Position(readColor[0],readColor[1],readColor[2]-1);
-    }
+    position = new Position(readColor[0],readColor[1],readColor[2]);
     if(position != undefined) {
-        console.log(position.x, position.y, position.z);
+        console.log("remove",position.x, position.y, position.z);
         removeBox(position);
     }
+
     gl.enable(gl.DITHER);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
