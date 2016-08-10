@@ -128,7 +128,7 @@ function onClickBuild(event){
     gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-    gl.disable(gl.DITHER);
+
     var readColor = new Uint8Array(4);
     gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
@@ -152,7 +152,7 @@ function onClickBuild(event){
         var box = new Box(position);
         addBox(box);
     }
-    gl.enable(gl.DITHER);
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     gl.finish();
@@ -182,7 +182,7 @@ function onClickRemove(event){
     gl.drawArrays(gl.TRIANGLES,0, frameColors.length);
 
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
-    gl.disable(gl.DITHER);
+
     var readColor = new Uint8Array(4);
     gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
@@ -193,7 +193,7 @@ function onClickRemove(event){
         removeBox(position);
     }
 
-    gl.enable(gl.DITHER);
+
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
     gl.finish();
