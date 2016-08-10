@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mandatory2</title>
+</head>
+<body>
+<p> </p>
+<button id = "Button1">1st Person</button>
+<button id = "Button2">Ortho</button>
+<button id = "Button3">Flying</button>
+
+<p> </p>
+<button id = "Button5">Left</button>
+<button id = "Button6">Right</button>
+<button id = "Button7">Down</button>
+<button id = "Button8">Up</button>
+<p> </p>
+
+sunrise<input id="sunSlider" type="range" min="-90" max="90" step="1" value ="0">sunset
+</br>
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vColor; //normal
+attribute vec4 bufferColor;
+attribute vec4 vCenter;
+attribute vec2 vTexCoord;
+varying vec2 fTexCoord;
+
+
+varying vec3 n,l,e;
+varying vec3 l1,e1;
+varying vec3 dist;
+varying vec4 fBufferColor;
+
+
+uniform mat4 vRotation;
+uniform mat4 modelView;
+uniform mat4 projection;
+uniform vec3 eyePosition;
+uniform vec3 atPosition;
+uniform mat4 sunRotation;
+
+uniform vec4 lightPosition;
+
+void main()
+{
+    //point light
+    vec3 pos = (modelView*vPosition).xyz;
+    vec3 light = (modelView*(sunRotation*lightPosition)).xyz;
+    l = normalize(light-pos);
+    e = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
+    n = normalize((modelView*(vRotation*vColor)).xyz);
+
+
+    vec3 light1 = (modelView*vec4(eyePosition.xyz,1)).xyz;
+    l1 = normalize(light1-pos);
+    dist = light1-pos;
+    e1 = normalize((modelView*vec4(eyePosition.xyz,1)).xyz-pos);
+
+    fBufferColor = bufferColor;
+
+
+    fTexCoord = vTexCoord;
+    gl_Position = projection*modelView*(vRotation*(vPosition-vCenter)+vCenter);
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform vec4 ambientProduct1;
+uniform vec4 diffuseProduct1;
+uniform vec4 specularProduct1;
+uniform float shininess;
+
+
+uniform float bufferOrNot;
+
+
+varying vec2 fTexCoord;
+varying vec4 fBufferColor;
+
+uniform sampler2D texture;
+
+
+varying vec3 n, l, e;
+varying vec3 l1,e1;
+varying vec3 dist;
+
+
+void
+main()
+{
+    if(bufferOrNot == 0.){
+      //point light
+      vec4 fColor;
+      vec3 h = normalize(l+e);
+      vec4 ambient = ambientProduct;
+
+      float ln = dot(l,n);
+      //the diffusion
+      float kd = max(ln,0.0);
+
+      vec4 diffuse = kd * diffuseProduct;
+
+      //the specular
+      float ks = pow(max(dot(n,h),0.0),shininess);
+      vec4 specular = ks * specularProduct;
+
+      if(ln<0.0) specular = vec4(0.0,0.0,0.0,1.0);
+
+
+
+
+        //torch
+        vec3 h1 = normalize(l1+e);
+        vec4 ambient1 = ambientProduct1;
+
+        float ln1 = dot(l1,n);
+        float kd1 = max(ln1,0.0);
+        float distance = 1.0/(.2*length(dist)+.1*pow(length(dist),2.0));
+        vec4 diffuse1 = kd1 * diffuseProduct1 * distance;
+        float ks1 = pow(max(dot(n,h1),0.0),shininess);
+        vec4 specular1 = ks1 * specularProduct1*distance;
+
+        if(ln1<0.0) specular = vec4(0.0,0.0,0.0,1.0);
+
+        fColor = ambient + diffuse + specular + ambientProduct1 + diffuse1 + specular1;
+
+        fColor.a = 1.0;
+
+
+        gl_FragColor = fColor * texture2D( texture, fTexCoord );
+         } else {
+            gl_FragColor = fBufferColor;
+        }
+}
+</script>
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="/Mandatory2/structure.js"></script>
+<script type="text/javascript" src="/Mandatory2/cubeconstruction.js"></script>
+<script type="text/javascript" src="/Mandatory2/main.js"></script>
+<script type="text/javascript" src="/Mandatory2/movement.js"></script>
+<script type="text/javascript" src="/Mandatory2/ligthing.js"></script>
+<script type="text/javascript" src="/Mandatory2/pickCube.js"></script>
+
+<img id = "texImage" src = "2.png" hidden>
+<canvas id="gl-canvas" width="512" height="512">
+    Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+</body>
+</html>
