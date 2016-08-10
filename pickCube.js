@@ -130,7 +130,7 @@ function onClickBuild(event){
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
 
     var readColor = new Uint8Array(4);
-    gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    gl.readPixels(mouseX, canvas.height-mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     console.log(readColor);
     var position;
@@ -184,7 +184,7 @@ function onClickRemove(event){
     gl.uniform1f(gl.getUniformLocation(program, "bufferOrNot"), 0);
 
     var readColor = new Uint8Array(4);
-    gl.readPixels(mouseX, mouseY-canvas.height, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
+    gl.readPixels(mouseX, canvas.height-mouseY, 1,1,gl.RGBA, gl.UNSIGNED_BYTE, readColor);
     readColor = [Math.round(readColor[0] / 2.55),Math.round(readColor[1] / 2.55),Math.round(readColor[2] / 2.55), Math.round(readColor[3] / 2.55)];
     var position;
     position = new Position(readColor[0],readColor[1],readColor[2]);
