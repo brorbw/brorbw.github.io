@@ -7,6 +7,7 @@ var gl;
 
 //buffers
 var vBuffer;
+var dBuffer;
 //attributes
 var vPos;
 
@@ -48,12 +49,16 @@ window.onload = function init() {
     gl.useProgram(program);
     
     vBuffer = gl.createBuffer();
+    dBuffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER,vBuffer);
 
     circle(vertices[0]);
 
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, dBuffer);
+    dotPeople();
     console.log(points.length);
     render();
 }
@@ -67,9 +72,14 @@ function render(){
     vPos = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPos,2,gl.FLOAT,false,0,0);
     gl.enableVertexAttribArray(vPos);
-    
     gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length);
-    
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, dBuffer);
+    vPos = gl.getAttribLocation(program, "vPosition");
+    gl.vertexAttribPointer(vPos,2,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(vPos);
+    gl.drawArrays(gl.POINTS, 0, dots.length);
+
 }
 
 function circle(center) {
@@ -87,5 +97,5 @@ function circle(center) {
 }
 
 function dotPeople(){
-    
+    makePoints(vertices[0]);
 }
